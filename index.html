@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Age of Attraction DTR</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #111;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 420px;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #aaa;
+      margin-bottom: 32px;
+    }
+
+    input, button {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 15px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+
+    input {
+      background: #222;
+      color: white;
+    }
+
+    button {
+      background: white;
+      color: #111;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .secondary {
+      background: #222;
+      color: white;
+    }
+
+    #message {
+      margin-top: 15px;
+      color: #aaa;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Age of Attraction</h1>
+  <div class="subtitle">Season 2 · Sound Department</div>
+
+  <input id="email" type="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+
+  <button onclick="signIn()">Log In</button>
+  <button class="secondary" onclick="signUp()">Create Account</button>
+
+  <div id="message"></div>
+
+</div>
+
+<script>
+
+const SUPABASE_URL = "https://hyhzcikkoqvvfyiffmla.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_Gl1oRE_S8bRTiI65vCnHRQ_InR0_wX1";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+async function signUp() {
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  if (!email || !password) {
+    showMessage("Please enter an email and password.");
+    return;
+  }
+
+  const { error } = await supabaseClient.auth.signUp({
+    email: email,
+    password: password
+  });
+
+  if (error) {
+    showMessage(error.message);
+    return;
+  }
+
+  showMessage("Account created. You can now log in.");
+}
+
+async function signIn() {
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
+
+  if (error) {
+    showMessage(error.message);
+    return;
+  }
+
+  showMessage("Logged in!");
+}
+
+function showMessage(message) {
+  document.getElementById("message").textContent = message;
+}
+
+</script>
+
+</body>
+</html>
