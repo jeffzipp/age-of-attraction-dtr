@@ -1,17 +1,13 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#111111">
-
   <title>Age of Attraction DTR</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -39,11 +35,6 @@
       color: #aaa;
     }
 
-    h3 {
-      margin-top: 30px;
-      margin-bottom: 12px;
-    }
-
     label {
       display: block;
       margin-top: 18px;
@@ -52,9 +43,7 @@
       color: #ccc;
     }
 
-    input,
-    select,
-    textarea {
+    input, select, textarea {
       width: 100%;
       padding: 13px;
       border-radius: 7px;
@@ -100,10 +89,6 @@
       border: 1px solid #555;
     }
 
-    button:hover {
-      opacity: 0.9;
-    }
-
     .subtitle {
       color: #888;
       margin-bottom: 25px;
@@ -141,20 +126,30 @@
     }
 
     .hours-preview {
-      margin-top: 18px;
-      padding: 14px;
+      margin-top: 20px;
+      padding: 15px;
       background: #1d1d1d;
       border: 1px solid #333;
       border-radius: 7px;
       text-align: center;
-      font-size: 18px;
+    }
+
+    .hours-number {
+      font-size: 22px;
       font-weight: bold;
+    }
+
+    .hours-detail {
+      margin-top: 5px;
+      font-size: 13px;
+      color: #999;
     }
 
     .top-bar {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
+      gap: 15px;
       margin-bottom: 25px;
     }
 
@@ -164,6 +159,19 @@
       padding: 8px 12px;
       font-size: 13px;
     }
+
+    .section {
+      margin-top: 30px;
+      padding-top: 5px;
+      border-top: 1px solid #333;
+    }
+
+    .section-title {
+      margin-top: 20px;
+      margin-bottom: 0;
+      font-size: 16px;
+      font-weight: bold;
+    }
   </style>
 </head>
 
@@ -172,6 +180,7 @@
 <div class="container">
 
   <!-- LOGIN -->
+
   <div id="loginScreen">
 
     <h1>Age of Attraction</h1>
@@ -192,17 +201,23 @@
 
 
   <!-- CREW SETUP -->
+
   <div id="setupScreen" class="hidden">
 
     <h1>Crew Setup</h1>
+
     <div class="subtitle">
-      Enter your information once. You can update it later.
+      Enter your production and payroll information.
     </div>
 
     <label>Name</label>
     <input type="text" id="crewName">
 
+    <label>Department</label>
+    <input type="text" value="Sound" disabled>
+
     <label>Position</label>
+
     <select id="position">
       <option value="">Select position</option>
       <option value="HOD">HOD</option>
@@ -211,39 +226,162 @@
       <option value="Bag Mixer">Bag Mixer</option>
     </select>
 
-    <label>Day Rate</label>
-    <input type="number" id="dayRate" min="0" step="0.01" inputmode="decimal">
 
-    <label>Kit Rental</label>
-    <input type="number" id="kitRental" min="0" step="0.01" inputmode="decimal">
+    <label>Employee Type</label>
 
-    <label>Kit / Equipment Notes</label>
-    <textarea id="equipmentNotes"
-      placeholder="Optional equipment or kit details"></textarea>
+    <select id="employmentType" onchange="updateEmploymentFields()">
+      <option value="">Select type</option>
+      <option value="Employee">Employee</option>
+      <option value="Incorporated Contractor">
+        Incorporated Contractor
+      </option>
+    </select>
 
-    <button onclick="saveProfile()">Save Profile</button>
+
+    <div id="corporationFields" class="hidden section">
+
+      <div class="section-title">
+        Corporation Information
+      </div>
+
+      <label>Corporation Name</label>
+      <input type="text" id="corporationName">
+
+      <label>GST #</label>
+      <input type="text" id="gstNumber">
+
+      <label>GST Amount</label>
+      <input
+        type="number"
+        id="gstAmount"
+        min="0"
+        step="0.01"
+        inputmode="decimal"
+      >
+
+    </div>
+
+
+    <div class="section">
+
+      <div class="section-title">
+        Rate & Kit
+      </div>
+
+      <label>Day Rate</label>
+
+      <input
+        type="number"
+        id="dayRate"
+        min="0"
+        step="0.01"
+        inputmode="decimal"
+      >
+
+
+      <label>Additional Fee</label>
+
+      <select id="feeType">
+        <option value="None">None</option>
+        <option value="Kit">Kit Fee</option>
+        <option value="Vehicle">Vehicle Fee</option>
+      </select>
+
+
+      <label>Fee Amount</label>
+
+      <input
+        type="number"
+        id="kitRental"
+        min="0"
+        step="0.01"
+        inputmode="decimal"
+        value="0"
+      >
+
+
+      <label>Kit / Equipment Notes</label>
+
+      <textarea
+        id="equipmentNotes"
+        placeholder="Optional"
+      ></textarea>
+
+    </div>
+
+
+    <div class="section">
+
+      <div class="section-title">
+        Production Information
+      </div>
+
+      <label>Local / Hotel</label>
+
+      <select id="localHotel">
+        <option value="">Select</option>
+        <option value="Local">Local</option>
+        <option value="Hotel">Hotel</option>
+      </select>
+
+
+      <label>Province</label>
+
+      <select id="province">
+        <option value="">Select province</option>
+        <option value="BC">BC</option>
+        <option value="ON">ON</option>
+      </select>
+
+
+      <label>Crew Initials</label>
+
+      <input
+        type="text"
+        id="crewInitials"
+        maxlength="5"
+        placeholder="e.g. JZ"
+      >
+
+    </div>
+
+
+    <button onclick="saveProfile()">
+      Save Profile
+    </button>
 
     <div id="setupMessage" class="message"></div>
 
   </div>
 
 
-  <!-- DTR -->
+  <!-- DAILY DTR -->
+
   <div id="dtrScreen" class="hidden">
 
     <div class="top-bar">
+
       <div>
         <h1>Daily DTR</h1>
         <div class="subtitle" id="crewGreeting"></div>
       </div>
 
-      <button class="secondary" onclick="signOut()">Log Out</button>
+      <button
+        class="secondary"
+        onclick="signOut()"
+      >
+        Log Out
+      </button>
+
     </div>
+
 
     <label>Date</label>
     <input type="date" id="dtrDate">
 
-    <label>Start Time</label>
+
+    <label>IN</label>
+
     <input
       type="text"
       id="startTime"
@@ -254,42 +392,79 @@
     >
 
     <div class="time-help">
-      Use 24-hour format. Times after midnight can be entered as 25:00, 26:30, etc.
+      24-hour format
     </div>
 
-    <label>Lunch Duration</label>
+
+    <label>Lunch Start</label>
+
     <input
-      type="number"
-      id="lunchMinutes"
-      min="0"
-      step="5"
-      value="30"
+      type="text"
+      id="lunchStart"
+      placeholder="13:00"
       inputmode="numeric"
+      maxlength="5"
+      autocomplete="off"
     >
 
-    <label>End Time</label>
+
+    <label>Lunch End</label>
+
+    <input
+      type="text"
+      id="lunchEnd"
+      placeholder="13:30"
+      inputmode="numeric"
+      maxlength="5"
+      autocomplete="off"
+    >
+
+
+    <label>OUT</label>
+
     <input
       type="text"
       id="endTime"
-      placeholder="17:00"
+      placeholder="26:30"
       inputmode="numeric"
       maxlength="5"
       autocomplete="off"
     >
 
     <div class="time-help">
-      Maximum: 48:00
+      For after-midnight finishes use 25:00, 26:30, etc. Maximum 48:00.
     </div>
 
-    <div id="hoursPreview" class="hours-preview hidden"></div>
+
+    <div
+      id="hoursPreview"
+      class="hours-preview hidden"
+    >
+
+      <div
+        id="hoursNumber"
+        class="hours-number"
+      ></div>
+
+      <div
+        id="hoursDetail"
+        class="hours-detail"
+      ></div>
+
+    </div>
+
 
     <label>Notes</label>
+
     <textarea
       id="dtrNotes"
       placeholder="Optional notes about the day"
     ></textarea>
 
-    <button onclick="submitDTR()">Submit DTR</button>
+
+    <button onclick="submitDTR()">
+      Submit DTR
+    </button>
 
     <div id="dtrMessage" class="message"></div>
 
@@ -302,593 +477,1088 @@
 
 <script>
 
-  const SUPABASE_URL = "https://hyhzcikkoqvvfyiffmla.supabase.co";
+const SUPABASE_URL =
+  "https://hyhzcikkoqvvfyiffmla.supabase.co";
 
-  const SUPABASE_KEY =
-    "sb_publishable_Gl1oRE_S8bRTiI65vCnHRQ_InR0_wX1";
+const SUPABASE_KEY =
+  "sb_publishable_Gl1oRE_S8bRTiI65vCnHRQ_InR0_wX1";
 
-  const supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+let currentUser = null;
+let currentProfile = null;
+let productionId = null;
+
+
+
+function showScreen(screenId) {
+
+  document
+    .getElementById("loginScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("setupScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("dtrScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById(screenId)
+    .classList.remove("hidden");
+}
+
+
+
+function showMessage(elementId, message, type) {
+
+  const element =
+    document.getElementById(elementId);
+
+  element.textContent = message;
+
+  element.className =
+    "message " + type;
+}
+
+
+
+function todayString() {
+
+  const now = new Date();
+
+  const year =
+    now.getFullYear();
+
+  const month =
+    String(now.getMonth() + 1)
+      .padStart(2, "0");
+
+  const day =
+    String(now.getDate())
+      .padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+
+
+function parseTimeToMinutes(value) {
+
+  value = value.trim();
+
+  const match =
+    value.match(/^(\d{1,2}):([0-5]\d)$/);
+
+  if (!match) {
+    return null;
+  }
+
+  const hours =
+    parseInt(match[1], 10);
+
+  const minutes =
+    parseInt(match[2], 10);
+
+  if (hours < 0 || hours > 48) {
+    return null;
+  }
+
+  if (hours === 48 && minutes > 0) {
+    return null;
+  }
+
+  return (hours * 60) + minutes;
+}
+
+
+
+function minutesToDisplay(minutes) {
+
+  const hours =
+    Math.floor(minutes / 60);
+
+  const mins =
+    minutes % 60;
+
+  if (mins === 0) {
+    return `${hours}h`;
+  }
+
+  return `${hours}h ${mins}m`;
+}
+
+
+
+function updateEmploymentFields() {
+
+  const type =
+    document.getElementById(
+      "employmentType"
+    ).value;
+
+  const fields =
+    document.getElementById(
+      "corporationFields"
+    );
+
+  if (type === "Incorporated Contractor") {
+
+    fields.classList.remove("hidden");
+
+  } else {
+
+    fields.classList.add("hidden");
+
+  }
+}
+
+
+
+function updateHoursPreview() {
+
+  const start =
+    parseTimeToMinutes(
+      document.getElementById(
+        "startTime"
+      ).value
+    );
+
+  const lunchStart =
+    parseTimeToMinutes(
+      document.getElementById(
+        "lunchStart"
+      ).value
+    );
+
+  const lunchEnd =
+    parseTimeToMinutes(
+      document.getElementById(
+        "lunchEnd"
+      ).value
+    );
+
+  const end =
+    parseTimeToMinutes(
+      document.getElementById(
+        "endTime"
+      ).value
     );
 
 
-  let currentUser = null;
-  let currentProfile = null;
-  let productionId = null;
+  const preview =
+    document.getElementById(
+      "hoursPreview"
+    );
 
 
-  function showScreen(screenId) {
+  if (
+    start === null ||
+    lunchStart === null ||
+    lunchEnd === null ||
+    end === null
+  ) {
 
-    document.getElementById("loginScreen").classList.add("hidden");
-    document.getElementById("setupScreen").classList.add("hidden");
-    document.getElementById("dtrScreen").classList.add("hidden");
+    preview.classList.add("hidden");
 
-    document.getElementById(screenId).classList.remove("hidden");
+    return;
   }
 
 
-  function showMessage(elementId, message, type) {
+  if (
+    lunchStart < start ||
+    lunchEnd <= lunchStart ||
+    end <= lunchEnd
+  ) {
 
-    const element = document.getElementById(elementId);
+    preview.classList.add("hidden");
 
-    element.textContent = message;
-
-    element.className = "message " + type;
+    return;
   }
 
 
-  function todayString() {
+  const lunchMinutes =
+    lunchEnd - lunchStart;
 
-    const now = new Date();
-
-    const year = now.getFullYear();
-
-    const month =
-      String(now.getMonth() + 1).padStart(2, "0");
-
-    const day =
-      String(now.getDate()).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-  }
+  const totalMinutes =
+    end - start - lunchMinutes;
 
 
-  function parseTimeToMinutes(value) {
-
-    value = value.trim();
-
-    const match =
-      value.match(/^(\d{1,2}):([0-5]\d)$/);
-
-    if (!match) {
-      return null;
-    }
-
-    const hours = parseInt(match[1], 10);
-    const minutes = parseInt(match[2], 10);
-
-    if (hours < 0 || hours > 48) {
-      return null;
-    }
-
-    if (hours === 48 && minutes > 0) {
-      return null;
-    }
-
-    return hours * 60 + minutes;
-  }
+  document.getElementById(
+    "hoursNumber"
+  ).textContent =
+    "Total: " +
+    minutesToDisplay(totalMinutes);
 
 
-  function formatHours(minutes) {
-
-    const hours = Math.floor(minutes / 60);
-
-    const mins = minutes % 60;
-
-    if (mins === 0) {
-      return `${hours} hours`;
-    }
-
-    return `${hours}h ${mins}m`;
-  }
+  document.getElementById(
+    "hoursDetail"
+  ).textContent =
+    "Lunch: " +
+    minutesToDisplay(lunchMinutes);
 
 
-  function updateHoursPreview() {
+  preview.classList.remove("hidden");
+}
 
-    const start =
-      parseTimeToMinutes(
-        document.getElementById("startTime").value
-      );
 
-    const end =
-      parseTimeToMinutes(
-        document.getElementById("endTime").value
-      );
 
-    const lunch =
-      parseInt(
-        document.getElementById("lunchMinutes").value,
-        10
-      ) || 0;
-
-    const preview =
-      document.getElementById("hoursPreview");
-
-    if (
-      start === null ||
-      end === null ||
-      end <= start
-    ) {
-      preview.classList.add("hidden");
-      return;
-    }
-
-    const workedMinutes =
-      end - start - lunch;
-
-    if (workedMinutes < 0) {
-      preview.classList.add("hidden");
-      return;
-    }
-
-    preview.textContent =
-      "Total: " + formatHours(workedMinutes);
-
-    preview.classList.remove("hidden");
-  }
-
+[
+  "startTime",
+  "lunchStart",
+  "lunchEnd",
+  "endTime"
+].forEach(id => {
 
   document
-    .getElementById("startTime")
-    .addEventListener("input", updateHoursPreview);
+    .getElementById(id)
+    .addEventListener(
+      "input",
+      updateHoursPreview
+    );
 
-  document
-    .getElementById("endTime")
-    .addEventListener("input", updateHoursPreview);
-
-  document
-    .getElementById("lunchMinutes")
-    .addEventListener("input", updateHoursPreview);
+});
 
 
-  async function initialize() {
 
-    const {
-      data: { session }
-    } = await supabaseClient.auth.getSession();
+async function initialize() {
 
-    if (!session) {
-      showScreen("loginScreen");
-      return;
-    }
+  const {
+    data: { session }
+  } =
+    await supabaseClient.auth.getSession();
 
-    currentUser = session.user;
 
-    await loadProfile();
+  if (!session) {
+
+    showScreen("loginScreen");
+
+    return;
   }
 
 
-  async function signUp() {
+  currentUser =
+    session.user;
 
-    const email =
-      document.getElementById("email").value.trim();
+  await loadProfile();
+}
 
-    const password =
-      document.getElementById("password").value;
 
-    if (!email || !password) {
 
-      showMessage(
-        "loginMessage",
-        "Please enter an email and password.",
-        "error"
-      );
+async function signUp() {
 
-      return;
-    }
+  const email =
+    document
+      .getElementById("email")
+      .value
+      .trim();
 
-    const { data, error } =
-      await supabaseClient.auth.signUp({
-        email,
-        password
-      });
+  const password =
+    document
+      .getElementById("password")
+      .value;
 
-    if (error) {
 
-      showMessage(
-        "loginMessage",
-        error.message,
-        "error"
-      );
-
-      return;
-    }
-
-    currentUser = data.user;
+  if (!email || !password) {
 
     showMessage(
       "loginMessage",
-      "Account created. You can now log in.",
-      "success"
+      "Please enter an email and password.",
+      "error"
     );
+
+    return;
   }
 
 
-  async function signIn() {
+  const { data, error } =
+    await supabaseClient.auth.signUp({
+      email,
+      password
+    });
 
-    const email =
-      document.getElementById("email").value.trim();
 
-    const password =
-      document.getElementById("password").value;
+  if (error) {
 
-    if (!email || !password) {
+    showMessage(
+      "loginMessage",
+      error.message,
+      "error"
+    );
 
-      showMessage(
-        "loginMessage",
-        "Please enter an email and password.",
-        "error"
-      );
+    return;
+  }
 
-      return;
-    }
 
-    const { data, error } =
-      await supabaseClient.auth.signInWithPassword({
+  currentUser =
+    data.user;
+
+
+  showMessage(
+    "loginMessage",
+    "Account created. You can now log in.",
+    "success"
+  );
+}
+
+
+
+async function signIn() {
+
+  const email =
+    document
+      .getElementById("email")
+      .value
+      .trim();
+
+  const password =
+    document
+      .getElementById("password")
+      .value;
+
+
+  if (!email || !password) {
+
+    showMessage(
+      "loginMessage",
+      "Please enter an email and password.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const { data, error } =
+    await supabaseClient.auth
+      .signInWithPassword({
         email,
         password
       });
 
-    if (error) {
 
-      showMessage(
-        "loginMessage",
+  if (error) {
+
+    showMessage(
+      "loginMessage",
+      error.message,
+      "error"
+    );
+
+    return;
+  }
+
+
+  currentUser =
+    data.user;
+
+  await loadProfile();
+}
+
+
+
+async function loadProfile() {
+
+  const {
+    data: profiles,
+    error
+  } =
+    await supabaseClient
+      .from("crew_profiles")
+      .select("*")
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .limit(1);
+
+
+  if (error) {
+
+    showMessage(
+      "loginMessage",
+      error.message,
+      "error"
+    );
+
+    showScreen("loginScreen");
+
+    return;
+  }
+
+
+  if (
+    !profiles ||
+    profiles.length === 0
+  ) {
+
+    await findProduction();
+
+    showScreen("setupScreen");
+
+    return;
+  }
+
+
+  currentProfile =
+    profiles[0];
+
+  productionId =
+    currentProfile.production_id;
+
+
+  /*
+    Existing profiles were created
+    before the new payroll fields existed.
+
+    If the important new fields are
+    missing, send the user back through
+    setup so they can complete them.
+  */
+
+  if (
+    !currentProfile.employment_type ||
+    !currentProfile.local_hotel ||
+    !currentProfile.province ||
+    !currentProfile.crew_initials
+  ) {
+
+    populateProfileForm();
+
+    showScreen("setupScreen");
+
+    return;
+  }
+
+
+  showDTR();
+}
+
+
+
+function populateProfileForm() {
+
+  if (!currentProfile) {
+    return;
+  }
+
+
+  document.getElementById(
+    "crewName"
+  ).value =
+    currentProfile.name || "";
+
+
+  document.getElementById(
+    "position"
+  ).value =
+    currentProfile.position || "";
+
+
+  document.getElementById(
+    "employmentType"
+  ).value =
+    currentProfile.employment_type || "";
+
+
+  document.getElementById(
+    "dayRate"
+  ).value =
+    currentProfile.day_rate || 0;
+
+
+  document.getElementById(
+    "kitRental"
+  ).value =
+    currentProfile.kit_rental || 0;
+
+
+  document.getElementById(
+    "equipmentNotes"
+  ).value =
+    currentProfile.equipment_notes || "";
+
+
+  document.getElementById(
+    "feeType"
+  ).value =
+    currentProfile.fee_type || "None";
+
+
+  document.getElementById(
+    "localHotel"
+  ).value =
+    currentProfile.local_hotel || "";
+
+
+  document.getElementById(
+    "province"
+  ).value =
+    currentProfile.province || "";
+
+
+  document.getElementById(
+    "corporationName"
+  ).value =
+    currentProfile.corporation_name || "";
+
+
+  document.getElementById(
+    "gstNumber"
+  ).value =
+    currentProfile.gst_number || "";
+
+
+  document.getElementById(
+    "gstAmount"
+  ).value =
+    currentProfile.gst_amount || "";
+
+
+  document.getElementById(
+    "crewInitials"
+  ).value =
+    currentProfile.crew_initials || "";
+
+
+  updateEmploymentFields();
+}
+
+
+
+async function findProduction() {
+
+  const { data, error } =
+    await supabaseClient
+      .from("productions")
+      .select("*")
+      .eq(
+        "name",
+        "Age of Attraction"
+      )
+      .eq(
+        "season",
+        "Season 2"
+      )
+      .limit(1);
+
+
+  if (error) {
+
+    showMessage(
+      "setupMessage",
+      "Unable to find the production: " +
         error.message,
-        "error"
-      );
+      "error"
+    );
 
-      return;
-    }
-
-    currentUser = data.user;
-
-    await loadProfile();
+    return;
   }
 
 
-  async function loadProfile() {
+  if (!data || data.length === 0) {
 
-    const {
-      data: profiles,
-      error
-    } =
-      await supabaseClient
-        .from("crew_profiles")
-        .select("*")
-        .eq("user_id", currentUser.id)
-        .limit(1);
+    showMessage(
+      "setupMessage",
+      "Unable to find the production.",
+      "error"
+    );
 
-    if (error) {
-
-      showMessage(
-        "loginMessage",
-        error.message,
-        "error"
-      );
-
-      showScreen("loginScreen");
-
-      return;
-    }
-
-
-    if (!profiles || profiles.length === 0) {
-
-      await findProduction();
-
-      showScreen("setupScreen");
-
-      return;
-    }
-
-
-    currentProfile = profiles[0];
-
-    productionId = currentProfile.production_id;
-
-    showDTR();
+    return;
   }
 
 
-  async function findProduction() {
+  productionId =
+    data[0].id;
+}
 
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from("productions")
-        .select("*")
-        .eq("name", "Age of Attraction")
-        .eq("season", "Season 2")
-        .limit(1);
 
-    if (error) {
 
-      showMessage(
-        "setupMessage",
-        "Unable to find the production: " + error.message,
-        "error"
-      );
+async function saveProfile() {
 
-      return;
-    }
+  const name =
+    document
+      .getElementById("crewName")
+      .value
+      .trim();
 
-    if (!data || data.length === 0) {
+  const position =
+    document
+      .getElementById("position")
+      .value;
 
-      showMessage(
-        "setupMessage",
-        "Unable to find the production.",
-        "error"
-      );
+  const employmentType =
+    document
+      .getElementById(
+        "employmentType"
+      )
+      .value;
 
-      return;
-    }
+  const dayRate =
+    parseFloat(
+      document.getElementById(
+        "dayRate"
+      ).value
+    ) || 0;
 
-    productionId = data[0].id;
+  const kitRental =
+    parseFloat(
+      document.getElementById(
+        "kitRental"
+      ).value
+    ) || 0;
+
+  const feeType =
+    document
+      .getElementById(
+        "feeType"
+      ).value;
+
+  const equipmentNotes =
+    document
+      .getElementById(
+        "equipmentNotes"
+      )
+      .value
+      .trim();
+
+  const localHotel =
+    document
+      .getElementById(
+        "localHotel"
+      ).value;
+
+  const province =
+    document
+      .getElementById(
+        "province"
+      ).value;
+
+  const crewInitials =
+    document
+      .getElementById(
+        "crewInitials"
+      )
+      .value
+      .trim()
+      .toUpperCase();
+
+  const corporationName =
+    document
+      .getElementById(
+        "corporationName"
+      )
+      .value
+      .trim();
+
+  const gstNumber =
+    document
+      .getElementById(
+        "gstNumber"
+      )
+      .value
+      .trim();
+
+  const gstAmount =
+    parseFloat(
+      document.getElementById(
+        "gstAmount"
+      ).value
+    ) || 0;
+
+
+  if (
+    !name ||
+    !position ||
+    !employmentType ||
+    !localHotel ||
+    !province ||
+    !crewInitials
+  ) {
+
+    showMessage(
+      "setupMessage",
+      "Please complete all required fields.",
+      "error"
+    );
+
+    return;
   }
 
 
-  async function saveProfile() {
+  if (
+    employmentType ===
+      "Incorporated Contractor" &&
+    (!corporationName || !gstNumber)
+  ) {
 
-    const name =
-      document.getElementById("crewName").value.trim();
+    showMessage(
+      "setupMessage",
+      "Please enter your corporation name and GST number.",
+      "error"
+    );
 
-    const position =
-      document.getElementById("position").value;
-
-    const dayRate =
-      parseFloat(
-        document.getElementById("dayRate").value
-      ) || 0;
-
-    const kitRental =
-      parseFloat(
-        document.getElementById("kitRental").value
-      ) || 0;
-
-    const equipmentNotes =
-      document.getElementById("equipmentNotes").value.trim();
+    return;
+  }
 
 
-    if (!name || !position) {
+  if (!productionId) {
 
-      showMessage(
-        "setupMessage",
-        "Please enter your name and position.",
-        "error"
-      );
-
-      return;
-    }
-
+    await findProduction();
 
     if (!productionId) {
-
-      await findProduction();
-
-      if (!productionId) {
-        return;
-      }
+      return;
     }
+  }
 
 
-    const { data, error } =
+  const profileData = {
+
+    user_id:
+      currentUser.id,
+
+    production_id:
+      productionId,
+
+    name:
+      name,
+
+    position:
+      position,
+
+    employment_type:
+      employmentType,
+
+    day_rate:
+      dayRate,
+
+    kit_rental:
+      kitRental,
+
+    fee_type:
+      feeType,
+
+    equipment_notes:
+      equipmentNotes,
+
+    local_hotel:
+      localHotel,
+
+    province:
+      province,
+
+    crew_initials:
+      crewInitials,
+
+    corporation_name:
+      employmentType ===
+        "Incorporated Contractor"
+        ? corporationName
+        : null,
+
+    gst_number:
+      employmentType ===
+        "Incorporated Contractor"
+        ? gstNumber
+        : null,
+
+    gst_amount:
+      employmentType ===
+        "Incorporated Contractor"
+        ? gstAmount
+        : null
+
+  };
+
+
+  let result;
+
+
+  if (currentProfile) {
+
+    result =
       await supabaseClient
         .from("crew_profiles")
-        .insert({
-          user_id: currentUser.id,
-          production_id: productionId,
-          name,
-          position,
-          day_rate: dayRate,
-          kit_rental: kitRental,
-          equipment_notes: equipmentNotes
-        })
+        .update(profileData)
+        .eq(
+          "id",
+          currentProfile.id
+        )
         .select()
         .single();
 
+  } else {
 
-    if (error) {
-
-      showMessage(
-        "setupMessage",
-        error.message,
-        "error"
-      );
-
-      return;
-    }
-
-
-    currentProfile = data;
-
-    showDTR();
-  }
-
-
-  function showDTR() {
-
-    showScreen("dtrScreen");
-
-    document.getElementById("dtrDate").value =
-      todayString();
-
-    document.getElementById("crewGreeting").textContent =
-      currentProfile.name +
-      " · " +
-      currentProfile.position;
-  }
-
-
-  async function submitDTR() {
-
-    const date =
-      document.getElementById("dtrDate").value;
-
-    const startValue =
-      document.getElementById("startTime").value;
-
-    const endValue =
-      document.getElementById("endTime").value;
-
-    const lunchMinutes =
-      parseInt(
-        document.getElementById("lunchMinutes").value,
-        10
-      ) || 0;
-
-    const notes =
-      document.getElementById("dtrNotes").value.trim();
-
-
-    if (!date || !startValue || !endValue) {
-
-      showMessage(
-        "dtrMessage",
-        "Please enter the date, start time and end time.",
-        "error"
-      );
-
-      return;
-    }
-
-
-    const startMinutes =
-      parseTimeToMinutes(startValue);
-
-    const endMinutes =
-      parseTimeToMinutes(endValue);
-
-
-    if (startMinutes === null) {
-
-      showMessage(
-        "dtrMessage",
-        "Start time must be between 00:00 and 48:00.",
-        "error"
-      );
-
-      return;
-    }
-
-
-    if (endMinutes === null) {
-
-      showMessage(
-        "dtrMessage",
-        "End time must be between 00:00 and 48:00.",
-        "error"
-      );
-
-      return;
-    }
-
-
-    if (endMinutes <= startMinutes) {
-
-      showMessage(
-        "dtrMessage",
-        "End time must be later than start time. Use 25:00 instead of 01:00 for an after-midnight finish.",
-        "error"
-      );
-
-      return;
-    }
-
-
-    if (lunchMinutes < 0) {
-
-      showMessage(
-        "dtrMessage",
-        "Lunch duration cannot be negative.",
-        "error"
-      );
-
-      return;
-    }
-
-
-    if ((endMinutes - startMinutes) < lunchMinutes) {
-
-      showMessage(
-        "dtrMessage",
-        "Lunch cannot be longer than the total shift.",
-        "error"
-      );
-
-      return;
-    }
-
-
-    const { error } =
+    result =
       await supabaseClient
-        .from("dtrs")
-        .upsert(
-          {
-            crew_profile_id: currentProfile.id,
-            date,
-            start_minutes: startMinutes,
-            lunch_minutes: lunchMinutes,
-            end_minutes: endMinutes,
-            notes,
-            status: "submitted",
-            updated_at: new Date().toISOString()
-          },
-          {
-            onConflict: "crew_profile_id,date"
-          }
-        );
+        .from("crew_profiles")
+        .insert(profileData)
+        .select()
+        .single();
+
+  }
 
 
-    if (error) {
+  if (result.error) {
 
-      showMessage(
-        "dtrMessage",
-        error.message,
-        "error"
-      );
+    showMessage(
+      "setupMessage",
+      result.error.message,
+      "error"
+    );
 
-      return;
-    }
+    return;
+  }
 
+
+  currentProfile =
+    result.data;
+
+
+  showDTR();
+}
+
+
+
+function showDTR() {
+
+  showScreen("dtrScreen");
+
+
+  document.getElementById(
+    "dtrDate"
+  ).value =
+    todayString();
+
+
+  document.getElementById(
+    "crewGreeting"
+  ).textContent =
+    currentProfile.name +
+    " · " +
+    currentProfile.position;
+}
+
+
+
+async function submitDTR() {
+
+  const date =
+    document
+      .getElementById(
+        "dtrDate"
+      ).value;
+
+  const startValue =
+    document
+      .getElementById(
+        "startTime"
+      ).value;
+
+  const lunchStartValue =
+    document
+      .getElementById(
+        "lunchStart"
+      ).value;
+
+  const lunchEndValue =
+    document
+      .getElementById(
+        "lunchEnd"
+      ).value;
+
+  const endValue =
+    document
+      .getElementById(
+        "endTime"
+      ).value;
+
+  const notes =
+    document
+      .getElementById(
+        "dtrNotes"
+      )
+      .value
+      .trim();
+
+
+  if (
+    !date ||
+    !startValue ||
+    !lunchStartValue ||
+    !lunchEndValue ||
+    !endValue
+  ) {
 
     showMessage(
       "dtrMessage",
-      "DTR submitted successfully.",
-      "success"
+      "Please complete IN, Lunch Start, Lunch End and OUT.",
+      "error"
     );
+
+    return;
   }
 
 
-  async function signOut() {
+  const startMinutes =
+    parseTimeToMinutes(startValue);
 
-    await supabaseClient.auth.signOut();
+  const lunchStartMinutes =
+    parseTimeToMinutes(
+      lunchStartValue
+    );
 
-    currentUser = null;
-    currentProfile = null;
-    productionId = null;
+  const lunchEndMinutes =
+    parseTimeToMinutes(
+      lunchEndValue
+    );
 
-    showScreen("loginScreen");
+  const endMinutes =
+    parseTimeToMinutes(endValue);
+
+
+  if (
+    startMinutes === null ||
+    lunchStartMinutes === null ||
+    lunchEndMinutes === null ||
+    endMinutes === null
+  ) {
+
+    showMessage(
+      "dtrMessage",
+      "Times must use HH:MM format and be between 00:00 and 48:00.",
+      "error"
+    );
+
+    return;
   }
 
 
-  initialize();
+  if (lunchStartMinutes < startMinutes) {
+
+    showMessage(
+      "dtrMessage",
+      "Lunch Start cannot be before IN.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if (
+    lunchEndMinutes <=
+    lunchStartMinutes
+  ) {
+
+    showMessage(
+      "dtrMessage",
+      "Lunch End must be later than Lunch Start.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if (
+    endMinutes <=
+    lunchEndMinutes
+  ) {
+
+    showMessage(
+      "dtrMessage",
+      "OUT must be later than Lunch End. For after-midnight finishes, use 25:00, 26:30, etc.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const { error } =
+    await supabaseClient
+      .from("dtrs")
+      .upsert(
+        {
+          crew_profile_id:
+            currentProfile.id,
+
+          date:
+            date,
+
+          start_minutes:
+            startMinutes,
+
+          lunch_start_minutes:
+            lunchStartMinutes,
+
+          lunch_end_minutes:
+            lunchEndMinutes,
+
+          end_minutes:
+            endMinutes,
+
+          notes:
+            notes,
+
+          status:
+            "submitted",
+
+          updated_at:
+            new Date().toISOString()
+        },
+        {
+          onConflict:
+            "crew_profile_id,date"
+        }
+      );
+
+
+  if (error) {
+
+    showMessage(
+      "dtrMessage",
+      error.message,
+      "error"
+    );
+
+    return;
+  }
+
+
+  showMessage(
+    "dtrMessage",
+    "DTR submitted successfully.",
+    "success"
+  );
+}
+
+
+
+async function signOut() {
+
+  await supabaseClient.auth.signOut();
+
+  currentUser = null;
+  currentProfile = null;
+  productionId = null;
+
+  showScreen("loginScreen");
+}
+
+
+
+initialize();
 
 </script>
 
 </body>
 </html>
-```
