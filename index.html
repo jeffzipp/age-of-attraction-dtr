@@ -3,53 +3,81 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111111">
+
   <title>Age of Attraction DTR</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #111;
       color: white;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .container {
       width: 90%;
-      max-width: 420px;
+      max-width: 440px;
+      margin: 0 auto;
+      padding: 50px 0;
     }
 
     h1 {
-      font-size: 32px;
-      margin-bottom: 8px;
+      font-size: 30px;
+      margin: 0 0 6px;
+    }
+
+    h2 {
+      font-size: 22px;
+      margin-top: 35px;
     }
 
     .subtitle {
-      color: #aaa;
-      margin-bottom: 32px;
+      color: #999;
+      margin-bottom: 30px;
     }
 
-    input, button {
+    label {
+      display: block;
+      margin: 18px 0 7px;
+      font-size: 14px;
+      color: #bbb;
+    }
+
+    input,
+    select,
+    textarea,
+    button {
       width: 100%;
-      box-sizing: border-box;
-      padding: 15px;
-      margin-bottom: 12px;
-      border-radius: 8px;
-      border: none;
+      font-family: inherit;
       font-size: 16px;
+      border-radius: 8px;
     }
 
-    input {
+    input,
+    select,
+    textarea {
+      padding: 14px;
       background: #222;
       color: white;
+      border: 1px solid #333;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
     }
 
     button {
+      padding: 15px;
+      margin-top: 20px;
+      border: none;
       background: white;
       color: #111;
       font-weight: 600;
@@ -61,10 +89,28 @@
       color: white;
     }
 
-    #message {
-      margin-top: 15px;
-      color: #aaa;
+    .hidden {
+      display: none;
     }
+
+    #message {
+      margin-top: 18px;
+      color: #aaa;
+      line-height: 1.4;
+    }
+
+    .card {
+      background: #1b1b1b;
+      border: 1px solid #292929;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .success {
+      color: #9ee493;
+    }
+
   </style>
 </head>
 
@@ -72,74 +118,532 @@
 
 <div class="container">
 
-  <h1>Age of Attraction</h1>
-  <div class="subtitle">Season 2 · Sound Department</div>
+  <!-- LOGIN -->
+  <div id="loginScreen">
 
-  <input id="email" type="email" placeholder="Email">
-  <input id="password" type="password" placeholder="Password">
+    <h1>Age of Attraction</h1>
+    <div class="subtitle">Season 2 · Sound Department</div>
 
-  <button onclick="signIn()">Log In</button>
-  <button class="secondary" onclick="signUp()">Create Account</button>
+    <label>Email</label>
+    <input id="email" type="email" autocomplete="email">
 
-  <div id="message"></div>
+    <label>Password</label>
+    <input id="password" type="password" autocomplete="current-password">
+
+    <button onclick="signIn()">Log In</button>
+
+    <button class="secondary" onclick="signUp()">
+      Create Account
+    </button>
+
+    <div id="loginMessage"></div>
+
+  </div>
+
+
+  <!-- CREW SETUP -->
+  <div id="setupScreen" class="hidden">
+
+    <h1>Welcome</h1>
+    <div class="subtitle">
+      Let's set up your sound department profile.
+    </div>
+
+    <label>Name</label>
+    <input id="crewName" type="text" placeholder="Full name">
+
+    <label>Position</label>
+    <select id="position">
+      <option value="">Select position</option>
+      <option value="HOD">HOD</option>
+      <option value="A1">A1</option>
+      <option value="A2">A2</option>
+      <option value="Bag Mixer">Bag Mixer</option>
+    </select>
+
+    <label>Day Rate</label>
+    <input id="dayRate" type="number" step="0.01" placeholder="650.00">
+
+    <label>Kit Rental</label>
+    <input id="kitRental" type="number" step="0.01" placeholder="350.00">
+
+    <label>Kit / Equipment Notes</label>
+    <textarea
+      id="equipmentNotes"
+      placeholder="Optional equipment information"
+    ></textarea>
+
+    <button onclick="saveProfile()">Save Profile</button>
+
+    <div id="setupMessage"></div>
+
+  </div>
+
+
+  <!-- DAILY DTR -->
+  <div id="dtrScreen" class="hidden">
+
+    <h1>Daily DTR</h1>
+    <div class="subtitle">
+      Age of Attraction · Season 2
+    </div>
+
+    <div class="card">
+      <strong id="crewDisplayName"></strong>
+      <div id="crewDisplayPosition"></div>
+    </div>
+
+    <label>Date</label>
+    <input id="dtrDate" type="date">
+
+    <label>Start Time</label>
+    <input id="startTime" type="time">
+
+    <label>Lunch Duration</label>
+    <select id="lunchMinutes">
+      <option value="0">No lunch</option>
+      <option value="30">30 minutes</option>
+      <option value="45">45 minutes</option>
+      <option value="60">1 hour</option>
+      <option value="75">1 hour 15 minutes</option>
+      <option value="90">1 hour 30 minutes</option>
+    </select>
+
+    <label>End Time</label>
+    <input id="endTime" type="time">
+
+    <label>Notes</label>
+    <textarea
+      id="dtrNotes"
+      placeholder="Optional notes"
+    ></textarea>
+
+    <button onclick="submitDTR()">Submit DTR</button>
+
+    <button class="secondary" onclick="signOut()">
+      Log Out
+    </button>
+
+    <div id="dtrMessage"></div>
+
+  </div>
 
 </div>
 
+
 <script>
 
-const SUPABASE_URL = "https://hyhzcikkoqvvfyiffmla.supabase.co";
+const SUPABASE_URL =
+  "https://hyhzcikkoqvvfyiffmla.supabase.co";
 
-const SUPABASE_KEY = "sb_publishable_Gl1oRE_S8bRTiI65vCnHRQ_InR0_wX1";
+const SUPABASE_KEY =
+  "sb_publishable_Gl1oRE_S8bRTiI65vCnHRQ_InR0_wX1";
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+let currentUser = null;
+let currentProfile = null;
+
+
+/* -------------------------
+   STARTUP
+------------------------- */
+
+async function initialize() {
+
+  const {
+    data: { session }
+  } = await supabaseClient.auth.getSession();
+
+  if (session) {
+
+    currentUser = session.user;
+
+    await loadProfile();
+
+  }
+
+}
+
+
+/* -------------------------
+   SIGN UP
+------------------------- */
 
 async function signUp() {
 
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const email =
+    document.getElementById("email").value.trim();
+
+  const password =
+    document.getElementById("password").value;
 
   if (!email || !password) {
-    showMessage("Please enter an email and password.");
+
+    showLoginMessage(
+      "Please enter an email and password."
+    );
+
     return;
   }
 
-  const { error } = await supabaseClient.auth.signUp({
-    email: email,
-    password: password
-  });
+  const { error } =
+    await supabaseClient.auth.signUp({
+      email,
+      password
+    });
 
   if (error) {
-    showMessage(error.message);
+
+    showLoginMessage(error.message);
+
     return;
   }
 
-  showMessage("Account created. You can now log in.");
+  showLoginMessage(
+    "Account created. You can now log in."
+  );
+
 }
+
+
+/* -------------------------
+   LOGIN
+------------------------- */
 
 async function signIn() {
 
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const email =
+    document.getElementById("email").value.trim();
 
-  const { error } = await supabaseClient.auth.signInWithPassword({
-    email: email,
-    password: password
-  });
+  const password =
+    document.getElementById("password").value;
+
+  const { data, error } =
+    await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
 
   if (error) {
-    showMessage(error.message);
+
+    showLoginMessage(error.message);
+
     return;
   }
 
-  showMessage("Logged in!");
+  currentUser = data.user;
+
+  await loadProfile();
+
 }
 
-function showMessage(message) {
-  document.getElementById("message").textContent = message;
+
+/* -------------------------
+   LOAD PROFILE
+------------------------- */
+
+async function loadProfile() {
+
+  const { data, error } =
+    await supabaseClient
+      .from("crew_profiles")
+      .select("*")
+      .eq("user_id", currentUser.id)
+      .maybeSingle();
+
+  if (error) {
+
+    console.error(error);
+
+    showLoginMessage(
+      "Unable to load your profile."
+    );
+
+    return;
+  }
+
+  if (!data) {
+
+    showSetup();
+
+  } else {
+
+    currentProfile = data;
+
+    showDTR();
+
+  }
+
 }
+
+
+/* -------------------------
+   SAVE PROFILE
+------------------------- */
+
+async function saveProfile() {
+
+  const name =
+    document.getElementById("crewName").value.trim();
+
+  const position =
+    document.getElementById("position").value;
+
+  const dayRate =
+    parseFloat(
+      document.getElementById("dayRate").value
+    ) || 0;
+
+  const kitRental =
+    parseFloat(
+      document.getElementById("kitRental").value
+    ) || 0;
+
+  const equipmentNotes =
+    document.getElementById("equipmentNotes").value.trim();
+
+
+  if (!name || !position) {
+
+    showSetupMessage(
+      "Please enter your name and position."
+    );
+
+    return;
+  }
+
+
+  /* Get Age of Attraction S2 */
+
+  const { data: production, error: productionError } =
+    await supabaseClient
+      .from("productions")
+      .select("id")
+      .eq("name", "Age of Attraction")
+      .eq("season", "Season 2")
+      .single();
+
+
+  if (productionError) {
+
+    console.error(productionError);
+
+    showSetupMessage(
+      "Unable to find the production."
+    );
+
+    return;
+  }
+
+
+  /* Save profile */
+
+  const { data, error } =
+    await supabaseClient
+      .from("crew_profiles")
+      .insert({
+        user_id: currentUser.id,
+        production_id: production.id,
+        name: name,
+        position: position,
+        day_rate: dayRate,
+        kit_rental: kitRental,
+        equipment_notes: equipmentNotes
+      })
+      .select()
+      .single();
+
+
+  if (error) {
+
+    console.error(error);
+
+    showSetupMessage(error.message);
+
+    return;
+  }
+
+
+  currentProfile = data;
+
+  showDTR();
+
+}
+
+
+/* -------------------------
+   SHOW SETUP
+------------------------- */
+
+function showSetup() {
+
+  document
+    .getElementById("loginScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("setupScreen")
+    .classList.remove("hidden");
+
+}
+
+
+/* -------------------------
+   SHOW DTR
+------------------------- */
+
+function showDTR() {
+
+  document
+    .getElementById("loginScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("setupScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("dtrScreen")
+    .classList.remove("hidden");
+
+
+  document.getElementById("crewDisplayName")
+    .textContent = currentProfile.name;
+
+  document.getElementById("crewDisplayPosition")
+    .textContent = currentProfile.position;
+
+
+  /* Default date to today */
+
+  const today =
+    new Date().toISOString().split("T")[0];
+
+  document.getElementById("dtrDate").value = today;
+
+}
+
+
+/* -------------------------
+   SUBMIT DTR
+------------------------- */
+
+async function submitDTR() {
+
+  const date =
+    document.getElementById("dtrDate").value;
+
+  const start =
+    document.getElementById("startTime").value;
+
+  const lunch =
+    parseInt(
+      document.getElementById("lunchMinutes").value
+    );
+
+  const end =
+    document.getElementById("endTime").value;
+
+  const notes =
+    document.getElementById("dtrNotes").value.trim();
+
+
+  if (!date || !start || !end) {
+
+    showDTRMessage(
+      "Please enter the date, start time and end time."
+    );
+
+    return;
+  }
+
+
+  const { error } =
+    await supabaseClient
+      .from("dtrs")
+      .insert({
+        crew_profile_id: currentProfile.id,
+        date: date,
+        start_time: start,
+        lunch_minutes: lunch,
+        end_time: end,
+        notes: notes
+      });
+
+
+  if (error) {
+
+    console.error(error);
+
+    showDTRMessage(error.message);
+
+    return;
+  }
+
+
+  showDTRMessage(
+    "DTR submitted successfully.",
+    true
+  );
+
+}
+
+
+/* -------------------------
+   LOG OUT
+------------------------- */
+
+async function signOut() {
+
+  await supabaseClient.auth.signOut();
+
+  location.reload();
+
+}
+
+
+/* -------------------------
+   MESSAGES
+------------------------- */
+
+function showLoginMessage(message) {
+
+  document.getElementById("loginMessage")
+    .textContent = message;
+
+}
+
+function showSetupMessage(message) {
+
+  document.getElementById("setupMessage")
+    .textContent = message;
+
+}
+
+function showDTRMessage(message, success = false) {
+
+  const element =
+    document.getElementById("dtrMessage");
+
+  element.textContent = message;
+
+  element.className =
+    success ? "success" : "";
+
+}
+
+
+/* -------------------------
+   RUN
+------------------------- */
+
+initialize();
 
 </script>
 
