@@ -1,618 +1,967 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#111111">
 
-  <title>Age of Attraction DTR</title>
+<meta charset="UTF-8">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-    body {
-      margin: 0;
-      background: #111;
-      color: white;
-      font-family: Arial, Helvetica, sans-serif;
-      min-height: 100vh;
-    }
+<meta
+  name="theme-color"
+  content="#111111"
+>
 
-    .container {
-      max-width: 500px;
-      margin: 0 auto;
-      padding: 24px 20px 50px;
-    }
+<title>Age of Attraction DTR</title>
 
-    h1 {
-      margin: 0 0 6px;
-      font-size: 28px;
-    }
 
-    h2 {
-      margin: 0 0 25px;
-      font-size: 18px;
-      font-weight: normal;
-      color: #aaa;
-    }
+<style>
 
-    label {
-      display: block;
-      margin-top: 18px;
-      margin-bottom: 7px;
-      font-size: 14px;
-      color: #ccc;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    input,
-    select,
-    textarea {
-      width: 100%;
-      padding: 13px;
-      border-radius: 7px;
-      border: 1px solid #555;
-      background: #333;
-      color: white;
-      font-size: 16px;
-    }
+body {
+  margin: 0;
+  background: #111;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
 
-    select {
-      background: #444;
-      border-color: #666;
-    }
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 24px 20px 50px;
+}
 
-    textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
+.container.wide {
+  max-width: 1100px;
+}
 
-    input:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
+h1 {
+  margin: 0 0 6px;
+  font-size: 28px;
+}
 
-    input:focus,
-    select:focus,
-    textarea:focus {
-      outline: none;
-      border-color: #aaa;
-    }
+h2 {
+  margin: 0 0 25px;
+  font-size: 18px;
+  font-weight: normal;
+  color: #aaa;
+}
 
-    button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 22px;
-      border: none;
-      border-radius: 7px;
-      background: white;
-      color: #111;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+label {
+  display: block;
+  margin-top: 18px;
+  margin-bottom: 7px;
+  font-size: 14px;
+  color: #ccc;
+}
 
-    button.secondary {
-      background: #333;
-      color: white;
-      border: 1px solid #555;
-    }
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 13px;
+  border-radius: 7px;
+  border: 1px solid #555;
+  background: #333;
+  color: white;
+  font-size: 16px;
+}
 
-    button:hover {
-      opacity: 0.9;
-    }
+select {
+  background: #444;
+  border-color: #666;
+}
 
-    .subtitle {
-      color: #888;
-      margin-bottom: 25px;
-    }
+textarea {
+  min-height: 90px;
+  resize: vertical;
+}
 
-    .message {
-      margin-top: 18px;
-      padding: 12px;
-      border-radius: 7px;
-      background: #222;
-      color: #ddd;
-      display: none;
-    }
+input:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
 
-    .message.success {
-      display: block;
-      background: #18351f;
-      color: #a8e6b4;
-    }
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #aaa;
+}
 
-    .message.error {
-      display: block;
-      background: #3a1818;
-      color: #ffb0b0;
-    }
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 22px;
+  border: none;
+  border-radius: 7px;
+  background: white;
+  color: #111;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    .hidden {
-      display: none !important;
-    }
+button.secondary {
+  background: #333;
+  color: white;
+  border: 1px solid #555;
+}
 
-    .time-help {
-      margin-top: 6px;
-      font-size: 13px;
-      color: #888;
-    }
+button:hover {
+  opacity: 0.9;
+}
 
-    .hours-preview {
-      margin-top: 20px;
-      padding: 15px;
-      background: #1d1d1d;
-      border: 1px solid #333;
-      border-radius: 7px;
-      text-align: center;
-    }
+.subtitle {
+  color: #888;
+  margin-bottom: 25px;
+}
 
-    .hours-number {
-      font-size: 22px;
-      font-weight: bold;
-    }
+.message {
+  margin-top: 18px;
+  padding: 12px;
+  border-radius: 7px;
+  background: #222;
+  color: #ddd;
+  display: none;
+}
 
-    .hours-detail {
-      margin-top: 5px;
-      font-size: 13px;
-      color: #999;
-    }
+.message.success {
+  display: block;
+  background: #18351f;
+  color: #a8e6b4;
+}
 
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 15px;
-      margin-bottom: 25px;
-    }
+.message.error {
+  display: block;
+  background: #3a1818;
+  color: #ffb0b0;
+}
 
-    .top-bar button {
-      width: auto;
-      margin: 0;
-      padding: 8px 12px;
-      font-size: 13px;
-    }
+.hidden {
+  display: none !important;
+}
 
-    .section {
-      margin-top: 30px;
-      padding-top: 5px;
-      border-top: 1px solid #333;
-    }
+.time-help {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #888;
+}
 
-    .section-title {
-      margin-top: 20px;
-      margin-bottom: 0;
-      font-size: 16px;
-      font-weight: bold;
-    }
+.hours-preview {
+  margin-top: 20px;
+  padding: 15px;
+  background: #1d1d1d;
+  border: 1px solid #333;
+  border-radius: 7px;
+  text-align: center;
+}
 
-    .checkbox-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-top: 22px;
-      padding: 14px;
-      background: #1d1d1d;
-      border: 1px solid #444;
-      border-radius: 7px;
-      cursor: pointer;
-    }
+.hours-number {
+  font-size: 22px;
+  font-weight: bold;
+}
 
-    .checkbox-row input {
-      width: 20px;
-      height: 20px;
-      margin: 0;
-      padding: 0;
-      accent-color: white;
-    }
+.hours-detail {
+  margin-top: 5px;
+  font-size: 13px;
+  color: #999;
+}
 
-    .checkbox-row span {
-      font-size: 16px;
-      color: white;
-    }
-  </style>
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.top-bar button {
+  width: auto;
+  margin: 0;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.section {
+  margin-top: 30px;
+  padding-top: 5px;
+  border-top: 1px solid #333;
+}
+
+.section-title {
+  margin-top: 20px;
+  margin-bottom: 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+  padding: 14px;
+  background: #1d1d1d;
+  border: 1px solid #444;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.checkbox-row input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  accent-color: white;
+}
+
+.checkbox-row span {
+  font-size: 16px;
+  color: white;
+}
+
+
+/* ================================================
+   TIMESHEET
+================================================ */
+
+.timesheet-header {
+  margin-bottom: 18px;
+}
+
+.timesheet-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.timesheet-actions button {
+  width: auto;
+  margin: 0;
+  flex: 1;
+  min-width: 120px;
+}
+
+.week-ending {
+  text-align: center;
+  padding: 15px;
+  margin-bottom: 15px;
+  background: #1d1d1d;
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+
+.week-ending-label {
+  color: #888;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.week-ending-date {
+  margin-top: 5px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.pdf-container {
+  background: #222;
+  border: 1px solid #333;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#timesheetPDF {
+  display: block;
+  width: 100%;
+  height: 75vh;
+  min-height: 600px;
+  border: 0;
+  background: white;
+}
+
+.loading {
+  padding: 50px 20px;
+  text-align: center;
+  color: #aaa;
+}
+
+.timesheet-note {
+  margin-top: 12px;
+  color: #777;
+  font-size: 13px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+
+  #timesheetPDF {
+    height: 68vh;
+    min-height: 500px;
+  }
+
+  .timesheet-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .timesheet-actions button {
+    width: 100%;
+  }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-<div class="container">
+<div
+  id="appContainer"
+  class="container"
+>
 
-  <!-- LOGIN -->
 
-  <div id="loginScreen">
+<!-- =================================================
+     LOGIN
+================================================== -->
 
-    <h1>Age of Attraction</h1>
-    <h2>Season 2 · Sound Department</h2>
+<div id="loginScreen">
 
-    <label>Email</label>
+  <h1>Age of Attraction</h1>
+
+  <h2>
+    Season 2 · Sound Department
+  </h2>
+
+
+  <label>Email</label>
+
+  <input
+    type="email"
+    id="email"
+    autocomplete="email"
+  >
+
+
+  <label>Password</label>
+
+  <input
+    type="password"
+    id="password"
+    autocomplete="current-password"
+  >
+
+
+  <button onclick="signIn()">
+    Log In
+  </button>
+
+
+  <button
+    class="secondary"
+    onclick="signUp()"
+  >
+    Create Account
+  </button>
+
+
+  <div
+    id="loginMessage"
+    class="message"
+  ></div>
+
+</div>
+
+
+
+<!-- =================================================
+     CREW SETUP
+================================================== -->
+
+<div
+  id="setupScreen"
+  class="hidden"
+>
+
+  <h1>Crew Setup</h1>
+
+  <div class="subtitle">
+    Enter your production and payroll information.
+  </div>
+
+
+  <label>Name</label>
+
+  <input
+    type="text"
+    id="crewName"
+  >
+
+
+  <label>Department</label>
+
+  <input
+    type="text"
+    value="Sound"
+    disabled
+  >
+
+
+  <label>Position</label>
+
+  <select id="position">
+
+    <option value="">
+      Select position
+    </option>
+
+    <option value="HOD">
+      HOD
+    </option>
+
+    <option value="A1">
+      A1
+    </option>
+
+    <option value="A2">
+      A2
+    </option>
+
+    <option value="Bag Mixer">
+      Bag Mixer
+    </option>
+
+  </select>
+
+
+  <label>Employee Type</label>
+
+  <select
+    id="employmentType"
+    onchange="updateEmploymentFields()"
+  >
+
+    <option value="">
+      Select type
+    </option>
+
+    <option value="Employee">
+      Employee
+    </option>
+
+    <option value="Incorporated Contractor">
+      Incorporated Contractor
+    </option>
+
+  </select>
+
+
+
+  <div
+    id="corporationFields"
+    class="hidden section"
+  >
+
+    <div class="section-title">
+      Corporation Information
+    </div>
+
+
+    <label>Corporation Name</label>
+
     <input
-      type="email"
-      id="email"
-      autocomplete="email"
+      type="text"
+      id="corporationName"
     >
 
-    <label>Password</label>
+
+    <label>GST #</label>
+
     <input
-      type="password"
-      id="password"
-      autocomplete="current-password"
+      type="text"
+      id="gstNumber"
     >
 
-    <button onclick="signIn()">
-      Log In
-    </button>
+
+    <label>GST Amount</label>
+
+    <input
+      type="number"
+      id="gstAmount"
+      min="0"
+      step="0.01"
+      inputmode="decimal"
+    >
+
+  </div>
+
+
+
+  <div class="section">
+
+    <div class="section-title">
+      Rate & Kit
+    </div>
+
+
+    <label>Day Rate</label>
+
+    <input
+      type="number"
+      id="dayRate"
+      min="0"
+      step="0.01"
+      inputmode="decimal"
+    >
+
+
+    <label>Additional Fee</label>
+
+    <select id="feeType">
+
+      <option value="None">
+        None
+      </option>
+
+      <option value="Kit">
+        Kit Fee
+      </option>
+
+      <option value="Vehicle">
+        Vehicle Fee
+      </option>
+
+    </select>
+
+
+    <label>Fee Amount</label>
+
+    <input
+      type="number"
+      id="kitRental"
+      min="0"
+      step="0.01"
+      inputmode="decimal"
+      value="0"
+    >
+
+
+    <label>Kit / Equipment Notes</label>
+
+    <textarea
+      id="equipmentNotes"
+      placeholder="Optional"
+    ></textarea>
+
+  </div>
+
+
+
+  <div class="section">
+
+    <div class="section-title">
+      Production Information
+    </div>
+
+
+    <label>Local / Hotel</label>
+
+    <select id="localHotel">
+
+      <option value="">
+        Select
+      </option>
+
+      <option value="Local">
+        Local
+      </option>
+
+      <option value="Hotel">
+        Hotel
+      </option>
+
+    </select>
+
+
+    <label>Province</label>
+
+    <select id="province">
+
+      <option value="">
+        Select province
+      </option>
+
+      <option value="BC">
+        BC
+      </option>
+
+      <option value="ON">
+        ON
+      </option>
+
+    </select>
+
+
+    <label>Crew Initials</label>
+
+    <input
+      type="text"
+      id="crewInitials"
+      maxlength="5"
+      placeholder="e.g. JZ"
+    >
+
+  </div>
+
+
+  <button onclick="saveProfile()">
+    Save Profile
+  </button>
+
+
+  <div
+    id="setupMessage"
+    class="message"
+  ></div>
+
+</div>
+
+
+
+<!-- =================================================
+     DAILY DTR
+================================================== -->
+
+<div
+  id="dtrScreen"
+  class="hidden"
+>
+
+  <div class="top-bar">
+
+    <div>
+
+      <h1>Daily DTR</h1>
+
+      <div
+        class="subtitle"
+        id="crewGreeting"
+      ></div>
+
+    </div>
+
 
     <button
       class="secondary"
-      onclick="signUp()"
+      onclick="signOut()"
     >
-      Create Account
+      Log Out
     </button>
 
+  </div>
+
+
+  <button
+    class="secondary"
+    onclick="openMyTimesheet()"
+  >
+    My Timesheet
+  </button>
+
+
+  <label>Date</label>
+
+  <input
+    type="date"
+    id="dtrDate"
+  >
+
+
+  <label>IN</label>
+
+  <input
+    type="text"
+    id="startTime"
+    placeholder="08:00"
+    inputmode="numeric"
+    maxlength="5"
+    autocomplete="off"
+  >
+
+
+  <div class="time-help">
+    24-hour format
+  </div>
+
+
+
+  <label class="checkbox-row">
+
+    <input
+      type="checkbox"
+      id="noLunch"
+      onchange="toggleLunch()"
+    >
+
+    <span>
+      No Lunch
+    </span>
+
+  </label>
+
+
+
+  <div id="lunchFields">
+
+    <label>Lunch Start</label>
+
+    <input
+      type="text"
+      id="lunchStart"
+      placeholder="13:00"
+      inputmode="numeric"
+      maxlength="5"
+      autocomplete="off"
+    >
+
+
+    <label>Lunch End</label>
+
+    <input
+      type="text"
+      id="lunchEnd"
+      placeholder="13:30"
+      inputmode="numeric"
+      maxlength="5"
+      autocomplete="off"
+    >
+
+  </div>
+
+
+  <label>OUT</label>
+
+  <input
+    type="text"
+    id="endTime"
+    placeholder="26:30"
+    inputmode="numeric"
+    maxlength="5"
+    autocomplete="off"
+  >
+
+
+  <div class="time-help">
+    For after-midnight finishes use 25:00,
+    26:30, etc. Maximum 48:00.
+  </div>
+
+
+
+  <div
+    id="hoursPreview"
+    class="hours-preview hidden"
+  >
+
     <div
-      id="loginMessage"
-      class="message"
+      id="hoursNumber"
+      class="hours-number"
+    ></div>
+
+    <div
+      id="hoursDetail"
+      class="hours-detail"
     ></div>
 
   </div>
 
 
-  <!-- CREW SETUP -->
+  <label>Notes</label>
+
+  <textarea
+    id="dtrNotes"
+    placeholder="Optional notes about the day"
+  ></textarea>
+
+
+  <button onclick="submitDTR()">
+    Submit DTR
+  </button>
+
 
   <div
-    id="setupScreen"
-    class="hidden"
-  >
+    id="dtrMessage"
+    class="message"
+  ></div>
 
-    <h1>Crew Setup</h1>
+</div>
 
-    <div class="subtitle">
-      Enter your production and payroll information.
+
+
+<!-- =================================================
+     MY TIMESHEET
+================================================== -->
+
+<div
+  id="timesheetScreen"
+  class="hidden"
+>
+
+  <div class="top-bar">
+
+    <div>
+
+      <h1>My Timesheet</h1>
+
+      <div
+        class="subtitle"
+        id="timesheetCrewName"
+      ></div>
+
     </div>
 
-    <label>Name</label>
-    <input
-      type="text"
-      id="crewName"
+
+    <button
+      class="secondary"
+      onclick="showDTR()"
     >
+      DTR
+    </button>
+
+  </div>
 
 
-    <label>Department</label>
-    <input
-      type="text"
-      value="Sound"
+
+  <div class="week-ending">
+
+    <div class="week-ending-label">
+      Week Ending
+    </div>
+
+    <div
+      id="weekEndingDisplay"
+      class="week-ending-date"
+    ></div>
+
+  </div>
+
+
+
+  <div class="timesheet-actions">
+
+    <button
+      class="secondary"
+      onclick="changeWeek(-7)"
+    >
+      ← Previous Week
+    </button>
+
+
+    <button
+      class="secondary"
+      onclick="goToCurrentWeek()"
+    >
+      This Week
+    </button>
+
+
+    <button
+      class="secondary"
+      onclick="changeWeek(7)"
+    >
+      Next Week →
+    </button>
+
+
+    <button
+      id="openPDFButton"
+      class="secondary"
+      onclick="openGeneratedPDF()"
       disabled
     >
-
-
-    <label>Position</label>
-
-    <select id="position">
-      <option value="">Select position</option>
-      <option value="HOD">HOD</option>
-      <option value="A1">A1</option>
-      <option value="A2">A2</option>
-      <option value="Bag Mixer">Bag Mixer</option>
-    </select>
-
-
-    <label>Employee Type</label>
-
-    <select
-      id="employmentType"
-      onchange="updateEmploymentFields()"
-    >
-      <option value="">Select type</option>
-      <option value="Employee">
-        Employee
-      </option>
-      <option value="Incorporated Contractor">
-        Incorporated Contractor
-      </option>
-    </select>
-
-
-    <!-- CORPORATION -->
-
-    <div
-      id="corporationFields"
-      class="hidden section"
-    >
-
-      <div class="section-title">
-        Corporation Information
-      </div>
-
-      <label>Corporation Name</label>
-      <input
-        type="text"
-        id="corporationName"
-      >
-
-      <label>GST #</label>
-      <input
-        type="text"
-        id="gstNumber"
-      >
-
-      <label>GST Amount</label>
-      <input
-        type="number"
-        id="gstAmount"
-        min="0"
-        step="0.01"
-        inputmode="decimal"
-      >
-
-    </div>
-
-
-    <!-- RATE -->
-
-    <div class="section">
-
-      <div class="section-title">
-        Rate & Kit
-      </div>
-
-      <label>Day Rate</label>
-
-      <input
-        type="number"
-        id="dayRate"
-        min="0"
-        step="0.01"
-        inputmode="decimal"
-      >
-
-
-      <label>Additional Fee</label>
-
-      <select id="feeType">
-        <option value="None">None</option>
-        <option value="Kit">Kit Fee</option>
-        <option value="Vehicle">Vehicle Fee</option>
-      </select>
-
-
-      <label>Fee Amount</label>
-
-      <input
-        type="number"
-        id="kitRental"
-        min="0"
-        step="0.01"
-        inputmode="decimal"
-        value="0"
-      >
-
-
-      <label>Kit / Equipment Notes</label>
-
-      <textarea
-        id="equipmentNotes"
-        placeholder="Optional"
-      ></textarea>
-
-    </div>
-
-
-    <!-- PRODUCTION INFO -->
-
-    <div class="section">
-
-      <div class="section-title">
-        Production Information
-      </div>
-
-
-      <label>Local / Hotel</label>
-
-      <select id="localHotel">
-        <option value="">Select</option>
-        <option value="Local">Local</option>
-        <option value="Hotel">Hotel</option>
-      </select>
-
-
-      <label>Province</label>
-
-      <select id="province">
-        <option value="">Select province</option>
-        <option value="BC">BC</option>
-        <option value="ON">ON</option>
-      </select>
-
-
-      <label>Crew Initials</label>
-
-      <input
-        type="text"
-        id="crewInitials"
-        maxlength="5"
-        placeholder="e.g. JZ"
-      >
-
-    </div>
-
-
-    <button onclick="saveProfile()">
-      Save Profile
+      Open PDF
     </button>
-
-    <div
-      id="setupMessage"
-      class="message"
-    ></div>
 
   </div>
 
 
-  <!-- DTR -->
 
   <div
-    id="dtrScreen"
-    class="hidden"
-  >
-
-    <div class="top-bar">
-
-      <div>
-
-        <h1>Daily DTR</h1>
-
-        <div
-          class="subtitle"
-          id="crewGreeting"
-        ></div>
-
-      </div>
-
-      <button
-        class="secondary"
-        onclick="signOut()"
-      >
-        Log Out
-      </button>
-
-    </div>
+    id="timesheetMessage"
+    class="message"
+  ></div>
 
 
-    <label>Date</label>
 
-    <input
-      type="date"
-      id="dtrDate"
-    >
-
-
-    <label>IN</label>
-
-    <input
-      type="text"
-      id="startTime"
-      placeholder="08:00"
-      inputmode="numeric"
-      maxlength="5"
-      autocomplete="off"
-    >
-
-    <div class="time-help">
-      24-hour format
-    </div>
-
-
-    <!-- NO LUNCH -->
-
-    <label class="checkbox-row">
-
-      <input
-        type="checkbox"
-        id="noLunch"
-        onchange="toggleLunch()"
-      >
-
-      <span>No Lunch</span>
-
-    </label>
-
-
-    <div id="lunchFields">
-
-      <label>Lunch Start</label>
-
-      <input
-        type="text"
-        id="lunchStart"
-        placeholder="13:00"
-        inputmode="numeric"
-        maxlength="5"
-        autocomplete="off"
-      >
-
-
-      <label>Lunch End</label>
-
-      <input
-        type="text"
-        id="lunchEnd"
-        placeholder="13:30"
-        inputmode="numeric"
-        maxlength="5"
-        autocomplete="off"
-      >
-
-    </div>
-
-
-    <label>OUT</label>
-
-    <input
-      type="text"
-      id="endTime"
-      placeholder="26:30"
-      inputmode="numeric"
-      maxlength="5"
-      autocomplete="off"
-    >
-
-    <div class="time-help">
-      For after-midnight finishes use 25:00, 26:30, etc. Maximum 48:00.
-    </div>
-
-
-    <!-- HOURS PREVIEW -->
+  <div class="pdf-container">
 
     <div
-      id="hoursPreview"
-      class="hours-preview hidden"
+      id="pdfLoading"
+      class="loading"
     >
-
-      <div
-        id="hoursNumber"
-        class="hours-number"
-      ></div>
-
-      <div
-        id="hoursDetail"
-        class="hours-detail"
-      ></div>
-
+      Building your timesheet...
     </div>
 
 
-    <label>Notes</label>
+    <iframe
+      id="timesheetPDF"
+      class="hidden"
+      title="Weekly Timesheet"
+    ></iframe>
 
-    <textarea
-      id="dtrNotes"
-      placeholder="Optional notes about the day"
-    ></textarea>
+  </div>
 
 
-    <button onclick="submitDTR()">
-      Submit DTR
-    </button>
-
-    <div
-      id="dtrMessage"
-      class="message"
-    ></div>
-
+  <div class="timesheet-note">
+    This is the production's original timesheet
+    populated from your submitted DTRs.
   </div>
 
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</div>
+
+
+
+<!-- =================================================
+     LIBRARIES
+================================================== -->
+
+<script
+  src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+<script
+  src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"
+></script>
+
+
 
 <script>
+
+/* ===================================================
+   SUPABASE
+=================================================== */
 
 const SUPABASE_URL =
   "https://hyhzcikkoqvvfyiffmla.supabase.co";
 
 const SUPABASE_KEY =
   "sb_publishable_Gl1oRE_S8bRTiI65vCnHRQ_InR0_wX1";
+
 
 const supabaseClient =
   window.supabase.createClient(
@@ -622,14 +971,20 @@ const supabaseClient =
 
 
 let currentUser = null;
+
 let currentProfile = null;
+
 let productionId = null;
 
+let currentWeekEnding = null;
+
+let currentPDFUrl = null;
 
 
-// -----------------------------------------------------
-// SCREEN HELPERS
-// -----------------------------------------------------
+
+/* ===================================================
+   SCREEN HELPERS
+=================================================== */
 
 function showScreen(screenId) {
 
@@ -646,8 +1001,37 @@ function showScreen(screenId) {
     .classList.add("hidden");
 
   document
+    .getElementById("timesheetScreen")
+    .classList.add("hidden");
+
+
+  document
     .getElementById(screenId)
     .classList.remove("hidden");
+
+
+  const container =
+    document.getElementById(
+      "appContainer"
+    );
+
+
+  if (
+    screenId ===
+    "timesheetScreen"
+  ) {
+
+    container
+      .classList
+      .add("wide");
+
+  } else {
+
+    container
+      .classList
+      .remove("wide");
+
+  }
 }
 
 
@@ -659,9 +1043,12 @@ function showMessage(
 ) {
 
   const element =
-    document.getElementById(elementId);
+    document.getElementById(
+      elementId
+    );
 
-  element.textContent = message;
+  element.textContent =
+    message;
 
   element.className =
     "message " + type;
@@ -669,44 +1056,204 @@ function showMessage(
 
 
 
-// -----------------------------------------------------
-// DATE
-// -----------------------------------------------------
+function clearMessage(
+  elementId
+) {
 
-function todayString() {
+  const element =
+    document.getElementById(
+      elementId
+    );
 
-  const now = new Date();
+  element.textContent = "";
 
-  const year =
-    now.getFullYear();
-
-  const month =
-    String(
-      now.getMonth() + 1
-    ).padStart(2, "0");
-
-  const day =
-    String(
-      now.getDate()
-    ).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
+  element.className =
+    "message";
 }
 
 
 
-// -----------------------------------------------------
-// TIME
-// -----------------------------------------------------
+/* ===================================================
+   DATE HELPERS
+=================================================== */
 
-function parseTimeToMinutes(value) {
+function dateToISO(date) {
 
-  value = value.trim();
+  const year =
+    date.getFullYear();
+
+  const month =
+    String(
+      date.getMonth() + 1
+    ).padStart(2, "0");
+
+  const day =
+    String(
+      date.getDate()
+    ).padStart(2, "0");
+
+
+  return (
+    year +
+    "-" +
+    month +
+    "-" +
+    day
+  );
+}
+
+
+
+function isoToLocalDate(
+  iso
+) {
+
+  const parts =
+    iso.split("-");
+
+  return new Date(
+    Number(parts[0]),
+    Number(parts[1]) - 1,
+    Number(parts[2]),
+    12,
+    0,
+    0
+  );
+}
+
+
+
+function todayString() {
+
+  return dateToISO(
+    new Date()
+  );
+}
+
+
+
+function getSaturdayForDate(
+  inputDate
+) {
+
+  const date =
+    new Date(
+      inputDate.getFullYear(),
+      inputDate.getMonth(),
+      inputDate.getDate(),
+      12,
+      0,
+      0
+    );
+
+
+  const day =
+    date.getDay();
+
+
+  const daysUntilSaturday =
+    (6 - day + 7) % 7;
+
+
+  date.setDate(
+    date.getDate() +
+    daysUntilSaturday
+  );
+
+
+  return date;
+}
+
+
+
+function getSundayForSaturday(
+  saturday
+) {
+
+  const sunday =
+    new Date(
+      saturday.getFullYear(),
+      saturday.getMonth(),
+      saturday.getDate(),
+      12,
+      0,
+      0
+    );
+
+
+  sunday.setDate(
+    sunday.getDate() - 6
+  );
+
+
+  return sunday;
+}
+
+
+
+function formatDisplayDate(
+  date
+) {
+
+  return date.toLocaleDateString(
+    "en-CA",
+    {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric"
+    }
+  );
+}
+
+
+
+function formatPDFDate(
+  date
+) {
+
+  const month =
+    String(
+      date.getMonth() + 1
+    ).padStart(2, "0");
+
+  const day =
+    String(
+      date.getDate()
+    ).padStart(2, "0");
+
+  const year =
+    date.getFullYear();
+
+
+  return (
+    month +
+    "/" +
+    day +
+    "/" +
+    year
+  );
+}
+
+
+
+/* ===================================================
+   TIME HELPERS
+=================================================== */
+
+function parseTimeToMinutes(
+  value
+) {
+
+  value =
+    value.trim();
+
 
   const match =
     value.match(
       /^(\d{1,2}):([0-5]\d)$/
     );
+
 
   if (!match) {
     return null;
@@ -718,6 +1265,7 @@ function parseTimeToMinutes(value) {
       match[1],
       10
     );
+
 
   const minutes =
     parseInt(
@@ -749,12 +1297,50 @@ function parseTimeToMinutes(value) {
 
 
 
-function minutesToDisplay(minutes) {
+function minutesToTime(
+  totalMinutes
+) {
+
+  if (
+    totalMinutes === null ||
+    totalMinutes === undefined
+  ) {
+    return "";
+  }
+
+
+  const hours =
+    Math.floor(
+      totalMinutes / 60
+    );
+
+
+  const minutes =
+    totalMinutes % 60;
+
+
+  return (
+    String(hours)
+      .padStart(2, "0")
+    +
+    ":"
+    +
+    String(minutes)
+      .padStart(2, "0")
+  );
+}
+
+
+
+function minutesToDisplay(
+  minutes
+) {
 
   const hours =
     Math.floor(
       minutes / 60
     );
+
 
   const mins =
     minutes % 60;
@@ -765,14 +1351,32 @@ function minutesToDisplay(minutes) {
   }
 
 
-  return `${hours}h ${mins}m`;
+  return (
+    `${hours}h ${mins}m`
+  );
 }
 
 
 
-// -----------------------------------------------------
-// EMPLOYEE / CORPORATION
-// -----------------------------------------------------
+function minutesToDecimalHours(
+  minutes
+) {
+
+  const decimal =
+    minutes / 60;
+
+
+  return decimal
+    .toFixed(2)
+    .replace(/\.00$/, "")
+    .replace(/(\.\d)0$/, "$1");
+}
+
+
+
+/* ===================================================
+   EMPLOYMENT FIELDS
+=================================================== */
 
 function updateEmploymentFields() {
 
@@ -782,6 +1386,7 @@ function updateEmploymentFields() {
         "employmentType"
       )
       .value;
+
 
   const fields =
     document
@@ -810,9 +1415,9 @@ function updateEmploymentFields() {
 
 
 
-// -----------------------------------------------------
-// NO LUNCH
-// -----------------------------------------------------
+/* ===================================================
+   NO LUNCH
+=================================================== */
 
 function toggleLunch() {
 
@@ -823,11 +1428,13 @@ function toggleLunch() {
       )
       .checked;
 
+
   const lunchStart =
     document
       .getElementById(
         "lunchStart"
       );
+
 
   const lunchEnd =
     document
@@ -846,6 +1453,7 @@ function toggleLunch() {
   if (noLunch) {
 
     lunchStart.value = "";
+
     lunchEnd.value = "";
 
   }
@@ -856,9 +1464,9 @@ function toggleLunch() {
 
 
 
-// -----------------------------------------------------
-// HOURS PREVIEW
-// -----------------------------------------------------
+/* ===================================================
+   HOURS PREVIEW
+=================================================== */
 
 function updateHoursPreview() {
 
@@ -871,6 +1479,7 @@ function updateHoursPreview() {
         .value
     );
 
+
   const end =
     parseTimeToMinutes(
       document
@@ -880,12 +1489,14 @@ function updateHoursPreview() {
         .value
     );
 
+
   const noLunch =
     document
       .getElementById(
         "noLunch"
       )
       .checked;
+
 
   const preview =
     document
@@ -921,6 +1532,7 @@ function updateHoursPreview() {
           )
           .value
       );
+
 
     const lunchEnd =
       parseTimeToMinutes(
@@ -996,284 +1608,335 @@ function updateHoursPreview() {
   "lunchStart",
   "lunchEnd",
   "endTime"
-].forEach(id => {
+]
+.forEach(
+  id => {
 
-  document
-    .getElementById(id)
-    .addEventListener(
-      "input",
-      updateHoursPreview
-    );
+    document
+      .getElementById(id)
+      .addEventListener(
+        "input",
+        updateHoursPreview
+      );
 
-});
+  }
+);
 
 
 
-// -----------------------------------------------------
-// INITIALIZE
-// -----------------------------------------------------
+/* ===================================================
+   INITIALIZE
+=================================================== */
 
 async function initialize() {
 
-  const {
-    data: { session }
-  } =
-    await supabaseClient
-      .auth
-      .getSession();
+  try {
+
+    const {
+      data: {
+        session
+      }
+    } =
+      await supabaseClient
+        .auth
+        .getSession();
 
 
-  if (!session) {
+    if (!session) {
+
+      showScreen(
+        "loginScreen"
+      );
+
+      return;
+    }
+
+
+    currentUser =
+      session.user;
+
+
+    await loadProfile();
+
+  } catch (error) {
 
     showScreen(
       "loginScreen"
     );
 
-    return;
+
+    showMessage(
+      "loginMessage",
+      error.message ||
+      "Unable to connect.",
+      "error"
+    );
+
   }
-
-
-  currentUser =
-    session.user;
-
-  await loadProfile();
 }
 
 
 
-// -----------------------------------------------------
-// SIGN UP
-// -----------------------------------------------------
+/* ===================================================
+   SIGN UP
+=================================================== */
 
 async function signUp() {
 
-  const email =
-    document
-      .getElementById(
-        "email"
-      )
-      .value
-      .trim();
+  try {
 
-  const password =
-    document
-      .getElementById(
-        "password"
-      )
-      .value;
+    const email =
+      document
+        .getElementById(
+          "email"
+        )
+        .value
+        .trim();
 
 
-  if (
-    !email ||
-    !password
-  ) {
+    const password =
+      document
+        .getElementById(
+          "password"
+        )
+        .value;
+
+
+    if (
+      !email ||
+      !password
+    ) {
+
+      showMessage(
+        "loginMessage",
+        "Please enter an email and password.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .auth
+        .signUp({
+          email,
+          password
+        });
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    currentUser =
+      data.user;
+
 
     showMessage(
       "loginMessage",
-      "Please enter an email and password.",
-      "error"
+      "Account created. You can now log in.",
+      "success"
     );
 
-    return;
-  }
-
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .auth
-      .signUp({
-        email,
-        password
-      });
-
-
-  if (error) {
+  } catch (error) {
 
     showMessage(
       "loginMessage",
-      error.message,
+      error.message ||
+      "Unable to create account.",
       "error"
     );
 
-    return;
   }
-
-
-  currentUser =
-    data.user;
-
-
-  showMessage(
-    "loginMessage",
-    "Account created. You can now log in.",
-    "success"
-  );
 }
 
 
 
-// -----------------------------------------------------
-// SIGN IN
-// -----------------------------------------------------
+/* ===================================================
+   SIGN IN
+=================================================== */
 
 async function signIn() {
 
-  const email =
-    document
-      .getElementById(
-        "email"
-      )
-      .value
-      .trim();
+  try {
 
-  const password =
-    document
-      .getElementById(
-        "password"
-      )
-      .value;
+    const email =
+      document
+        .getElementById(
+          "email"
+        )
+        .value
+        .trim();
 
 
-  if (
-    !email ||
-    !password
-  ) {
+    const password =
+      document
+        .getElementById(
+          "password"
+        )
+        .value;
+
+
+    if (
+      !email ||
+      !password
+    ) {
+
+      showMessage(
+        "loginMessage",
+        "Please enter an email and password.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .auth
+        .signInWithPassword({
+          email,
+          password
+        });
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    currentUser =
+      data.user;
+
+
+    await loadProfile();
+
+  } catch (error) {
 
     showMessage(
       "loginMessage",
-      "Please enter an email and password.",
+      error.message ||
+      "Unable to log in.",
       "error"
     );
 
-    return;
   }
-
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .auth
-      .signInWithPassword({
-        email,
-        password
-      });
-
-
-  if (error) {
-
-    showMessage(
-      "loginMessage",
-      error.message,
-      "error"
-    );
-
-    return;
-  }
-
-
-  currentUser =
-    data.user;
-
-  await loadProfile();
 }
 
 
 
-// -----------------------------------------------------
-// LOAD PROFILE
-// -----------------------------------------------------
+/* ===================================================
+   LOAD PROFILE
+=================================================== */
 
 async function loadProfile() {
 
-  const {
-    data: profiles,
-    error
-  } =
-    await supabaseClient
-      .from(
-        "crew_profiles"
-      )
-      .select("*")
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .limit(1);
+  try {
+
+    const {
+      data: profiles,
+      error
+    } =
+      await supabaseClient
+        .from(
+          "crew_profiles"
+        )
+        .select("*")
+        .eq(
+          "user_id",
+          currentUser.id
+        )
+        .limit(1);
 
 
-  if (error) {
+    if (error) {
+      throw error;
+    }
+
+
+    if (
+      !profiles ||
+      profiles.length === 0
+    ) {
+
+      await findProduction();
+
+
+      showScreen(
+        "setupScreen"
+      );
+
+
+      return;
+    }
+
+
+    currentProfile =
+      profiles[0];
+
+
+    productionId =
+      currentProfile
+        .production_id;
+
+
+    if (
+      !currentProfile
+        .employment_type ||
+      !currentProfile
+        .local_hotel ||
+      !currentProfile
+        .province ||
+      !currentProfile
+        .crew_initials
+    ) {
+
+      populateProfileForm();
+
+
+      showScreen(
+        "setupScreen"
+      );
+
+
+      return;
+    }
+
+
+    showDTR();
+
+  } catch (error) {
 
     showMessage(
       "loginMessage",
-      error.message,
+      error.message ||
+      "Unable to load profile.",
       "error"
     );
+
 
     showScreen(
       "loginScreen"
     );
 
-    return;
   }
-
-
-  if (
-    !profiles ||
-    profiles.length === 0
-  ) {
-
-    await findProduction();
-
-    showScreen(
-      "setupScreen"
-    );
-
-    return;
-  }
-
-
-  currentProfile =
-    profiles[0];
-
-  productionId =
-    currentProfile
-      .production_id;
-
-
-  if (
-    !currentProfile
-      .employment_type ||
-    !currentProfile
-      .local_hotel ||
-    !currentProfile
-      .province ||
-    !currentProfile
-      .crew_initials
-  ) {
-
-    populateProfileForm();
-
-    showScreen(
-      "setupScreen"
-    );
-
-    return;
-  }
-
-
-  showDTR();
 }
 
 
 
-// -----------------------------------------------------
-// POPULATE PROFILE
-// -----------------------------------------------------
+/* ===================================================
+   POPULATE PROFILE
+=================================================== */
 
 function populateProfileForm() {
 
@@ -1415,9 +2078,9 @@ function populateProfileForm() {
 
 
 
-// -----------------------------------------------------
-// FIND PRODUCTION
-// -----------------------------------------------------
+/* ===================================================
+   FIND PRODUCTION
+=================================================== */
 
 async function findProduction() {
 
@@ -1442,15 +2105,7 @@ async function findProduction() {
 
 
   if (error) {
-
-    showMessage(
-      "setupMessage",
-      "Unable to find the production: " +
-        error.message,
-      "error"
-    );
-
-    return;
+    throw error;
   }
 
 
@@ -1459,13 +2114,10 @@ async function findProduction() {
     data.length === 0
   ) {
 
-    showMessage(
-      "setupMessage",
-      "Unable to find the production.",
-      "error"
+    throw new Error(
+      "Unable to find the production."
     );
 
-    return;
   }
 
 
@@ -1475,281 +2127,293 @@ async function findProduction() {
 
 
 
-// -----------------------------------------------------
-// SAVE PROFILE
-// -----------------------------------------------------
+/* ===================================================
+   SAVE PROFILE
+=================================================== */
 
 async function saveProfile() {
 
-  const name =
-    document
-      .getElementById(
-        "crewName"
-      )
-      .value
-      .trim();
+  try {
 
-  const position =
-    document
-      .getElementById(
-        "position"
-      )
-      .value;
-
-  const employmentType =
-    document
-      .getElementById(
-        "employmentType"
-      )
-      .value;
-
-  const dayRate =
-    parseFloat(
-      document
-        .getElementById(
-          "dayRate"
-        )
-        .value
-    ) || 0;
-
-  const kitRental =
-    parseFloat(
-      document
-        .getElementById(
-          "kitRental"
-        )
-        .value
-    ) || 0;
-
-  const feeType =
-    document
-      .getElementById(
-        "feeType"
-      )
-      .value;
-
-  const equipmentNotes =
-    document
-      .getElementById(
-        "equipmentNotes"
-      )
-      .value
-      .trim();
-
-  const localHotel =
-    document
-      .getElementById(
-        "localHotel"
-      )
-      .value;
-
-  const province =
-    document
-      .getElementById(
-        "province"
-      )
-      .value;
-
-  const crewInitials =
-    document
-      .getElementById(
-        "crewInitials"
-      )
-      .value
-      .trim()
-      .toUpperCase();
-
-  const corporationName =
-    document
-      .getElementById(
-        "corporationName"
-      )
-      .value
-      .trim();
-
-  const gstNumber =
-    document
-      .getElementById(
-        "gstNumber"
-      )
-      .value
-      .trim();
-
-  const gstAmount =
-    parseFloat(
-      document
-        .getElementById(
-          "gstAmount"
-        )
-        .value
-    ) || 0;
-
-
-  if (
-    !name ||
-    !position ||
-    !employmentType ||
-    !localHotel ||
-    !province ||
-    !crewInitials
-  ) {
-
-    showMessage(
-      "setupMessage",
-      "Please complete all required fields.",
-      "error"
+    clearMessage(
+      "setupMessage"
     );
 
-    return;
-  }
+
+    const name =
+      document
+        .getElementById(
+          "crewName"
+        )
+        .value
+        .trim();
 
 
-  if (
-    employmentType ===
-      "Incorporated Contractor" &&
-    (
-      !corporationName ||
-      !gstNumber
-    )
-  ) {
-
-    showMessage(
-      "setupMessage",
-      "Please enter your corporation name and GST number.",
-      "error"
-    );
-
-    return;
-  }
+    const position =
+      document
+        .getElementById(
+          "position"
+        )
+        .value;
 
 
-  if (!productionId) {
+    const employmentType =
+      document
+        .getElementById(
+          "employmentType"
+        )
+        .value;
 
-    await findProduction();
+
+    const dayRate =
+      parseFloat(
+        document
+          .getElementById(
+            "dayRate"
+          )
+          .value
+      ) || 0;
+
+
+    const kitRental =
+      parseFloat(
+        document
+          .getElementById(
+            "kitRental"
+          )
+          .value
+      ) || 0;
+
+
+    const feeType =
+      document
+        .getElementById(
+          "feeType"
+        )
+        .value;
+
+
+    const equipmentNotes =
+      document
+        .getElementById(
+          "equipmentNotes"
+        )
+        .value
+        .trim();
+
+
+    const localHotel =
+      document
+        .getElementById(
+          "localHotel"
+        )
+        .value;
+
+
+    const province =
+      document
+        .getElementById(
+          "province"
+        )
+        .value;
+
+
+    const crewInitials =
+      document
+        .getElementById(
+          "crewInitials"
+        )
+        .value
+        .trim()
+        .toUpperCase();
+
+
+    const corporationName =
+      document
+        .getElementById(
+          "corporationName"
+        )
+        .value
+        .trim();
+
+
+    const gstNumber =
+      document
+        .getElementById(
+          "gstNumber"
+        )
+        .value
+        .trim();
+
+
+    const gstAmount =
+      parseFloat(
+        document
+          .getElementById(
+            "gstAmount"
+          )
+          .value
+      ) || 0;
+
+
+    if (
+      !name ||
+      !position ||
+      !employmentType ||
+      !localHotel ||
+      !province ||
+      !crewInitials
+    ) {
+
+      throw new Error(
+        "Please complete all required fields."
+      );
+
+    }
+
+
+    if (
+      employmentType ===
+      "Incorporated Contractor"
+      &&
+      (
+        !corporationName ||
+        !gstNumber
+      )
+    ) {
+
+      throw new Error(
+        "Please enter your corporation name and GST number."
+      );
+
+    }
+
 
     if (!productionId) {
-      return;
+      await findProduction();
     }
-  }
 
 
-  const profileData = {
+    const profileData = {
 
-    user_id:
-      currentUser.id,
+      user_id:
+        currentUser.id,
 
-    production_id:
-      productionId,
+      production_id:
+        productionId,
 
-    name:
       name,
 
-    position:
       position,
 
-    employment_type:
-      employmentType,
+      employment_type:
+        employmentType,
 
-    day_rate:
-      dayRate,
+      day_rate:
+        dayRate,
 
-    kit_rental:
-      kitRental,
+      kit_rental:
+        kitRental,
 
-    fee_type:
-      feeType,
+      fee_type:
+        feeType,
 
-    equipment_notes:
-      equipmentNotes,
+      equipment_notes:
+        equipmentNotes,
 
-    local_hotel:
-      localHotel,
+      local_hotel:
+        localHotel,
 
-    province:
       province,
 
-    crew_initials:
-      crewInitials,
+      crew_initials:
+        crewInitials,
 
-    corporation_name:
-      employmentType ===
+      corporation_name:
+        employmentType ===
         "Incorporated Contractor"
-        ? corporationName
-        : null,
+          ? corporationName
+          : null,
 
-    gst_number:
-      employmentType ===
+      gst_number:
+        employmentType ===
         "Incorporated Contractor"
-        ? gstNumber
-        : null,
+          ? gstNumber
+          : null,
 
-    gst_amount:
-      employmentType ===
+      gst_amount:
+        employmentType ===
         "Incorporated Contractor"
-        ? gstAmount
-        : null
-  };
+          ? gstAmount
+          : null
+
+    };
 
 
-  let result;
+    let result;
 
 
-  if (currentProfile) {
+    if (currentProfile) {
 
-    result =
-      await supabaseClient
-        .from(
-          "crew_profiles"
-        )
-        .update(
-          profileData
-        )
-        .eq(
-          "id",
-          currentProfile.id
-        )
-        .select()
-        .single();
+      result =
+        await supabaseClient
+          .from(
+            "crew_profiles"
+          )
+          .update(
+            profileData
+          )
+          .eq(
+            "id",
+            currentProfile.id
+          )
+          .select()
+          .single();
 
-  } else {
+    } else {
 
-    result =
-      await supabaseClient
-        .from(
-          "crew_profiles"
-        )
-        .insert(
-          profileData
-        )
-        .select()
-        .single();
+      result =
+        await supabaseClient
+          .from(
+            "crew_profiles"
+          )
+          .insert(
+            profileData
+          )
+          .select()
+          .single();
 
-  }
+    }
 
 
-  if (result.error) {
+    if (result.error) {
+      throw result.error;
+    }
+
+
+    currentProfile =
+      result.data;
+
+
+    showDTR();
+
+  } catch (error) {
 
     showMessage(
       "setupMessage",
-      result.error.message,
+      error.message ||
+      "Unable to save profile.",
       "error"
     );
 
-    return;
   }
-
-
-  currentProfile =
-    result.data;
-
-  showDTR();
 }
 
 
 
-// -----------------------------------------------------
-// SHOW DTR
-// -----------------------------------------------------
+/* ===================================================
+   SHOW DTR
+=================================================== */
 
 function showDTR() {
 
@@ -1758,12 +2422,22 @@ function showDTR() {
   );
 
 
-  document
-    .getElementById(
-      "dtrDate"
-    )
-    .value =
-      todayString();
+  if (
+    !document
+      .getElementById(
+        "dtrDate"
+      )
+      .value
+  ) {
+
+    document
+      .getElementById(
+        "dtrDate"
+      )
+      .value =
+        todayString();
+
+  }
 
 
   document
@@ -1778,304 +2452,1269 @@ function showDTR() {
 
 
 
-// -----------------------------------------------------
-// SUBMIT DTR
-// -----------------------------------------------------
+/* ===================================================
+   SUBMIT DTR
+=================================================== */
 
 async function submitDTR() {
 
-  const date =
+  try {
+
+    clearMessage(
+      "dtrMessage"
+    );
+
+
+    const date =
+      document
+        .getElementById(
+          "dtrDate"
+        )
+        .value;
+
+
+    const startValue =
+      document
+        .getElementById(
+          "startTime"
+        )
+        .value;
+
+
+    const endValue =
+      document
+        .getElementById(
+          "endTime"
+        )
+        .value;
+
+
+    const noLunch =
+      document
+        .getElementById(
+          "noLunch"
+        )
+        .checked;
+
+
+    const notes =
+      document
+        .getElementById(
+          "dtrNotes"
+        )
+        .value
+        .trim();
+
+
+    if (
+      !date ||
+      !startValue ||
+      !endValue
+    ) {
+
+      throw new Error(
+        "Please complete the date, IN and OUT."
+      );
+
+    }
+
+
+    const startMinutes =
+      parseTimeToMinutes(
+        startValue
+      );
+
+
+    const endMinutes =
+      parseTimeToMinutes(
+        endValue
+      );
+
+
+    if (
+      startMinutes === null ||
+      endMinutes === null
+    ) {
+
+      throw new Error(
+        "IN and OUT must use HH:MM format and be between 00:00 and 48:00."
+      );
+
+    }
+
+
+    if (
+      endMinutes <=
+      startMinutes
+    ) {
+
+      throw new Error(
+        "OUT must be later than IN. For after-midnight finishes use 25:00, 26:30, etc."
+      );
+
+    }
+
+
+    let lunchStartMinutes =
+      null;
+
+
+    let lunchEndMinutes =
+      null;
+
+
+    if (!noLunch) {
+
+      const lunchStartValue =
+        document
+          .getElementById(
+            "lunchStart"
+          )
+          .value;
+
+
+      const lunchEndValue =
+        document
+          .getElementById(
+            "lunchEnd"
+          )
+          .value;
+
+
+      if (
+        !lunchStartValue ||
+        !lunchEndValue
+      ) {
+
+        throw new Error(
+          "Please enter Lunch Start and Lunch End, or select No Lunch."
+        );
+
+      }
+
+
+      lunchStartMinutes =
+        parseTimeToMinutes(
+          lunchStartValue
+        );
+
+
+      lunchEndMinutes =
+        parseTimeToMinutes(
+          lunchEndValue
+        );
+
+
+      if (
+        lunchStartMinutes === null ||
+        lunchEndMinutes === null
+      ) {
+
+        throw new Error(
+          "Lunch times must use HH:MM format."
+        );
+
+      }
+
+
+      if (
+        lunchStartMinutes <
+        startMinutes
+      ) {
+
+        throw new Error(
+          "Lunch Start cannot be before IN."
+        );
+
+      }
+
+
+      if (
+        lunchEndMinutes <=
+        lunchStartMinutes
+      ) {
+
+        throw new Error(
+          "Lunch End must be later than Lunch Start."
+        );
+
+      }
+
+
+      if (
+        endMinutes <=
+        lunchEndMinutes
+      ) {
+
+        throw new Error(
+          "OUT must be later than Lunch End."
+        );
+
+      }
+
+    }
+
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(
+          "dtrs"
+        )
+        .upsert(
+          {
+
+            crew_profile_id:
+              currentProfile.id,
+
+            date,
+
+            start_minutes:
+              startMinutes,
+
+            lunch_start_minutes:
+              noLunch
+                ? null
+                : lunchStartMinutes,
+
+            lunch_end_minutes:
+              noLunch
+                ? null
+                : lunchEndMinutes,
+
+            end_minutes:
+              endMinutes,
+
+            no_lunch:
+              noLunch,
+
+            notes,
+
+            status:
+              "submitted",
+
+            updated_at:
+              new Date()
+                .toISOString()
+
+          },
+          {
+            onConflict:
+              "crew_profile_id,date"
+          }
+        );
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    showMessage(
+      "dtrMessage",
+      "DTR submitted successfully.",
+      "success"
+    );
+
+  } catch (error) {
+
+    showMessage(
+      "dtrMessage",
+      error.message ||
+      "Unable to submit DTR.",
+      "error"
+    );
+
+  }
+}
+
+
+
+/* ===================================================
+   OPEN MY TIMESHEET
+=================================================== */
+
+async function openMyTimesheet() {
+
+  const selectedDate =
     document
       .getElementById(
         "dtrDate"
       )
       .value;
 
-  const startValue =
-    document
-      .getElementById(
-        "startTime"
-      )
-      .value;
 
-  const endValue =
-    document
-      .getElementById(
-        "endTime"
-      )
-      .value;
-
-  const noLunch =
-    document
-      .getElementById(
-        "noLunch"
-      )
-      .checked;
-
-  const notes =
-    document
-      .getElementById(
-        "dtrNotes"
-      )
-      .value
-      .trim();
+  let referenceDate;
 
 
-  if (
-    !date ||
-    !startValue ||
-    !endValue
-  ) {
+  if (selectedDate) {
 
-    showMessage(
-      "dtrMessage",
-      "Please complete the date, IN and OUT.",
-      "error"
+    referenceDate =
+      isoToLocalDate(
+        selectedDate
+      );
+
+  } else {
+
+    referenceDate =
+      new Date();
+
+  }
+
+
+  currentWeekEnding =
+    getSaturdayForDate(
+      referenceDate
     );
 
+
+  showScreen(
+    "timesheetScreen"
+  );
+
+
+  document
+    .getElementById(
+      "timesheetCrewName"
+    )
+    .textContent =
+      currentProfile.name +
+      " · " +
+      currentProfile.position;
+
+
+  await buildTimesheet();
+}
+
+
+
+/* ===================================================
+   CHANGE WEEK
+=================================================== */
+
+async function changeWeek(
+  days
+) {
+
+  if (!currentWeekEnding) {
     return;
   }
 
 
-  const startMinutes =
-    parseTimeToMinutes(
-      startValue
+  currentWeekEnding.setDate(
+    currentWeekEnding.getDate() +
+    days
+  );
+
+
+  await buildTimesheet();
+}
+
+
+
+async function goToCurrentWeek() {
+
+  currentWeekEnding =
+    getSaturdayForDate(
+      new Date()
     );
 
-  const endMinutes =
-    parseTimeToMinutes(
-      endValue
+
+  await buildTimesheet();
+}
+
+
+
+/* ===================================================
+   BUILD TIMESHEET
+=================================================== */
+
+async function buildTimesheet() {
+
+  try {
+
+    clearMessage(
+      "timesheetMessage"
     );
 
 
-  if (
-    startMinutes === null ||
-    endMinutes === null
-  ) {
-
-    showMessage(
-      "dtrMessage",
-      "IN and OUT must use HH:MM format and be between 00:00 and 48:00.",
-      "error"
-    );
-
-    return;
-  }
+    document
+      .getElementById(
+        "pdfLoading"
+      )
+      .classList
+      .remove("hidden");
 
 
-  if (
-    endMinutes <=
-    startMinutes
-  ) {
-
-    showMessage(
-      "dtrMessage",
-      "OUT must be later than IN. For after-midnight finishes use 25:00, 26:30, etc.",
-      "error"
-    );
-
-    return;
-  }
+    document
+      .getElementById(
+        "timesheetPDF"
+      )
+      .classList
+      .add("hidden");
 
 
-  let lunchStartMinutes =
-    null;
+    document
+      .getElementById(
+        "openPDFButton"
+      )
+      .disabled =
+        true;
 
-  let lunchEndMinutes =
-    null;
+
+    document
+      .getElementById(
+        "weekEndingDisplay"
+      )
+      .textContent =
+        formatDisplayDate(
+          currentWeekEnding
+        );
 
 
-  if (!noLunch) {
+    const sunday =
+      getSundayForSaturday(
+        currentWeekEnding
+      );
 
-    const lunchStartValue =
-      document
-        .getElementById(
-          "lunchStart"
+
+    const sundayISO =
+      dateToISO(
+        sunday
+      );
+
+
+    const saturdayISO =
+      dateToISO(
+        currentWeekEnding
+      );
+
+
+    /* -----------------------------------------------
+       GET DTRS
+    ------------------------------------------------ */
+
+    const {
+      data: dtrs,
+      error: dtrError
+    } =
+      await supabaseClient
+        .from(
+          "dtrs"
         )
-        .value;
-
-    const lunchEndValue =
-      document
-        .getElementById(
-          "lunchEnd"
+        .select("*")
+        .eq(
+          "crew_profile_id",
+          currentProfile.id
         )
-        .value;
+        .gte(
+          "date",
+          sundayISO
+        )
+        .lte(
+          "date",
+          saturdayISO
+        )
+        .order(
+          "date",
+          {
+            ascending: true
+          }
+        );
 
 
-    if (
-      !lunchStartValue ||
-      !lunchEndValue
-    ) {
-
-      showMessage(
-        "dtrMessage",
-        "Please enter Lunch Start and Lunch End, or select No Lunch.",
-        "error"
-      );
-
-      return;
+    if (dtrError) {
+      throw dtrError;
     }
 
 
-    lunchStartMinutes =
-      parseTimeToMinutes(
-        lunchStartValue
-      );
+    /* -----------------------------------------------
+       GET ACTIVE TEMPLATE
+    ------------------------------------------------ */
 
-    lunchEndMinutes =
-      parseTimeToMinutes(
-        lunchEndValue
-      );
-
-
-    if (
-      lunchStartMinutes === null ||
-      lunchEndMinutes === null
-    ) {
-
-      showMessage(
-        "dtrMessage",
-        "Lunch times must use HH:MM format.",
-        "error"
-      );
-
-      return;
-    }
+    const {
+      data: templates,
+      error: templateError
+    } =
+      await supabaseClient
+        .from(
+          "timesheet_templates"
+        )
+        .select("*")
+        .eq(
+          "production_id",
+          productionId
+        )
+        .eq(
+          "is_active",
+          true
+        )
+        .limit(1);
 
 
-    if (
-      lunchStartMinutes <
-      startMinutes
-    ) {
-
-      showMessage(
-        "dtrMessage",
-        "Lunch Start cannot be before IN.",
-        "error"
-      );
-
-      return;
+    if (templateError) {
+      throw templateError;
     }
 
 
     if (
-      lunchEndMinutes <=
-      lunchStartMinutes
+      !templates ||
+      templates.length === 0
     ) {
 
-      showMessage(
-        "dtrMessage",
-        "Lunch End must be later than Lunch Start.",
-        "error"
+      throw new Error(
+        "No timesheet template has been configured for this production."
       );
 
-      return;
     }
 
 
-    if (
-      endMinutes <=
-      lunchEndMinutes
-    ) {
+    const template =
+      templates[0];
 
-      showMessage(
-        "dtrMessage",
-        "OUT must be later than Lunch End.",
-        "error"
+
+    /* -----------------------------------------------
+       GET FIELD MAPPINGS
+    ------------------------------------------------ */
+
+    const {
+      data: mappings,
+      error: mappingError
+    } =
+      await supabaseClient
+        .from(
+          "timesheet_field_mappings"
+        )
+        .select("*")
+        .eq(
+          "template_id",
+          template.id
+        );
+
+
+    if (mappingError) {
+      throw mappingError;
+    }
+
+
+    /* -----------------------------------------------
+       DOWNLOAD PRIVATE PDF
+    ------------------------------------------------ */
+
+    const {
+      data: pdfBlob,
+      error: downloadError
+    } =
+      await supabaseClient
+        .storage
+        .from(
+          "timesheet-templates"
+        )
+        .download(
+          template.file_path
+        );
+
+
+    if (downloadError) {
+      throw downloadError;
+    }
+
+
+    const pdfBytes =
+      await pdfBlob
+        .arrayBuffer();
+
+
+    /* -----------------------------------------------
+       LOAD ORIGINAL PDF
+    ------------------------------------------------ */
+
+    const {
+      PDFDocument
+    } =
+      PDFLib;
+
+
+    const pdfDoc =
+      await PDFDocument.load(
+        pdfBytes
       );
 
-      return;
+
+    const form =
+      pdfDoc.getForm();
+
+
+    /* -----------------------------------------------
+       BUILD STANDARDIZED DATA
+    ------------------------------------------------ */
+
+    const values =
+      buildTimesheetValues(
+        sunday,
+        currentWeekEnding,
+        dtrs || []
+      );
+
+
+    /* -----------------------------------------------
+       APPLY TEMPLATE MAPPINGS
+    ------------------------------------------------ */
+
+    for (
+      const mapping
+      of mappings
+    ) {
+
+      const value =
+        values[
+          mapping.field_key
+        ];
+
+
+      if (
+        value === undefined ||
+        value === null
+      ) {
+        continue;
+      }
+
+
+      setPDFField(
+        form,
+        mapping.pdf_field_name,
+        value
+      );
+
     }
-  }
 
 
-  const {
-    error
-  } =
-    await supabaseClient
-      .from(
-        "dtrs"
-      )
-      .upsert(
+    /* -----------------------------------------------
+       UPDATE FIELD APPEARANCES
+    ------------------------------------------------ */
+
+    try {
+
+      form.updateFieldAppearances();
+
+    } catch (appearanceError) {
+
+      console.log(
+        "PDF appearance update:",
+        appearanceError
+      );
+
+    }
+
+
+    /* -----------------------------------------------
+       SAVE COMPLETED PDF
+    ------------------------------------------------ */
+
+    const completedBytes =
+      await pdfDoc.save();
+
+
+    const completedBlob =
+      new Blob(
+        [completedBytes],
         {
-
-          crew_profile_id:
-            currentProfile.id,
-
-          date:
-            date,
-
-          start_minutes:
-            startMinutes,
-
-          lunch_start_minutes:
-            noLunch
-              ? null
-              : lunchStartMinutes,
-
-          lunch_end_minutes:
-            noLunch
-              ? null
-              : lunchEndMinutes,
-
-          end_minutes:
-            endMinutes,
-
-          no_lunch:
-            noLunch,
-
-          notes:
-            notes,
-
-          status:
-            "submitted",
-
-          updated_at:
-            new Date()
-              .toISOString()
-
-        },
-        {
-          onConflict:
-            "crew_profile_id,date"
+          type:
+            "application/pdf"
         }
       );
 
 
-  if (error) {
+    if (currentPDFUrl) {
+
+      URL.revokeObjectURL(
+        currentPDFUrl
+      );
+
+    }
+
+
+    currentPDFUrl =
+      URL.createObjectURL(
+        completedBlob
+      );
+
+
+    const iframe =
+      document
+        .getElementById(
+          "timesheetPDF"
+        );
+
+
+    iframe.src =
+      currentPDFUrl;
+
+
+    iframe
+      .classList
+      .remove("hidden");
+
+
+    document
+      .getElementById(
+        "pdfLoading"
+      )
+      .classList
+      .add("hidden");
+
+
+    document
+      .getElementById(
+        "openPDFButton"
+      )
+      .disabled =
+        false;
+
+
+    if (
+      !dtrs ||
+      dtrs.length === 0
+    ) {
+
+      showMessage(
+        "timesheetMessage",
+        "No DTRs have been submitted for this week yet. Your production information is still shown on the timesheet.",
+        "success"
+      );
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    document
+      .getElementById(
+        "pdfLoading"
+      )
+      .classList
+      .add("hidden");
+
 
     showMessage(
-      "dtrMessage",
-      error.message,
+      "timesheetMessage",
+      error.message ||
+      "Unable to build timesheet.",
       "error"
     );
 
+  }
+}
+
+
+
+/* ===================================================
+   BUILD TIMESHEET VALUES
+=================================================== */
+
+function buildTimesheetValues(
+  sunday,
+  saturday,
+  dtrs
+) {
+
+  const values = {};
+
+
+  /* -----------------------------------------------
+     PROFILE
+  ------------------------------------------------ */
+
+  values[
+    "crew.name"
+  ] =
+    currentProfile.name ||
+    "";
+
+
+  values[
+    "crew.department"
+  ] =
+    "Sound";
+
+
+  values[
+    "crew.position"
+  ] =
+    currentProfile.position ||
+    "";
+
+
+  values[
+    "week.ending"
+  ] =
+    formatPDFDate(
+      saturday
+    );
+
+
+  values[
+    "crew.day_rate"
+  ] =
+    currentProfile.day_rate
+      ? "$" +
+        Number(
+          currentProfile.day_rate
+        ).toFixed(2)
+      : "";
+
+
+  values[
+    "crew.corporation_name"
+  ] =
+    currentProfile
+      .corporation_name ||
+    "";
+
+
+  values[
+    "crew.gst_number"
+  ] =
+    currentProfile
+      .gst_number ||
+    "";
+
+
+  values[
+    "crew.gst_amount"
+  ] =
+    currentProfile
+      .gst_amount
+      ? "$" +
+        Number(
+          currentProfile
+            .gst_amount
+        ).toFixed(2)
+      : "";
+
+
+  values[
+    "crew.initials"
+  ] =
+    currentProfile
+      .crew_initials ||
+    "";
+
+
+  values[
+    "crew.local"
+  ] =
+    currentProfile
+      .local_hotel ===
+    "Local";
+
+
+  values[
+    "crew.hotel"
+  ] =
+    currentProfile
+      .local_hotel ===
+    "Hotel";
+
+
+  values[
+    "crew.bc_resident"
+  ] =
+    currentProfile
+      .province ===
+    "BC";
+
+
+  values[
+    "crew.on_resident"
+  ] =
+    currentProfile
+      .province ===
+    "ON";
+
+
+  /* -----------------------------------------------
+     KIT / VEHICLE
+  ------------------------------------------------ */
+
+  if (
+    currentProfile
+      .fee_type ===
+    "Kit"
+  ) {
+
+    values[
+      "crew.kit_fee"
+    ] =
+      currentProfile
+        .kit_rental
+        ? "$" +
+          Number(
+            currentProfile
+              .kit_rental
+          ).toFixed(2)
+        : "";
+
+  } else {
+
+    values[
+      "crew.kit_fee"
+    ] = "";
+
+  }
+
+
+  if (
+    currentProfile
+      .fee_type ===
+    "Vehicle"
+  ) {
+
+    values[
+      "crew.vehicle_fee"
+    ] =
+      currentProfile
+        .kit_rental
+        ? "$" +
+          Number(
+            currentProfile
+              .kit_rental
+          ).toFixed(2)
+        : "";
+
+  } else {
+
+    values[
+      "crew.vehicle_fee"
+    ] = "";
+
+  }
+
+
+  /* -----------------------------------------------
+     DAILY DTRS
+  ------------------------------------------------ */
+
+  const dayKeys = [
+    "sun",
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat"
+  ];
+
+
+  for (
+    let i = 0;
+    i < 7;
+    i++
+  ) {
+
+    const date =
+      new Date(
+        sunday.getFullYear(),
+        sunday.getMonth(),
+        sunday.getDate(),
+        12,
+        0,
+        0
+      );
+
+
+    date.setDate(
+      sunday.getDate() + i
+    );
+
+
+    const iso =
+      dateToISO(
+        date
+      );
+
+
+    const key =
+      dayKeys[i];
+
+
+    const dtr =
+      dtrs.find(
+        item =>
+          item.date === iso
+      );
+
+
+    if (!dtr) {
+      continue;
+    }
+
+
+    values[
+      `${key}.date`
+    ] =
+      formatPDFDate(
+        date
+      );
+
+
+    values[
+      `${key}.in`
+    ] =
+      minutesToTime(
+        dtr.start_minutes
+      );
+
+
+    values[
+      `${key}.out`
+    ] =
+      minutesToTime(
+        dtr.end_minutes
+      );
+
+
+    if (
+      dtr.no_lunch
+    ) {
+
+      values[
+        `${key}.lunch_start`
+      ] = "";
+
+
+      values[
+        `${key}.lunch_end`
+      ] = "";
+
+    } else {
+
+      values[
+        `${key}.lunch_start`
+      ] =
+        minutesToTime(
+          dtr.lunch_start_minutes
+        );
+
+
+      values[
+        `${key}.lunch_end`
+      ] =
+        minutesToTime(
+          dtr.lunch_end_minutes
+        );
+
+    }
+
+
+    let lunchMinutes = 0;
+
+
+    if (
+      !dtr.no_lunch &&
+      dtr.lunch_start_minutes !== null &&
+      dtr.lunch_end_minutes !== null
+    ) {
+
+      lunchMinutes =
+        dtr.lunch_end_minutes -
+        dtr.lunch_start_minutes;
+
+    }
+
+
+    const workedMinutes =
+      dtr.end_minutes -
+      dtr.start_minutes -
+      lunchMinutes;
+
+
+    values[
+      `${key}.hours`
+    ] =
+      minutesToDecimalHours(
+        workedMinutes
+      );
+
+
+    values[
+      `${key}.province`
+    ] =
+      currentProfile
+        .province ||
+      "";
+
+  }
+
+
+  return values;
+}
+
+
+
+/* ===================================================
+   SET PDF FIELD
+=================================================== */
+
+function setPDFField(
+  form,
+  fieldName,
+  value
+) {
+
+  if (!fieldName) {
     return;
   }
 
 
-  showMessage(
-    "dtrMessage",
-    "DTR submitted successfully.",
-    "success"
+  try {
+
+    const field =
+      form.getField(
+        fieldName
+      );
+
+
+    const typeName =
+      field.constructor.name;
+
+
+    if (
+      typeName ===
+      "PDFCheckBox"
+    ) {
+
+      if (value) {
+
+        field.check();
+
+      } else {
+
+        field.uncheck();
+
+      }
+
+
+      return;
+    }
+
+
+    if (
+      typeName ===
+      "PDFTextField"
+    ) {
+
+      field.setText(
+        String(value)
+      );
+
+
+      return;
+    }
+
+
+    if (
+      typeName ===
+      "PDFDropdown"
+    ) {
+
+      field.select(
+        String(value)
+      );
+
+
+      return;
+    }
+
+
+    if (
+      typeName ===
+      "PDFOptionList"
+    ) {
+
+      field.select(
+        String(value)
+      );
+
+
+      return;
+    }
+
+
+    console.log(
+      "Unhandled PDF field type:",
+      fieldName,
+      typeName
+    );
+
+  } catch (error) {
+
+    console.warn(
+      "Unable to fill PDF field:",
+      fieldName,
+      error
+    );
+
+  }
+}
+
+
+
+/* ===================================================
+   OPEN GENERATED PDF
+=================================================== */
+
+function openGeneratedPDF() {
+
+  if (!currentPDFUrl) {
+    return;
+  }
+
+
+  window.open(
+    currentPDFUrl,
+    "_blank"
   );
 }
 
 
 
-// -----------------------------------------------------
-// SIGN OUT
-// -----------------------------------------------------
+/* ===================================================
+   SIGN OUT
+=================================================== */
 
 async function signOut() {
+
+  if (currentPDFUrl) {
+
+    URL.revokeObjectURL(
+      currentPDFUrl
+    );
+
+    currentPDFUrl =
+      null;
+
+  }
+
 
   await supabaseClient
     .auth
     .signOut();
 
+
   currentUser = null;
+
   currentProfile = null;
+
   productionId = null;
+
+  currentWeekEnding = null;
+
 
   showScreen(
     "loginScreen"
@@ -2084,9 +3723,14 @@ async function signOut() {
 
 
 
+/* ===================================================
+   START APP
+=================================================== */
+
 initialize();
 
 </script>
 
 </body>
+
 </html>
