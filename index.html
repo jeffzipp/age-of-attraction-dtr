@@ -64,6 +64,60 @@
 #timesheetPDF{display:none!important}.loading{padding:45px 15px}
 @media(max-width:600px){.container.wide{max-width:100%;padding-left:14px;padding-right:14px}.timesheet-header{margin-bottom:14px}.timesheet-header h1{font-size:28px}.week-nav{grid-template-columns:44px 1fr 44px}.week-nav button{font-size:20px;padding:10px 5px}.pdf-container{padding:8px}.timesheet-note{font-size:11px;margin-top:8px}}
 
+
+/* v15 — clean My Timesheet launch card */
+.timesheet-launch{
+  display:grid!important;
+  grid-template-columns:42px minmax(0,1fr) 24px!important;
+  align-items:center!important;
+  column-gap:14px!important;
+  padding:18px!important;
+  min-height:94px!important;
+}
+.timesheet-launch-icon{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:42px!important;
+  height:42px!important;
+  font-size:30px!important;
+}
+.timesheet-launch-copy{
+  display:flex!important;
+  flex-direction:column!important;
+  min-width:0!important;
+  gap:5px!important;
+}
+.timesheet-launch-title{
+  display:block!important;
+  font-size:20px!important;
+  line-height:1.15!important;
+  font-weight:700!important;
+  white-space:nowrap!important;
+}
+.timesheet-launch-sub{
+  display:block!important;
+  margin:0!important;
+  font-size:13px!important;
+  line-height:1.35!important;
+  color:#929292!important;
+  font-weight:400!important;
+}
+.timesheet-launch-arrow{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  font-size:30px!important;
+  line-height:1!important;
+  color:#aaa!important;
+}
+@media(max-width:390px){
+  .timesheet-launch{grid-template-columns:36px minmax(0,1fr) 20px!important;column-gap:11px!important;padding:16px!important}
+  .timesheet-launch-icon{width:36px!important;height:36px!important;font-size:26px!important}
+  .timesheet-launch-title{font-size:18px!important}
+  .timesheet-launch-sub{font-size:12px!important}
+}
+
 </style>
 </head>
 <body>
@@ -97,7 +151,7 @@
 </div>
 
 <button class="timesheet-launch" onclick="openMyTimesheet()">
-  <span class="timesheet-launch-icon">▣</span>
+  <span class="timesheet-launch-icon" aria-hidden="true">▤</span>
   <span class="timesheet-launch-copy"><span class="timesheet-launch-title">My Timesheet</span><span class="timesheet-launch-sub">View, open or send your weekly PDF</span></span>
   <span class="timesheet-launch-arrow">›</span>
 </button>
