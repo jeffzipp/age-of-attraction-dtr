@@ -133,6 +133,58 @@
   display:block!important;
 }
 
+
+/* v17 — HOD Department dashboard */
+.hod-only{display:none}
+body.is-manager .hod-only{display:block}
+.dtr-header-actions{display:flex!important;gap:8px!important;align-items:center!important}
+.dtr-header-actions button{width:auto!important;margin:0!important}
+.department-button{padding:9px 12px!important;font-size:13px!important}
+.department-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}
+.department-header h1{margin:0 0 5px}
+.department-header .subtitle{margin:0}
+.department-header-actions{display:flex;gap:8px}
+.department-header-actions button{width:auto;margin:0;padding:9px 12px;font-size:13px}
+.department-week{display:grid;grid-template-columns:44px 1fr 44px;gap:8px;align-items:stretch;margin-bottom:14px}
+.department-week button{margin:0;padding:10px 5px;font-size:20px}
+.department-week-center{background:#1d1d1d;border:1px solid #3b3b3b;border-radius:10px;text-align:center;padding:9px 8px;cursor:pointer}
+.department-week-label{font-size:10px;color:#777;text-transform:uppercase;letter-spacing:.06em}
+.department-week-date{font-size:16px;font-weight:700;margin-top:3px}
+.department-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.summary-card{background:#181818;border:1px solid #333;border-radius:12px;padding:12px 8px;text-align:center}
+.summary-number{font-size:22px;font-weight:750;line-height:1.1}
+.summary-label{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.04em;margin-top:5px}
+.department-list{display:flex;flex-direction:column;gap:10px}
+.crew-week-card{background:#181818;border:1px solid #333;border-radius:14px;padding:14px}
+.crew-week-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.crew-week-name{font-size:16px;font-weight:700}
+.crew-week-position{font-size:12px;color:#888;margin-top:2px}
+.week-status-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.day-status{appearance:none;-webkit-appearance:none;margin:0!important;padding:7px 2px!important;min-width:0!important;border-radius:8px!important;background:#222!important;border:1px solid #383838!important;color:#777!important;text-align:center!important}
+.day-status.submitted{background:#17261b!important;border-color:#2f5138!important;color:#b9dfc1!important}
+.day-status.today{outline:1px solid #777}
+.day-status .day-name{display:block;font-size:9px;font-weight:700;text-transform:uppercase}
+.day-status .day-mark{display:block;font-size:14px;line-height:1;margin-top:4px}
+.department-empty{padding:30px 15px;text-align:center;color:#777;background:#181818;border:1px solid #333;border-radius:12px}
+.dtr-modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:flex-end;justify-content:center;padding:14px;z-index:1000}
+.dtr-modal.hidden{display:none!important}
+.dtr-modal-card{width:100%;max-width:520px;background:#171717;border:1px solid #3b3b3b;border-radius:18px;padding:18px;max-height:82vh;overflow:auto}
+.dtr-modal-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px}
+.dtr-modal-title{font-size:20px;font-weight:750}
+.dtr-modal-sub{font-size:12px;color:#888;margin-top:4px}
+.dtr-modal-close{width:auto!important;margin:0!important;padding:7px 10px!important}
+.dtr-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dtr-detail{background:#222;border:1px solid #333;border-radius:10px;padding:11px}
+.dtr-detail-label{font-size:9px;color:#777;text-transform:uppercase;letter-spacing:.05em}
+.dtr-detail-value{font-size:17px;font-weight:700;margin-top:4px}
+.dtr-detail.full{grid-column:1/-1}
+@media(max-width:390px){
+  .department-summary{gap:6px}
+  .summary-number{font-size:20px}
+  .crew-week-card{padding:12px}
+  .week-status-grid{gap:4px}
+}
+
 </style>
 </head>
 <body>
@@ -161,6 +213,7 @@
     <div class="subtitle" id="crewGreeting"></div>
   </div>
   <div class="dtr-header-actions">
+    <button id="departmentButton" class="secondary department-button hod-only" onclick="openDepartment()">Department</button>
     <button class="secondary" onclick="signOut()">Log Out</button>
   </div>
 </div>
@@ -259,6 +312,51 @@
 <div class="timesheet-note">Production timesheet populated from your submitted DTRs.</div>
 </div>
 </div>
+
+<div id="departmentScreen" class="hidden">
+  <div class="department-header">
+    <div>
+      <h1>Department</h1>
+      <div class="subtitle">Age of Attraction · Season 2 · Sound</div>
+    </div>
+    <div class="department-header-actions">
+      <button class="secondary" onclick="showDTR()">My DTR</button>
+      <button class="secondary" onclick="signOut()">Log Out</button>
+    </div>
+  </div>
+
+  <div class="department-week">
+    <button class="secondary" onclick="changeDepartmentWeek(-7)">‹</button>
+    <div class="department-week-center" onclick="goToCurrentDepartmentWeek()">
+      <div class="department-week-label">Week Ending</div>
+      <div id="departmentWeekEnding" class="department-week-date"></div>
+    </div>
+    <button class="secondary" onclick="changeDepartmentWeek(7)">›</button>
+  </div>
+
+  <div class="department-summary">
+    <div class="summary-card"><div id="departmentCrewCount" class="summary-number">—</div><div class="summary-label">Crew</div></div>
+    <div class="summary-card"><div id="departmentSubmittedCount" class="summary-number">—</div><div class="summary-label">Submitted</div></div>
+    <div class="summary-card"><div id="departmentMissingCount" class="summary-number">—</div><div class="summary-label">Missing</div></div>
+  </div>
+
+  <div id="departmentMessage" class="message"></div>
+  <div id="departmentList" class="department-list"></div>
+</div>
+
+<div id="dtrDetailModal" class="dtr-modal hidden" onclick="closeDTRDetail(event)">
+  <div class="dtr-modal-card" onclick="event.stopPropagation()">
+    <div class="dtr-modal-head">
+      <div>
+        <div id="detailCrewName" class="dtr-modal-title"></div>
+        <div id="detailDate" class="dtr-modal-sub"></div>
+      </div>
+      <button class="secondary dtr-modal-close" onclick="closeDTRDetail()">Close</button>
+    </div>
+    <div id="dtrDetailBody" class="dtr-detail-grid"></div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
@@ -266,9 +364,9 @@
 const SUPABASE_URL="https://hyhzcikkoqvvfyiffmla.supabase.co";
 const SUPABASE_KEY="sb_publishable_Gl1oRE_S8bRTiI65vCnHRQ_InR0_wX1";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let currentUser=null,currentProfile=null,productionId=null,currentWeekEnding=null,currentPDFUrl=null,currentPDFBlob=null,currentDTR=null;
+let currentUser=null,currentProfile=null,productionId=null,currentWeekEnding=null,currentPDFUrl=null,currentPDFBlob=null,currentDTR=null,currentMembership=null,currentDepartmentWeekEnding=null,departmentDTRMap=new Map();
 const $=id=>document.getElementById(id);
-function showScreen(id){["loginScreen","setupScreen","dtrScreen","timesheetScreen"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");$("appContainer").classList.toggle("wide",id==="timesheetScreen")}
+function showScreen(id){["loginScreen","setupScreen","dtrScreen","timesheetScreen","departmentScreen"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");$("appContainer").classList.toggle("wide",id==="timesheetScreen"||id==="departmentScreen")}
 function showMessage(id,msg,type){$(id).textContent=msg;$(id).className="message "+type}function clearMessage(id){$(id).textContent="";$(id).className="message"}
 function dateToISO(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}function isoToLocalDate(s){const p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2],12)}function todayString(){return dateToISO(new Date())}
 function getSaturdayForDate(input){const d=new Date(input.getFullYear(),input.getMonth(),input.getDate(),12);d.setDate(d.getDate()+(6-d.getDay()+7)%7);return d}function getSundayForSaturday(s){const d=new Date(s.getFullYear(),s.getMonth(),s.getDate(),12);d.setDate(d.getDate()-6);return d}
@@ -312,10 +410,29 @@ function updateHoursPreview(){const s=parseTimeToMinutes($("startTime").value),e
 async function initialize(){try{const{data:{session}}=await supabaseClient.auth.getSession();if(!session){showScreen("loginScreen");return}currentUser=session.user;await loadProfile()}catch(e){showScreen("loginScreen");showMessage("loginMessage",e.message||"Unable to connect.","error")}}
 async function signUp(){try{const email=$("email").value.trim(),password=$("password").value;if(!email||!password)throw Error("Please enter an email and password.");const{data,error}=await supabaseClient.auth.signUp({email,password});if(error)throw error;currentUser=data.user;showMessage("loginMessage","Account created. You can now log in.","success")}catch(e){showMessage("loginMessage",e.message||"Unable to create account.","error")}}
 async function signIn(){try{const email=$("email").value.trim(),password=$("password").value;if(!email||!password)throw Error("Please enter an email and password.");const{data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;currentUser=data.user;await loadProfile()}catch(e){showMessage("loginMessage",e.message||"Unable to log in.","error")}}
-async function loadProfile(){try{const{data,error}=await supabaseClient.from("crew_profiles").select("*").eq("user_id",currentUser.id).limit(1);if(error)throw error;if(!data||!data.length){await findProduction();showScreen("setupScreen");return}currentProfile=data[0];productionId=currentProfile.production_id;if(!currentProfile.employment_type||!currentProfile.local_hotel||!currentProfile.province||!currentProfile.crew_initials){populateProfileForm();showScreen("setupScreen");return}await showDTR()}catch(e){showScreen("loginScreen");showMessage("loginMessage",e.message||"Unable to load profile.","error")}}
+async function loadProfile(){try{
+  const{data,error}=await supabaseClient.from("crew_profiles").select("*").eq("user_id",currentUser.id).limit(1);
+  if(error)throw error;
+  if(!data||!data.length){await findProduction();showScreen("setupScreen");return}
+  currentProfile=data[0];
+  productionId=currentProfile.production_id;
+  await loadMembership();
+  if(!currentProfile.employment_type||!currentProfile.local_hotel||!currentProfile.province||!currentProfile.crew_initials){populateProfileForm();showScreen("setupScreen");return}
+  await showDTR();
+}catch(e){showScreen("loginScreen");showMessage("loginMessage",e.message||"Unable to load profile.","error")}}
+async function loadMembership(){
+  currentMembership=null;
+  document.body.classList.remove("is-manager");
+  if(!currentUser||!productionId)return;
+  const{data,error}=await supabaseClient.from("production_memberships").select("*").eq("user_id",currentUser.id).eq("production_id",productionId).limit(1);
+  if(error)throw error;
+  currentMembership=data&&data.length?data[0]:null;
+  if(currentMembership&&currentMembership.status==="active"&&["hod","admin"].includes(currentMembership.role))document.body.classList.add("is-manager");
+}
+function isManager(){return !!(currentMembership&&currentMembership.status==="active"&&["hod","admin"].includes(currentMembership.role))}
 function populateProfileForm(){if(!currentProfile)return;const p=currentProfile;$("crewName").value=p.name||"";$("position").value=p.position||"";$("employmentType").value=p.employment_type||"";$("dayRate").value=p.day_rate||0;$("kitRental").value=p.kit_rental||0;$("equipmentNotes").value=p.equipment_notes||"";$("feeType").value=p.fee_type||"None";$("localHotel").value=p.local_hotel||"";$("province").value=p.province||"";$("corporationName").value=p.corporation_name||"";$("gstNumber").value=p.gst_number||"";$("gstAmount").value=p.gst_amount||"";$("crewInitials").value=p.crew_initials||"";updateEmploymentFields()}
 async function findProduction(){const{data,error}=await supabaseClient.from("productions").select("*").eq("name","Age of Attraction").eq("season","Season 2").limit(1);if(error)throw error;if(!data||!data.length)throw Error("Unable to find the production.");productionId=data[0].id}
-async function saveProfile(){try{clearMessage("setupMessage");const employment_type=$("employmentType").value;const profile={user_id:currentUser.id,production_id:productionId,name:$("crewName").value.trim(),position:$("position").value,employment_type,day_rate:parseFloat($("dayRate").value)||0,kit_rental:parseFloat($("kitRental").value)||0,fee_type:$("feeType").value,equipment_notes:$("equipmentNotes").value.trim(),local_hotel:$("localHotel").value,province:$("province").value,crew_initials:$("crewInitials").value.trim().toUpperCase(),corporation_name:employment_type==="Incorporated Contractor"?$("corporationName").value.trim():null,gst_number:employment_type==="Incorporated Contractor"?$("gstNumber").value.trim():null,gst_amount:employment_type==="Incorporated Contractor"?(parseFloat($("gstAmount").value)||0):null};if(!profile.name||!profile.position||!profile.employment_type||!profile.local_hotel||!profile.province||!profile.crew_initials)throw Error("Please complete all required fields.");if(employment_type==="Incorporated Contractor"&&(!profile.corporation_name||!profile.gst_number))throw Error("Please enter your corporation name and GST number.");if(!productionId)await findProduction();profile.production_id=productionId;let r=currentProfile?await supabaseClient.from("crew_profiles").update(profile).eq("id",currentProfile.id).select().single():await supabaseClient.from("crew_profiles").insert(profile).select().single();if(r.error)throw r.error;currentProfile=r.data;await showDTR()}catch(e){showMessage("setupMessage",e.message||"Unable to save profile.","error")}}
+async function saveProfile(){try{clearMessage("setupMessage");const employment_type=$("employmentType").value;const profile={user_id:currentUser.id,production_id:productionId,name:$("crewName").value.trim(),position:$("position").value,employment_type,day_rate:parseFloat($("dayRate").value)||0,kit_rental:parseFloat($("kitRental").value)||0,fee_type:$("feeType").value,equipment_notes:$("equipmentNotes").value.trim(),local_hotel:$("localHotel").value,province:$("province").value,crew_initials:$("crewInitials").value.trim().toUpperCase(),corporation_name:employment_type==="Incorporated Contractor"?$("corporationName").value.trim():null,gst_number:employment_type==="Incorporated Contractor"?$("gstNumber").value.trim():null,gst_amount:employment_type==="Incorporated Contractor"?(parseFloat($("gstAmount").value)||0):null};if(!profile.name||!profile.position||!profile.employment_type||!profile.local_hotel||!profile.province||!profile.crew_initials)throw Error("Please complete all required fields.");if(employment_type==="Incorporated Contractor"&&(!profile.corporation_name||!profile.gst_number))throw Error("Please enter your corporation name and GST number.");if(!productionId)await findProduction();profile.production_id=productionId;let r=currentProfile?await supabaseClient.from("crew_profiles").update(profile).eq("id",currentProfile.id).select().single():await supabaseClient.from("crew_profiles").insert(profile).select().single();if(r.error)throw r.error;currentProfile=r.data;productionId=currentProfile.production_id;await loadMembership();await showDTR()}catch(e){showMessage("setupMessage",e.message||"Unable to save profile.","error")}}
 function resetDTRForm(){currentDTR=null;$("startTime").value="";$("lunchStart").value="";$("lunchEnd").value="";$("endTime").value="";$("noLunch").checked=false;$("dtrNotes").value="";$("submitDTRButton").textContent="Submit DTR";$("clearDayButton").classList.add("hidden");$("editingBadge").classList.remove("show");toggleLunch();updateHoursPreview()}
 async function showDTR(){showScreen("dtrScreen");if(!$("dtrDate").value)$("dtrDate").value=todayString();$("crewGreeting").textContent=currentProfile.name+" · "+currentProfile.position;await loadDTRForSelectedDate()}
 async function loadDTRForSelectedDate(){if(!currentProfile)return;clearMessage("dtrMessage");const date=$("dtrDate").value;if(!date)return;const{data,error}=await supabaseClient.from("dtrs").select("*").eq("crew_profile_id",currentProfile.id).eq("date",date).limit(1);if(error){showMessage("dtrMessage",error.message||"Unable to load DTR.","error");return}if(!data||!data.length){resetDTRForm();return}const d=data[0];currentDTR=d;$("startTime").value=minutesToTime(d.start_minutes);$("endTime").value=minutesToTime(d.end_minutes);$("noLunch").checked=!!d.no_lunch;$("lunchStart").value=d.no_lunch?"":minutesToTime(d.lunch_start_minutes);$("lunchEnd").value=d.no_lunch?"":minutesToTime(d.lunch_end_minutes);$("dtrNotes").value=d.notes||"";$("submitDTRButton").textContent="Update DTR";$("clearDayButton").classList.remove("hidden");$("editingBadge").classList.add("show");toggleLunch();updateHoursPreview()}
@@ -335,6 +452,119 @@ async function clearDay(){
   }
 }
 async function submitDTR(){try{clearMessage("dtrMessage");["startTime","lunchStart","lunchEnd","endTime"].forEach(id=>formatTimeField($(id)));const date=$("dtrDate").value,startValue=$("startTime").value,endValue=$("endTime").value,noLunch=$("noLunch").checked,notes=$("dtrNotes").value.trim();if(!date||!startValue||!endValue)throw Error("Please complete the date, IN and OUT.");const start=parseTimeToMinutes(startValue),end=parseTimeToMinutes(endValue);if(start===null||end===null)throw Error("IN and OUT must use HH:MM format and be between 00:00 and 48:00.");if(end<=start)throw Error("OUT must be later than IN. For after-midnight finishes use 25:00, 26:30, etc.");let ls=null,le=null;if(!noLunch){ls=parseTimeToMinutes($("lunchStart").value);le=parseTimeToMinutes($("lunchEnd").value);if(ls===null||le===null)throw Error("Please enter valid Lunch Start and Lunch End, or select No Lunch.");if(ls<start)throw Error("Lunch Start cannot be before IN.");if(le<=ls)throw Error("Lunch End must be later than Lunch Start.");if(end<=le)throw Error("OUT must be later than Lunch End.")}const wasEditing=!!currentDTR;const{error}=await supabaseClient.from("dtrs").upsert({crew_profile_id:currentProfile.id,date,start_minutes:start,lunch_start_minutes:noLunch?null:ls,lunch_end_minutes:noLunch?null:le,end_minutes:end,no_lunch:noLunch,notes,status:"submitted",updated_at:new Date().toISOString()},{onConflict:"crew_profile_id,date"});if(error)throw error;await loadDTRForSelectedDate();showMessage("dtrMessage",wasEditing?"DTR updated successfully.":"DTR submitted successfully.","success")}catch(e){showMessage("dtrMessage",e.message||"Unable to submit DTR.","error")}}
+
+async function openDepartment(){
+  if(!isManager()){showMessage("dtrMessage","Department access is only available to the HOD or production admin.","error");return}
+  if(!currentDepartmentWeekEnding)currentDepartmentWeekEnding=getSaturdayForDate(new Date());
+  showScreen("departmentScreen");
+  await loadDepartmentDashboard();
+}
+async function changeDepartmentWeek(days){
+  if(!currentDepartmentWeekEnding)currentDepartmentWeekEnding=getSaturdayForDate(new Date());
+  currentDepartmentWeekEnding.setDate(currentDepartmentWeekEnding.getDate()+days);
+  await loadDepartmentDashboard();
+}
+async function goToCurrentDepartmentWeek(){
+  currentDepartmentWeekEnding=getSaturdayForDate(new Date());
+  await loadDepartmentDashboard();
+}
+function escapeHTML(v){
+  return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+async function loadDepartmentDashboard(){
+  try{
+    clearMessage("departmentMessage");
+    $("departmentList").innerHTML='<div class="department-empty">Loading department…</div>';
+    $("departmentWeekEnding").textContent=formatDisplayDate(currentDepartmentWeekEnding);
+    const sunday=getSundayForSaturday(currentDepartmentWeekEnding);
+    const sundayISO=dateToISO(sunday),saturdayISO=dateToISO(currentDepartmentWeekEnding);
+
+    const{data:crew,error:crewError}=await supabaseClient.from("crew_profiles").select("*").eq("production_id",productionId).order("name",{ascending:true});
+    if(crewError)throw crewError;
+    const profiles=crew||[];
+    const profileIds=profiles.map(p=>p.id);
+
+    let dtrs=[];
+    if(profileIds.length){
+      const{data,error}=await supabaseClient.from("dtrs").select("*").in("crew_profile_id",profileIds).gte("date",sundayISO).lte("date",saturdayISO).order("date",{ascending:true});
+      if(error)throw error;
+      dtrs=data||[];
+    }
+
+    departmentDTRMap=new Map();
+    for(const d of dtrs)departmentDTRMap.set(`${d.crew_profile_id}|${d.date}`,d);
+
+    const today=todayString();
+    let submitted=0,missing=0;
+    const dayDates=[];
+    for(let i=0;i<7;i++){const d=new Date(sunday);d.setDate(sunday.getDate()+i);dayDates.push(dateToISO(d))}
+    const relevantDates=dayDates.filter(x=>x<=today);
+    for(const p of profiles){
+      for(const date of relevantDates){
+        if(departmentDTRMap.has(`${p.id}|${date}`))submitted++; else missing++;
+      }
+    }
+
+    $("departmentCrewCount").textContent=profiles.length;
+    $("departmentSubmittedCount").textContent=submitted;
+    $("departmentMissingCount").textContent=missing;
+
+    if(!profiles.length){
+      $("departmentList").innerHTML='<div class="department-empty">No crew profiles are connected to this production yet.</div>';
+      return;
+    }
+
+    const dayNames=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    $("departmentList").innerHTML=profiles.map(p=>{
+      const days=dayDates.map((date,i)=>{
+        const dtr=departmentDTRMap.get(`${p.id}|${date}`);
+        const cls=`day-status${dtr?" submitted":""}${date===today?" today":""}`;
+        const disabled=dtr?"":" disabled";
+        return `<button class="${cls}"${disabled} onclick="openDTRDetail('${p.id}','${date}')"><span class="day-name">${dayNames[i]}</span><span class="day-mark">${dtr?"✓":"—"}</span></button>`;
+      }).join("");
+      return `<div class="crew-week-card"><div class="crew-week-top"><div><div class="crew-week-name">${escapeHTML(p.name)}</div><div class="crew-week-position">${escapeHTML(p.position||"Crew")}</div></div></div><div class="week-status-grid">${days}</div></div>`;
+    }).join("");
+  }catch(e){
+    console.error("DEPARTMENT ERROR",e);
+    $("departmentList").innerHTML="";
+    showMessage("departmentMessage",e.message||"Unable to load department.","error");
+  }
+}
+function openDTRDetail(profileId,date){
+  const dtr=departmentDTRMap.get(`${profileId}|${date}`);
+  if(!dtr)return;
+  const card=[...document.querySelectorAll(".crew-week-card")].find(()=>false);
+  const profileName=(()=>{
+    const keys=[...departmentDTRMap.keys()];
+    return "";
+  })();
+  // Resolve crew name from the visible card data by querying the profile again only when needed.
+  supabaseClient.from("crew_profiles").select("name,position").eq("id",profileId).single().then(({data,error})=>{
+    if(error||!data)return;
+    $("detailCrewName").textContent=data.name+" · "+(data.position||"Crew");
+    $("detailDate").textContent=formatDisplayDate(isoToLocalDate(date));
+    const total=calculateDTRMinutes(dtr);
+    const lunch=dtr.no_lunch?null:(dtr.lunch_end_minutes-dtr.lunch_start_minutes);
+    const note=dtr.notes?`<div class="dtr-detail full"><div class="dtr-detail-label">Note</div><div class="dtr-detail-value" style="font-size:14px">${escapeHTML(dtr.notes)}</div></div>`:"";
+    $("dtrDetailBody").innerHTML=
+      `<div class="dtr-detail"><div class="dtr-detail-label">IN</div><div class="dtr-detail-value">${minutesToTime(dtr.start_minutes)}</div></div>`+
+      `<div class="dtr-detail"><div class="dtr-detail-label">OUT</div><div class="dtr-detail-value">${minutesToTime(dtr.end_minutes)}</div></div>`+
+      `<div class="dtr-detail"><div class="dtr-detail-label">Lunch</div><div class="dtr-detail-value">${dtr.no_lunch?"No Lunch":minutesToTime(dtr.lunch_start_minutes)+"–"+minutesToTime(dtr.lunch_end_minutes)}</div></div>`+
+      `<div class="dtr-detail"><div class="dtr-detail-label">Total</div><div class="dtr-detail-value">${total===null?"—":minutesToDisplay(total)}</div></div>`+note;
+    $("dtrDetailModal").classList.remove("hidden");
+  });
+}
+function calculateDTRMinutes(d){
+  if(!d||d.start_minutes===null||d.end_minutes===null)return null;
+  let total=d.end_minutes-d.start_minutes;
+  if(!d.no_lunch&&d.lunch_start_minutes!==null&&d.lunch_end_minutes!==null)total-=d.lunch_end_minutes-d.lunch_start_minutes;
+  return total>=0?total:null;
+}
+function closeDTRDetail(event){
+  if(event&&event.target!==$("dtrDetailModal"))return;
+  $("dtrDetailModal").classList.add("hidden");
+}
+
 async function openMyTimesheet(){const selected=$("dtrDate").value;currentWeekEnding=getSaturdayForDate(selected?isoToLocalDate(selected):new Date());showScreen("timesheetScreen");$("timesheetCrewName").textContent=currentProfile.name+" · "+currentProfile.position;await buildTimesheet()}async function changeWeek(days){if(!currentWeekEnding)return;currentWeekEnding.setDate(currentWeekEnding.getDate()+days);await buildTimesheet()}async function goToCurrentWeek(){currentWeekEnding=getSaturdayForDate(new Date());await buildTimesheet()}
 async function renderTimesheetPreview(blob){
   const wrap=$("pdfPreviewWrap"),canvas=$("timesheetCanvas"),caption=$("pdfPreviewCaption");
@@ -384,7 +614,7 @@ async function sendGeneratedPDF(){
     showMessage("timesheetMessage",e.message||"Unable to share PDF.","error");
   }
 }
-async function signOut(){if(currentPDFUrl){URL.revokeObjectURL(currentPDFUrl);currentPDFUrl=null}currentPDFBlob=null;await supabaseClient.auth.signOut();currentUser=currentProfile=productionId=currentWeekEnding=currentDTR=null;showScreen("loginScreen")}
+async function signOut(){if(currentPDFUrl){URL.revokeObjectURL(currentPDFUrl);currentPDFUrl=null}currentPDFBlob=null;await supabaseClient.auth.signOut();currentUser=currentProfile=productionId=currentWeekEnding=currentDTR=currentMembership=currentDepartmentWeekEnding=null;departmentDTRMap=new Map();document.body.classList.remove("is-manager");showScreen("loginScreen")}
 initialize();
 </script>
 </body>
