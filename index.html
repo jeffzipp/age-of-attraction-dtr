@@ -1,28 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
-<meta
-  name="theme-color"
-  content="#111111"
->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111111">
 
 <title>Age of Attraction DTR</title>
 
-
 <style>
-
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -86,14 +72,6 @@ textarea {
 
 input:disabled {
   opacity: 0.4;
-  cursor: not-allowed;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  outline: none;
-  border-color: #aaa;
 }
 
 button {
@@ -115,8 +93,9 @@ button.secondary {
   border: 1px solid #555;
 }
 
-button:hover {
-  opacity: 0.9;
+button:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 
 .subtitle {
@@ -198,7 +177,6 @@ button:hover {
 
 .section-title {
   margin-top: 20px;
-  margin-bottom: 0;
   font-size: 16px;
   font-weight: bold;
 }
@@ -212,29 +190,16 @@ button:hover {
   background: #1d1d1d;
   border: 1px solid #444;
   border-radius: 7px;
-  cursor: pointer;
 }
 
 .checkbox-row input {
   width: 20px;
   height: 20px;
   margin: 0;
-  padding: 0;
-  accent-color: white;
 }
 
 .checkbox-row span {
   font-size: 16px;
-  color: white;
-}
-
-
-/* ================================================
-   TIMESHEET
-================================================ */
-
-.timesheet-header {
-  margin-bottom: 18px;
 }
 
 .timesheet-actions {
@@ -303,7 +268,6 @@ button:hover {
 }
 
 @media (max-width: 600px) {
-
   #timesheetPDF {
     height: 68vh;
     min-height: 500px;
@@ -317,186 +281,78 @@ button:hover {
   .timesheet-actions button {
     width: 100%;
   }
-
 }
-
 </style>
-
 </head>
-
 
 <body>
 
-<div
-  id="appContainer"
-  class="container"
->
+<div id="appContainer" class="container">
 
-
-<!-- =================================================
-     LOGIN
-================================================== -->
-
+<!-- LOGIN -->
 <div id="loginScreen">
 
   <h1>Age of Attraction</h1>
-
-  <h2>
-    Season 2 · Sound Department
-  </h2>
-
+  <h2>Season 2 · Sound Department</h2>
 
   <label>Email</label>
-
-  <input
-    type="email"
-    id="email"
-    autocomplete="email"
-  >
-
+  <input type="email" id="email" autocomplete="email">
 
   <label>Password</label>
+  <input type="password" id="password" autocomplete="current-password">
 
-  <input
-    type="password"
-    id="password"
-    autocomplete="current-password"
-  >
+  <button onclick="signIn()">Log In</button>
 
-
-  <button onclick="signIn()">
-    Log In
-  </button>
-
-
-  <button
-    class="secondary"
-    onclick="signUp()"
-  >
+  <button class="secondary" onclick="signUp()">
     Create Account
   </button>
 
-
-  <div
-    id="loginMessage"
-    class="message"
-  ></div>
-
+  <div id="loginMessage" class="message"></div>
 </div>
 
 
-
-<!-- =================================================
-     CREW SETUP
-================================================== -->
-
-<div
-  id="setupScreen"
-  class="hidden"
->
+<!-- CREW SETUP -->
+<div id="setupScreen" class="hidden">
 
   <h1>Crew Setup</h1>
-
   <div class="subtitle">
     Enter your production and payroll information.
   </div>
 
-
   <label>Name</label>
-
-  <input
-    type="text"
-    id="crewName"
-  >
-
+  <input type="text" id="crewName">
 
   <label>Department</label>
-
-  <input
-    type="text"
-    value="Sound"
-    disabled
-  >
-
+  <input type="text" value="Sound" disabled>
 
   <label>Position</label>
-
   <select id="position">
-
-    <option value="">
-      Select position
-    </option>
-
-    <option value="HOD">
-      HOD
-    </option>
-
-    <option value="A1">
-      A1
-    </option>
-
-    <option value="A2">
-      A2
-    </option>
-
-    <option value="Bag Mixer">
-      Bag Mixer
-    </option>
-
+    <option value="">Select position</option>
+    <option value="HOD">HOD</option>
+    <option value="A1">A1</option>
+    <option value="A2">A2</option>
+    <option value="Bag Mixer">Bag Mixer</option>
   </select>
 
-
   <label>Employee Type</label>
-
-  <select
-    id="employmentType"
-    onchange="updateEmploymentFields()"
-  >
-
-    <option value="">
-      Select type
-    </option>
-
-    <option value="Employee">
-      Employee
-    </option>
-
+  <select id="employmentType" onchange="updateEmploymentFields()">
+    <option value="">Select type</option>
+    <option value="Employee">Employee</option>
     <option value="Incorporated Contractor">
       Incorporated Contractor
     </option>
-
   </select>
 
-
-
-  <div
-    id="corporationFields"
-    class="hidden section"
-  >
-
-    <div class="section-title">
-      Corporation Information
-    </div>
-
+  <div id="corporationFields" class="hidden section">
+    <div class="section-title">Corporation Information</div>
 
     <label>Corporation Name</label>
-
-    <input
-      type="text"
-      id="corporationName"
-    >
-
+    <input type="text" id="corporationName">
 
     <label>GST #</label>
-
-    <input
-      type="text"
-      id="gstNumber"
-    >
-
+    <input type="text" id="gstNumber">
 
     <label>GST Amount</label>
-
     <input
       type="number"
       id="gstAmount"
@@ -504,20 +360,12 @@ button:hover {
       step="0.01"
       inputmode="decimal"
     >
-
   </div>
 
-
-
   <div class="section">
-
-    <div class="section-title">
-      Rate & Kit
-    </div>
-
+    <div class="section-title">Rate & Kit</div>
 
     <label>Day Rate</label>
-
     <input
       type="number"
       id="dayRate"
@@ -526,28 +374,14 @@ button:hover {
       inputmode="decimal"
     >
 
-
     <label>Additional Fee</label>
-
     <select id="feeType">
-
-      <option value="None">
-        None
-      </option>
-
-      <option value="Kit">
-        Kit Fee
-      </option>
-
-      <option value="Vehicle">
-        Vehicle Fee
-      </option>
-
+      <option value="None">None</option>
+      <option value="Kit">Kit Fee</option>
+      <option value="Vehicle">Vehicle Fee</option>
     </select>
 
-
     <label>Fee Amount</label>
-
     <input
       type="number"
       id="kitRental"
@@ -557,140 +391,67 @@ button:hover {
       value="0"
     >
 
-
     <label>Kit / Equipment Notes</label>
-
     <textarea
       id="equipmentNotes"
       placeholder="Optional"
     ></textarea>
-
   </div>
 
-
-
   <div class="section">
-
-    <div class="section-title">
-      Production Information
-    </div>
-
+    <div class="section-title">Production Information</div>
 
     <label>Local / Hotel</label>
-
     <select id="localHotel">
-
-      <option value="">
-        Select
-      </option>
-
-      <option value="Local">
-        Local
-      </option>
-
-      <option value="Hotel">
-        Hotel
-      </option>
-
+      <option value="">Select</option>
+      <option value="Local">Local</option>
+      <option value="Hotel">Hotel</option>
     </select>
-
 
     <label>Province</label>
-
     <select id="province">
-
-      <option value="">
-        Select province
-      </option>
-
-      <option value="BC">
-        BC
-      </option>
-
-      <option value="ON">
-        ON
-      </option>
-
+      <option value="">Select province</option>
+      <option value="BC">BC</option>
+      <option value="ON">ON</option>
     </select>
 
-
     <label>Crew Initials</label>
-
     <input
       type="text"
       id="crewInitials"
       maxlength="5"
       placeholder="e.g. JZ"
     >
-
   </div>
 
+  <button onclick="saveProfile()">Save Profile</button>
 
-  <button onclick="saveProfile()">
-    Save Profile
-  </button>
-
-
-  <div
-    id="setupMessage"
-    class="message"
-  ></div>
-
+  <div id="setupMessage" class="message"></div>
 </div>
 
 
-
-<!-- =================================================
-     DAILY DTR
-================================================== -->
-
-<div
-  id="dtrScreen"
-  class="hidden"
->
+<!-- DAILY DTR -->
+<div id="dtrScreen" class="hidden">
 
   <div class="top-bar">
-
     <div>
-
       <h1>Daily DTR</h1>
-
-      <div
-        class="subtitle"
-        id="crewGreeting"
-      ></div>
-
+      <div class="subtitle" id="crewGreeting"></div>
     </div>
 
-
-    <button
-      class="secondary"
-      onclick="signOut()"
-    >
+    <button class="secondary" onclick="signOut()">
       Log Out
     </button>
-
   </div>
 
-
-  <button
-    class="secondary"
-    onclick="openMyTimesheet()"
-  >
+  <button class="secondary" onclick="openMyTimesheet()">
     My Timesheet
   </button>
 
-
   <label>Date</label>
-
-  <input
-    type="date"
-    id="dtrDate"
-  >
-
+  <input type="date" id="dtrDate">
 
   <label>IN</label>
-
   <input
     type="text"
     id="startTime"
@@ -700,33 +461,19 @@ button:hover {
     autocomplete="off"
   >
 
-
-  <div class="time-help">
-    24-hour format
-  </div>
-
-
+  <div class="time-help">24-hour format</div>
 
   <label class="checkbox-row">
-
     <input
       type="checkbox"
       id="noLunch"
       onchange="toggleLunch()"
     >
-
-    <span>
-      No Lunch
-    </span>
-
+    <span>No Lunch</span>
   </label>
 
-
-
   <div id="lunchFields">
-
     <label>Lunch Start</label>
-
     <input
       type="text"
       id="lunchStart"
@@ -736,9 +483,7 @@ button:hover {
       autocomplete="off"
     >
 
-
     <label>Lunch End</label>
-
     <input
       type="text"
       id="lunchEnd"
@@ -747,12 +492,9 @@ button:hover {
       maxlength="5"
       autocomplete="off"
     >
-
   </div>
 
-
   <label>OUT</label>
-
   <input
     type="text"
     id="endTime"
@@ -762,128 +504,60 @@ button:hover {
     autocomplete="off"
   >
 
-
   <div class="time-help">
-    For after-midnight finishes use 25:00,
-    26:30, etc. Maximum 48:00.
+    For after-midnight finishes use 25:00, 26:30, etc.
+    Maximum 48:00.
   </div>
 
-
-
-  <div
-    id="hoursPreview"
-    class="hours-preview hidden"
-  >
-
-    <div
-      id="hoursNumber"
-      class="hours-number"
-    ></div>
-
-    <div
-      id="hoursDetail"
-      class="hours-detail"
-    ></div>
-
+  <div id="hoursPreview" class="hours-preview hidden">
+    <div id="hoursNumber" class="hours-number"></div>
+    <div id="hoursDetail" class="hours-detail"></div>
   </div>
-
 
   <label>Notes</label>
-
   <textarea
     id="dtrNotes"
     placeholder="Optional notes about the day"
   ></textarea>
 
+  <button onclick="submitDTR()">Submit DTR</button>
 
-  <button onclick="submitDTR()">
-    Submit DTR
-  </button>
-
-
-  <div
-    id="dtrMessage"
-    class="message"
-  ></div>
-
+  <div id="dtrMessage" class="message"></div>
 </div>
 
 
-
-<!-- =================================================
-     MY TIMESHEET
-================================================== -->
-
-<div
-  id="timesheetScreen"
-  class="hidden"
->
+<!-- MY TIMESHEET -->
+<div id="timesheetScreen" class="hidden">
 
   <div class="top-bar">
-
     <div>
-
       <h1>My Timesheet</h1>
-
-      <div
-        class="subtitle"
-        id="timesheetCrewName"
-      ></div>
-
+      <div class="subtitle" id="timesheetCrewName"></div>
     </div>
 
-
-    <button
-      class="secondary"
-      onclick="showDTR()"
-    >
+    <button class="secondary" onclick="showDTR()">
       DTR
     </button>
-
   </div>
-
-
 
   <div class="week-ending">
-
-    <div class="week-ending-label">
-      Week Ending
-    </div>
-
-    <div
-      id="weekEndingDisplay"
-      class="week-ending-date"
-    ></div>
-
+    <div class="week-ending-label">Week Ending</div>
+    <div id="weekEndingDisplay" class="week-ending-date"></div>
   </div>
-
-
 
   <div class="timesheet-actions">
 
-    <button
-      class="secondary"
-      onclick="changeWeek(-7)"
-    >
+    <button class="secondary" onclick="changeWeek(-7)">
       ← Previous Week
     </button>
 
-
-    <button
-      class="secondary"
-      onclick="goToCurrentWeek()"
-    >
+    <button class="secondary" onclick="goToCurrentWeek()">
       This Week
     </button>
 
-
-    <button
-      class="secondary"
-      onclick="changeWeek(7)"
-    >
+    <button class="secondary" onclick="changeWeek(7)">
       Next Week →
     </button>
-
 
     <button
       id="openPDFButton"
@@ -896,65 +570,35 @@ button:hover {
 
   </div>
 
-
-
-  <div
-    id="timesheetMessage"
-    class="message"
-  ></div>
-
-
+  <div id="timesheetMessage" class="message"></div>
 
   <div class="pdf-container">
-
-    <div
-      id="pdfLoading"
-      class="loading"
-    >
+    <div id="pdfLoading" class="loading">
       Building your timesheet...
     </div>
-
 
     <iframe
       id="timesheetPDF"
       class="hidden"
       title="Weekly Timesheet"
     ></iframe>
-
   </div>
-
 
   <div class="timesheet-note">
-    This is the production's original timesheet
-    populated from your submitted DTRs.
+    Production timesheet populated from your submitted DTRs.
   </div>
 
 </div>
 
-
 </div>
 
 
-
-<!-- =================================================
-     LIBRARIES
-================================================== -->
-
-<script
-  src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-></script>
-
-<script
-  src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"
-></script>
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
 <script>
 
-/* ===================================================
-   SUPABASE
-=================================================== */
+/* SUPABASE */
 
 const SUPABASE_URL =
   "https://hyhzcikkoqvvfyiffmla.supabase.co";
@@ -962,154 +606,84 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
   "sb_publishable_Gl1oRE_S8bRTiI65vCnHRQ_InR0_wX1";
 
-
 const supabaseClient =
   window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
   );
 
-
 let currentUser = null;
-
 let currentProfile = null;
-
 let productionId = null;
-
 let currentWeekEnding = null;
-
 let currentPDFUrl = null;
 
 
-
-/* ===================================================
-   SCREEN HELPERS
-=================================================== */
+/* SCREEN HELPERS */
 
 function showScreen(screenId) {
 
-  document
-    .getElementById("loginScreen")
-    .classList.add("hidden");
+  [
+    "loginScreen",
+    "setupScreen",
+    "dtrScreen",
+    "timesheetScreen"
+  ].forEach(id => {
+    document.getElementById(id).classList.add("hidden");
+  });
 
-  document
-    .getElementById("setupScreen")
-    .classList.add("hidden");
-
-  document
-    .getElementById("dtrScreen")
-    .classList.add("hidden");
-
-  document
-    .getElementById("timesheetScreen")
-    .classList.add("hidden");
-
-
-  document
-    .getElementById(screenId)
-    .classList.remove("hidden");
-
+  document.getElementById(screenId).classList.remove("hidden");
 
   const container =
-    document.getElementById(
-      "appContainer"
-    );
+    document.getElementById("appContainer");
 
-
-  if (
-    screenId ===
-    "timesheetScreen"
-  ) {
-
-    container
-      .classList
-      .add("wide");
-
+  if (screenId === "timesheetScreen") {
+    container.classList.add("wide");
   } else {
-
-    container
-      .classList
-      .remove("wide");
-
+    container.classList.remove("wide");
   }
 }
 
 
-
-function showMessage(
-  elementId,
-  message,
-  type
-) {
+function showMessage(elementId, message, type) {
 
   const element =
-    document.getElementById(
-      elementId
-    );
+    document.getElementById(elementId);
 
-  element.textContent =
-    message;
-
-  element.className =
-    "message " + type;
+  element.textContent = message;
+  element.className = "message " + type;
 }
 
 
-
-function clearMessage(
-  elementId
-) {
+function clearMessage(elementId) {
 
   const element =
-    document.getElementById(
-      elementId
-    );
+    document.getElementById(elementId);
 
   element.textContent = "";
-
-  element.className =
-    "message";
+  element.className = "message";
 }
 
 
-
-/* ===================================================
-   DATE HELPERS
-=================================================== */
+/* DATE HELPERS */
 
 function dateToISO(date) {
 
-  const year =
-    date.getFullYear();
+  const year = date.getFullYear();
 
   const month =
-    String(
-      date.getMonth() + 1
-    ).padStart(2, "0");
+    String(date.getMonth() + 1).padStart(2, "0");
 
   const day =
-    String(
-      date.getDate()
-    ).padStart(2, "0");
+    String(date.getDate()).padStart(2, "0");
 
-
-  return (
-    year +
-    "-" +
-    month +
-    "-" +
-    day
-  );
+  return `${year}-${month}-${day}`;
 }
 
 
+function isoToLocalDate(iso) {
 
-function isoToLocalDate(
-  iso
-) {
-
-  const parts =
-    iso.split("-");
+  const parts = iso.split("-");
 
   return new Date(
     Number(parts[0]),
@@ -1122,19 +696,12 @@ function isoToLocalDate(
 }
 
 
-
 function todayString() {
-
-  return dateToISO(
-    new Date()
-  );
+  return dateToISO(new Date());
 }
 
 
-
-function getSaturdayForDate(
-  inputDate
-) {
+function getSaturdayForDate(inputDate) {
 
   const date =
     new Date(
@@ -1146,29 +713,20 @@ function getSaturdayForDate(
       0
     );
 
-
-  const day =
-    date.getDay();
-
+  const day = date.getDay();
 
   const daysUntilSaturday =
     (6 - day + 7) % 7;
 
-
   date.setDate(
-    date.getDate() +
-    daysUntilSaturday
+    date.getDate() + daysUntilSaturday
   );
-
 
   return date;
 }
 
 
-
-function getSundayForSaturday(
-  saturday
-) {
+function getSundayForSaturday(saturday) {
 
   const sunday =
     new Date(
@@ -1180,20 +738,15 @@ function getSundayForSaturday(
       0
     );
 
-
   sunday.setDate(
     sunday.getDate() - 6
   );
-
 
   return sunday;
 }
 
 
-
-function formatDisplayDate(
-  date
-) {
+function formatDisplayDate(date) {
 
   return date.toLocaleDateString(
     "en-CA",
@@ -1207,99 +760,53 @@ function formatDisplayDate(
 }
 
 
-
-function formatPDFDate(
-  date
-) {
+function formatPDFDate(date) {
 
   const month =
-    String(
-      date.getMonth() + 1
-    ).padStart(2, "0");
+    String(date.getMonth() + 1).padStart(2, "0");
 
   const day =
-    String(
-      date.getDate()
-    ).padStart(2, "0");
+    String(date.getDate()).padStart(2, "0");
 
   const year =
     date.getFullYear();
 
-
-  return (
-    month +
-    "/" +
-    day +
-    "/" +
-    year
-  );
+  return `${month}/${day}/${year}`;
 }
 
 
+/* TIME HELPERS */
 
-/* ===================================================
-   TIME HELPERS
-=================================================== */
+function parseTimeToMinutes(value) {
 
-function parseTimeToMinutes(
-  value
-) {
-
-  value =
-    value.trim();
-
+  value = value.trim();
 
   const match =
-    value.match(
-      /^(\d{1,2}):([0-5]\d)$/
-    );
-
+    value.match(/^(\d{1,2}):([0-5]\d)$/);
 
   if (!match) {
     return null;
   }
 
-
   const hours =
-    parseInt(
-      match[1],
-      10
-    );
-
+    parseInt(match[1], 10);
 
   const minutes =
-    parseInt(
-      match[2],
-      10
-    );
+    parseInt(match[2], 10);
 
-
-  if (
-    hours < 0 ||
-    hours > 48
-  ) {
+  if (hours < 0 || hours > 48) {
     return null;
   }
 
-
-  if (
-    hours === 48 &&
-    minutes > 0
-  ) {
+  if (hours === 48 && minutes > 0) {
     return null;
   }
 
-
-  return (
-    hours * 60
-  ) + minutes;
+  return (hours * 60) + minutes;
 }
 
 
-
-function minutesToTime(
-  totalMinutes
-) {
+function minutesToTime(totalMinutes) {
 
   if (
     totalMinutes === null ||
@@ -1308,63 +815,40 @@ function minutesToTime(
     return "";
   }
 
-
   const hours =
-    Math.floor(
-      totalMinutes / 60
-    );
-
+    Math.floor(totalMinutes / 60);
 
   const minutes =
     totalMinutes % 60;
 
-
   return (
-    String(hours)
-      .padStart(2, "0")
-    +
-    ":"
-    +
-    String(minutes)
-      .padStart(2, "0")
+    String(hours).padStart(2, "0") +
+    ":" +
+    String(minutes).padStart(2, "0")
   );
 }
 
 
-
-function minutesToDisplay(
-  minutes
-) {
+function minutesToDisplay(minutes) {
 
   const hours =
-    Math.floor(
-      minutes / 60
-    );
-
+    Math.floor(minutes / 60);
 
   const mins =
     minutes % 60;
-
 
   if (mins === 0) {
     return `${hours}h`;
   }
 
-
-  return (
-    `${hours}h ${mins}m`
-  );
+  return `${hours}h ${mins}m`;
 }
 
 
-
-function minutesToDecimalHours(
-  minutes
-) {
+function minutesToDecimalHours(minutes) {
 
   const decimal =
     minutes / 60;
-
 
   return decimal
     .toFixed(2)
@@ -1373,176 +857,91 @@ function minutesToDecimalHours(
 }
 
 
-
-/* ===================================================
-   EMPLOYMENT FIELDS
-=================================================== */
+/* EMPLOYMENT */
 
 function updateEmploymentFields() {
 
   const type =
-    document
-      .getElementById(
-        "employmentType"
-      )
-      .value;
-
+    document.getElementById("employmentType").value;
 
   const fields =
-    document
-      .getElementById(
-        "corporationFields"
-      );
+    document.getElementById("corporationFields");
 
-
-  if (
-    type ===
-    "Incorporated Contractor"
-  ) {
-
-    fields
-      .classList
-      .remove("hidden");
-
+  if (type === "Incorporated Contractor") {
+    fields.classList.remove("hidden");
   } else {
-
-    fields
-      .classList
-      .add("hidden");
-
+    fields.classList.add("hidden");
   }
 }
 
 
-
-/* ===================================================
-   NO LUNCH
-=================================================== */
+/* NO LUNCH */
 
 function toggleLunch() {
 
   const noLunch =
-    document
-      .getElementById(
-        "noLunch"
-      )
-      .checked;
-
+    document.getElementById("noLunch").checked;
 
   const lunchStart =
-    document
-      .getElementById(
-        "lunchStart"
-      );
-
+    document.getElementById("lunchStart");
 
   const lunchEnd =
-    document
-      .getElementById(
-        "lunchEnd"
-      );
+    document.getElementById("lunchEnd");
 
-
-  lunchStart.disabled =
-    noLunch;
-
-  lunchEnd.disabled =
-    noLunch;
-
+  lunchStart.disabled = noLunch;
+  lunchEnd.disabled = noLunch;
 
   if (noLunch) {
-
     lunchStart.value = "";
-
     lunchEnd.value = "";
-
   }
-
 
   updateHoursPreview();
 }
 
 
-
-/* ===================================================
-   HOURS PREVIEW
-=================================================== */
+/* HOURS PREVIEW */
 
 function updateHoursPreview() {
 
   const start =
     parseTimeToMinutes(
-      document
-        .getElementById(
-          "startTime"
-        )
-        .value
+      document.getElementById("startTime").value
     );
-
 
   const end =
     parseTimeToMinutes(
-      document
-        .getElementById(
-          "endTime"
-        )
-        .value
+      document.getElementById("endTime").value
     );
 
-
   const noLunch =
-    document
-      .getElementById(
-        "noLunch"
-      )
-      .checked;
-
+    document.getElementById("noLunch").checked;
 
   const preview =
-    document
-      .getElementById(
-        "hoursPreview"
-      );
-
+    document.getElementById("hoursPreview");
 
   if (
     start === null ||
     end === null ||
     end <= start
   ) {
-
-    preview
-      .classList
-      .add("hidden");
-
+    preview.classList.add("hidden");
     return;
   }
 
-
   let lunchMinutes = 0;
-
 
   if (!noLunch) {
 
     const lunchStart =
       parseTimeToMinutes(
-        document
-          .getElementById(
-            "lunchStart"
-          )
-          .value
+        document.getElementById("lunchStart").value
       );
-
 
     const lunchEnd =
       parseTimeToMinutes(
-        document
-          .getElementById(
-            "lunchEnd"
-          )
-          .value
+        document.getElementById("lunchEnd").value
       );
-
 
     if (
       lunchStart === null ||
@@ -1551,56 +950,27 @@ function updateHoursPreview() {
       lunchEnd <= lunchStart ||
       end <= lunchEnd
     ) {
-
-      preview
-        .classList
-        .add("hidden");
-
+      preview.classList.add("hidden");
       return;
     }
 
-
     lunchMinutes =
-      lunchEnd -
-      lunchStart;
+      lunchEnd - lunchStart;
   }
 
-
   const totalMinutes =
-    end -
-    start -
-    lunchMinutes;
+    end - start - lunchMinutes;
 
+  document.getElementById("hoursNumber").textContent =
+    "Total: " + minutesToDisplay(totalMinutes);
 
-  document
-    .getElementById(
-      "hoursNumber"
-    )
-    .textContent =
-      "Total: " +
-      minutesToDisplay(
-        totalMinutes
-      );
+  document.getElementById("hoursDetail").textContent =
+    noLunch
+      ? "No Lunch"
+      : "Lunch: " + minutesToDisplay(lunchMinutes);
 
-
-  document
-    .getElementById(
-      "hoursDetail"
-    )
-    .textContent =
-      noLunch
-        ? "No Lunch"
-        : "Lunch: " +
-          minutesToDisplay(
-            lunchMinutes
-          );
-
-
-  preview
-    .classList
-    .remove("hidden");
+  preview.classList.remove("hidden");
 }
-
 
 
 [
@@ -1608,135 +978,77 @@ function updateHoursPreview() {
   "lunchStart",
   "lunchEnd",
   "endTime"
-]
-.forEach(
-  id => {
+].forEach(id => {
 
-    document
-      .getElementById(id)
-      .addEventListener(
-        "input",
-        updateHoursPreview
-      );
-
-  }
-);
+  document
+    .getElementById(id)
+    .addEventListener(
+      "input",
+      updateHoursPreview
+    );
+});
 
 
-
-/* ===================================================
-   INITIALIZE
-=================================================== */
+/* INITIALIZE */
 
 async function initialize() {
 
   try {
 
     const {
-      data: {
-        session
-      }
+      data: { session }
     } =
-      await supabaseClient
-        .auth
-        .getSession();
-
+      await supabaseClient.auth.getSession();
 
     if (!session) {
-
-      showScreen(
-        "loginScreen"
-      );
-
+      showScreen("loginScreen");
       return;
     }
 
-
-    currentUser =
-      session.user;
-
+    currentUser = session.user;
 
     await loadProfile();
 
   } catch (error) {
 
-    showScreen(
-      "loginScreen"
-    );
-
+    showScreen("loginScreen");
 
     showMessage(
       "loginMessage",
-      error.message ||
-      "Unable to connect.",
+      error.message || "Unable to connect.",
       "error"
     );
-
   }
 }
 
 
-
-/* ===================================================
-   SIGN UP
-=================================================== */
+/* SIGN UP */
 
 async function signUp() {
 
   try {
 
     const email =
-      document
-        .getElementById(
-          "email"
-        )
-        .value
-        .trim();
-
+      document.getElementById("email").value.trim();
 
     const password =
-      document
-        .getElementById(
-          "password"
-        )
-        .value;
+      document.getElementById("password").value;
 
-
-    if (
-      !email ||
-      !password
-    ) {
-
-      showMessage(
-        "loginMessage",
-        "Please enter an email and password.",
-        "error"
+    if (!email || !password) {
+      throw new Error(
+        "Please enter an email and password."
       );
-
-      return;
     }
 
+    const { data, error } =
+      await supabaseClient.auth.signUp({
+        email,
+        password
+      });
 
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .auth
-        .signUp({
-          email,
-          password
-        });
+    if (error) throw error;
 
-
-    if (error) {
-      throw error;
-    }
-
-
-    currentUser =
-      data.user;
-
+    currentUser = data.user;
 
     showMessage(
       "loginMessage",
@@ -1748,76 +1060,40 @@ async function signUp() {
 
     showMessage(
       "loginMessage",
-      error.message ||
-      "Unable to create account.",
+      error.message || "Unable to create account.",
       "error"
     );
-
   }
 }
 
 
-
-/* ===================================================
-   SIGN IN
-=================================================== */
+/* SIGN IN */
 
 async function signIn() {
 
   try {
 
     const email =
-      document
-        .getElementById(
-          "email"
-        )
-        .value
-        .trim();
-
+      document.getElementById("email").value.trim();
 
     const password =
-      document
-        .getElementById(
-          "password"
-        )
-        .value;
+      document.getElementById("password").value;
 
-
-    if (
-      !email ||
-      !password
-    ) {
-
-      showMessage(
-        "loginMessage",
-        "Please enter an email and password.",
-        "error"
+    if (!email || !password) {
+      throw new Error(
+        "Please enter an email and password."
       );
-
-      return;
     }
 
+    const { data, error } =
+      await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
 
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .auth
-        .signInWithPassword({
-          email,
-          password
-        });
+    if (error) throw error;
 
-
-    if (error) {
-      throw error;
-    }
-
-
-    currentUser =
-      data.user;
-
+    currentUser = data.user;
 
     await loadProfile();
 
@@ -1825,19 +1101,14 @@ async function signIn() {
 
     showMessage(
       "loginMessage",
-      error.message ||
-      "Unable to log in.",
+      error.message || "Unable to log in.",
       "error"
     );
-
   }
 }
 
 
-
-/* ===================================================
-   LOAD PROFILE
-=================================================== */
+/* LOAD PROFILE */
 
 async function loadProfile() {
 
@@ -1848,413 +1119,179 @@ async function loadProfile() {
       error
     } =
       await supabaseClient
-        .from(
-          "crew_profiles"
-        )
+        .from("crew_profiles")
         .select("*")
-        .eq(
-          "user_id",
-          currentUser.id
-        )
+        .eq("user_id", currentUser.id)
         .limit(1);
 
+    if (error) throw error;
 
-    if (error) {
-      throw error;
-    }
-
-
-    if (
-      !profiles ||
-      profiles.length === 0
-    ) {
+    if (!profiles || profiles.length === 0) {
 
       await findProduction();
-
-
-      showScreen(
-        "setupScreen"
-      );
-
-
+      showScreen("setupScreen");
       return;
     }
 
-
-    currentProfile =
-      profiles[0];
-
-
-    productionId =
-      currentProfile
-        .production_id;
-
+    currentProfile = profiles[0];
+    productionId = currentProfile.production_id;
 
     if (
-      !currentProfile
-        .employment_type ||
-      !currentProfile
-        .local_hotel ||
-      !currentProfile
-        .province ||
-      !currentProfile
-        .crew_initials
+      !currentProfile.employment_type ||
+      !currentProfile.local_hotel ||
+      !currentProfile.province ||
+      !currentProfile.crew_initials
     ) {
 
       populateProfileForm();
-
-
-      showScreen(
-        "setupScreen"
-      );
-
-
+      showScreen("setupScreen");
       return;
     }
-
 
     showDTR();
 
   } catch (error) {
 
+    showScreen("loginScreen");
+
     showMessage(
       "loginMessage",
-      error.message ||
-      "Unable to load profile.",
+      error.message || "Unable to load profile.",
       "error"
     );
-
-
-    showScreen(
-      "loginScreen"
-    );
-
   }
 }
 
 
-
-/* ===================================================
-   POPULATE PROFILE
-=================================================== */
+/* POPULATE PROFILE */
 
 function populateProfileForm() {
 
-  if (!currentProfile) {
-    return;
-  }
+  if (!currentProfile) return;
 
+  document.getElementById("crewName").value =
+    currentProfile.name || "";
 
-  document
-    .getElementById(
-      "crewName"
-    )
-    .value =
-      currentProfile.name ||
-      "";
+  document.getElementById("position").value =
+    currentProfile.position || "";
 
+  document.getElementById("employmentType").value =
+    currentProfile.employment_type || "";
 
-  document
-    .getElementById(
-      "position"
-    )
-    .value =
-      currentProfile.position ||
-      "";
+  document.getElementById("dayRate").value =
+    currentProfile.day_rate || 0;
 
+  document.getElementById("kitRental").value =
+    currentProfile.kit_rental || 0;
 
-  document
-    .getElementById(
-      "employmentType"
-    )
-    .value =
-      currentProfile
-        .employment_type ||
-      "";
+  document.getElementById("equipmentNotes").value =
+    currentProfile.equipment_notes || "";
 
+  document.getElementById("feeType").value =
+    currentProfile.fee_type || "None";
 
-  document
-    .getElementById(
-      "dayRate"
-    )
-    .value =
-      currentProfile
-        .day_rate ||
-      0;
+  document.getElementById("localHotel").value =
+    currentProfile.local_hotel || "";
 
+  document.getElementById("province").value =
+    currentProfile.province || "";
 
-  document
-    .getElementById(
-      "kitRental"
-    )
-    .value =
-      currentProfile
-        .kit_rental ||
-      0;
+  document.getElementById("corporationName").value =
+    currentProfile.corporation_name || "";
 
+  document.getElementById("gstNumber").value =
+    currentProfile.gst_number || "";
 
-  document
-    .getElementById(
-      "equipmentNotes"
-    )
-    .value =
-      currentProfile
-        .equipment_notes ||
-      "";
+  document.getElementById("gstAmount").value =
+    currentProfile.gst_amount || "";
 
-
-  document
-    .getElementById(
-      "feeType"
-    )
-    .value =
-      currentProfile
-        .fee_type ||
-      "None";
-
-
-  document
-    .getElementById(
-      "localHotel"
-    )
-    .value =
-      currentProfile
-        .local_hotel ||
-      "";
-
-
-  document
-    .getElementById(
-      "province"
-    )
-    .value =
-      currentProfile
-        .province ||
-      "";
-
-
-  document
-    .getElementById(
-      "corporationName"
-    )
-    .value =
-      currentProfile
-        .corporation_name ||
-      "";
-
-
-  document
-    .getElementById(
-      "gstNumber"
-    )
-    .value =
-      currentProfile
-        .gst_number ||
-      "";
-
-
-  document
-    .getElementById(
-      "gstAmount"
-    )
-    .value =
-      currentProfile
-        .gst_amount ||
-      "";
-
-
-  document
-    .getElementById(
-      "crewInitials"
-    )
-    .value =
-      currentProfile
-        .crew_initials ||
-      "";
-
+  document.getElementById("crewInitials").value =
+    currentProfile.crew_initials || "";
 
   updateEmploymentFields();
 }
 
 
-
-/* ===================================================
-   FIND PRODUCTION
-=================================================== */
+/* FIND PRODUCTION */
 
 async function findProduction() {
 
-  const {
-    data,
-    error
-  } =
+  const { data, error } =
     await supabaseClient
-      .from(
-        "productions"
-      )
+      .from("productions")
       .select("*")
-      .eq(
-        "name",
-        "Age of Attraction"
-      )
-      .eq(
-        "season",
-        "Season 2"
-      )
+      .eq("name", "Age of Attraction")
+      .eq("season", "Season 2")
       .limit(1);
 
+  if (error) throw error;
 
-  if (error) {
-    throw error;
-  }
-
-
-  if (
-    !data ||
-    data.length === 0
-  ) {
-
+  if (!data || data.length === 0) {
     throw new Error(
       "Unable to find the production."
     );
-
   }
 
-
-  productionId =
-    data[0].id;
+  productionId = data[0].id;
 }
 
 
-
-/* ===================================================
-   SAVE PROFILE
-=================================================== */
+/* SAVE PROFILE */
 
 async function saveProfile() {
 
   try {
 
-    clearMessage(
-      "setupMessage"
-    );
-
+    clearMessage("setupMessage");
 
     const name =
-      document
-        .getElementById(
-          "crewName"
-        )
-        .value
-        .trim();
-
+      document.getElementById("crewName").value.trim();
 
     const position =
-      document
-        .getElementById(
-          "position"
-        )
-        .value;
-
+      document.getElementById("position").value;
 
     const employmentType =
-      document
-        .getElementById(
-          "employmentType"
-        )
-        .value;
-
+      document.getElementById("employmentType").value;
 
     const dayRate =
       parseFloat(
-        document
-          .getElementById(
-            "dayRate"
-          )
-          .value
+        document.getElementById("dayRate").value
       ) || 0;
-
 
     const kitRental =
       parseFloat(
-        document
-          .getElementById(
-            "kitRental"
-          )
-          .value
+        document.getElementById("kitRental").value
       ) || 0;
 
-
     const feeType =
-      document
-        .getElementById(
-          "feeType"
-        )
-        .value;
-
+      document.getElementById("feeType").value;
 
     const equipmentNotes =
-      document
-        .getElementById(
-          "equipmentNotes"
-        )
-        .value
-        .trim();
-
+      document.getElementById("equipmentNotes").value.trim();
 
     const localHotel =
-      document
-        .getElementById(
-          "localHotel"
-        )
-        .value;
-
+      document.getElementById("localHotel").value;
 
     const province =
-      document
-        .getElementById(
-          "province"
-        )
-        .value;
-
+      document.getElementById("province").value;
 
     const crewInitials =
       document
-        .getElementById(
-          "crewInitials"
-        )
+        .getElementById("crewInitials")
         .value
         .trim()
         .toUpperCase();
 
-
     const corporationName =
-      document
-        .getElementById(
-          "corporationName"
-        )
-        .value
-        .trim();
-
+      document.getElementById("corporationName").value.trim();
 
     const gstNumber =
-      document
-        .getElementById(
-          "gstNumber"
-        )
-        .value
-        .trim();
-
+      document.getElementById("gstNumber").value.trim();
 
     const gstAmount =
       parseFloat(
-        document
-          .getElementById(
-            "gstAmount"
-          )
-          .value
+        document.getElementById("gstAmount").value
       ) || 0;
-
 
     if (
       !name ||
@@ -2264,109 +1301,63 @@ async function saveProfile() {
       !province ||
       !crewInitials
     ) {
-
       throw new Error(
         "Please complete all required fields."
       );
-
     }
 
-
     if (
-      employmentType ===
-      "Incorporated Contractor"
-      &&
-      (
-        !corporationName ||
-        !gstNumber
-      )
+      employmentType === "Incorporated Contractor" &&
+      (!corporationName || !gstNumber)
     ) {
-
       throw new Error(
         "Please enter your corporation name and GST number."
       );
-
     }
-
 
     if (!productionId) {
       await findProduction();
     }
 
-
     const profileData = {
-
-      user_id:
-        currentUser.id,
-
-      production_id:
-        productionId,
-
+      user_id: currentUser.id,
+      production_id: productionId,
       name,
-
       position,
-
-      employment_type:
-        employmentType,
-
-      day_rate:
-        dayRate,
-
-      kit_rental:
-        kitRental,
-
-      fee_type:
-        feeType,
-
-      equipment_notes:
-        equipmentNotes,
-
-      local_hotel:
-        localHotel,
-
+      employment_type: employmentType,
+      day_rate: dayRate,
+      kit_rental: kitRental,
+      fee_type: feeType,
+      equipment_notes: equipmentNotes,
+      local_hotel: localHotel,
       province,
-
-      crew_initials:
-        crewInitials,
+      crew_initials: crewInitials,
 
       corporation_name:
-        employmentType ===
-        "Incorporated Contractor"
+        employmentType === "Incorporated Contractor"
           ? corporationName
           : null,
 
       gst_number:
-        employmentType ===
-        "Incorporated Contractor"
+        employmentType === "Incorporated Contractor"
           ? gstNumber
           : null,
 
       gst_amount:
-        employmentType ===
-        "Incorporated Contractor"
+        employmentType === "Incorporated Contractor"
           ? gstAmount
           : null
-
     };
 
-
     let result;
-
 
     if (currentProfile) {
 
       result =
         await supabaseClient
-          .from(
-            "crew_profiles"
-          )
-          .update(
-            profileData
-          )
-          .eq(
-            "id",
-            currentProfile.id
-          )
+          .from("crew_profiles")
+          .update(profileData)
+          .eq("id", currentProfile.id)
           .select()
           .single();
 
@@ -2374,26 +1365,17 @@ async function saveProfile() {
 
       result =
         await supabaseClient
-          .from(
-            "crew_profiles"
-          )
-          .insert(
-            profileData
-          )
+          .from("crew_profiles")
+          .insert(profileData)
           .select()
           .single();
-
     }
-
 
     if (result.error) {
       throw result.error;
     }
 
-
-    currentProfile =
-      result.data;
-
+    currentProfile = result.data;
 
     showDTR();
 
@@ -2401,315 +1383,159 @@ async function saveProfile() {
 
     showMessage(
       "setupMessage",
-      error.message ||
-      "Unable to save profile.",
+      error.message || "Unable to save profile.",
       "error"
     );
-
   }
 }
 
 
-
-/* ===================================================
-   SHOW DTR
-=================================================== */
+/* SHOW DTR */
 
 function showDTR() {
 
-  showScreen(
-    "dtrScreen"
-  );
+  showScreen("dtrScreen");
 
-
-  if (
-    !document
-      .getElementById(
-        "dtrDate"
-      )
-      .value
-  ) {
-
-    document
-      .getElementById(
-        "dtrDate"
-      )
-      .value =
-        todayString();
-
+  if (!document.getElementById("dtrDate").value) {
+    document.getElementById("dtrDate").value =
+      todayString();
   }
 
-
-  document
-    .getElementById(
-      "crewGreeting"
-    )
-    .textContent =
-      currentProfile.name +
-      " · " +
-      currentProfile.position;
+  document.getElementById("crewGreeting").textContent =
+    currentProfile.name +
+    " · " +
+    currentProfile.position;
 }
 
 
-
-/* ===================================================
-   SUBMIT DTR
-=================================================== */
+/* SUBMIT DTR */
 
 async function submitDTR() {
 
   try {
 
-    clearMessage(
-      "dtrMessage"
-    );
-
+    clearMessage("dtrMessage");
 
     const date =
-      document
-        .getElementById(
-          "dtrDate"
-        )
-        .value;
-
+      document.getElementById("dtrDate").value;
 
     const startValue =
-      document
-        .getElementById(
-          "startTime"
-        )
-        .value;
-
+      document.getElementById("startTime").value;
 
     const endValue =
-      document
-        .getElementById(
-          "endTime"
-        )
-        .value;
-
+      document.getElementById("endTime").value;
 
     const noLunch =
-      document
-        .getElementById(
-          "noLunch"
-        )
-        .checked;
-
+      document.getElementById("noLunch").checked;
 
     const notes =
-      document
-        .getElementById(
-          "dtrNotes"
-        )
-        .value
-        .trim();
+      document.getElementById("dtrNotes").value.trim();
 
-
-    if (
-      !date ||
-      !startValue ||
-      !endValue
-    ) {
-
+    if (!date || !startValue || !endValue) {
       throw new Error(
         "Please complete the date, IN and OUT."
       );
-
     }
 
-
     const startMinutes =
-      parseTimeToMinutes(
-        startValue
-      );
-
+      parseTimeToMinutes(startValue);
 
     const endMinutes =
-      parseTimeToMinutes(
-        endValue
-      );
-
+      parseTimeToMinutes(endValue);
 
     if (
       startMinutes === null ||
       endMinutes === null
     ) {
-
       throw new Error(
         "IN and OUT must use HH:MM format and be between 00:00 and 48:00."
       );
-
     }
 
-
-    if (
-      endMinutes <=
-      startMinutes
-    ) {
-
+    if (endMinutes <= startMinutes) {
       throw new Error(
         "OUT must be later than IN. For after-midnight finishes use 25:00, 26:30, etc."
       );
-
     }
 
-
-    let lunchStartMinutes =
-      null;
-
-
-    let lunchEndMinutes =
-      null;
-
+    let lunchStartMinutes = null;
+    let lunchEndMinutes = null;
 
     if (!noLunch) {
 
       const lunchStartValue =
-        document
-          .getElementById(
-            "lunchStart"
-          )
-          .value;
-
+        document.getElementById("lunchStart").value;
 
       const lunchEndValue =
-        document
-          .getElementById(
-            "lunchEnd"
-          )
-          .value;
+        document.getElementById("lunchEnd").value;
 
-
-      if (
-        !lunchStartValue ||
-        !lunchEndValue
-      ) {
-
+      if (!lunchStartValue || !lunchEndValue) {
         throw new Error(
           "Please enter Lunch Start and Lunch End, or select No Lunch."
         );
-
       }
 
-
       lunchStartMinutes =
-        parseTimeToMinutes(
-          lunchStartValue
-        );
-
+        parseTimeToMinutes(lunchStartValue);
 
       lunchEndMinutes =
-        parseTimeToMinutes(
-          lunchEndValue
-        );
-
+        parseTimeToMinutes(lunchEndValue);
 
       if (
         lunchStartMinutes === null ||
         lunchEndMinutes === null
       ) {
-
         throw new Error(
           "Lunch times must use HH:MM format."
         );
-
       }
 
-
-      if (
-        lunchStartMinutes <
-        startMinutes
-      ) {
-
+      if (lunchStartMinutes < startMinutes) {
         throw new Error(
           "Lunch Start cannot be before IN."
         );
-
       }
 
-
-      if (
-        lunchEndMinutes <=
-        lunchStartMinutes
-      ) {
-
+      if (lunchEndMinutes <= lunchStartMinutes) {
         throw new Error(
           "Lunch End must be later than Lunch Start."
         );
-
       }
 
-
-      if (
-        endMinutes <=
-        lunchEndMinutes
-      ) {
-
+      if (endMinutes <= lunchEndMinutes) {
         throw new Error(
           "OUT must be later than Lunch End."
         );
-
       }
-
     }
 
-
-    const {
-      error
-    } =
+    const { error } =
       await supabaseClient
-        .from(
-          "dtrs"
-        )
+        .from("dtrs")
         .upsert(
           {
-
-            crew_profile_id:
-              currentProfile.id,
-
+            crew_profile_id: currentProfile.id,
             date,
-
-            start_minutes:
-              startMinutes,
+            start_minutes: startMinutes,
 
             lunch_start_minutes:
-              noLunch
-                ? null
-                : lunchStartMinutes,
+              noLunch ? null : lunchStartMinutes,
 
             lunch_end_minutes:
-              noLunch
-                ? null
-                : lunchEndMinutes,
+              noLunch ? null : lunchEndMinutes,
 
-            end_minutes:
-              endMinutes,
-
-            no_lunch:
-              noLunch,
-
+            end_minutes: endMinutes,
+            no_lunch: noLunch,
             notes,
-
-            status:
-              "submitted",
-
-            updated_at:
-              new Date()
-                .toISOString()
-
+            status: "submitted",
+            updated_at: new Date().toISOString()
           },
           {
-            onConflict:
-              "crew_profile_id,date"
+            onConflict: "crew_profile_id,date"
           }
         );
 
-
-    if (error) {
-      throw error;
-    }
-
+    if (error) throw error;
 
     showMessage(
       "dtrMessage",
@@ -2721,286 +1547,173 @@ async function submitDTR() {
 
     showMessage(
       "dtrMessage",
-      error.message ||
-      "Unable to submit DTR.",
+      error.message || "Unable to submit DTR.",
       "error"
     );
-
   }
 }
 
 
-
-/* ===================================================
-   OPEN MY TIMESHEET
-=================================================== */
+/* OPEN TIMESHEET */
 
 async function openMyTimesheet() {
 
   const selectedDate =
-    document
-      .getElementById(
-        "dtrDate"
-      )
-      .value;
-
+    document.getElementById("dtrDate").value;
 
   let referenceDate;
 
-
   if (selectedDate) {
-
     referenceDate =
-      isoToLocalDate(
-        selectedDate
-      );
-
+      isoToLocalDate(selectedDate);
   } else {
-
     referenceDate =
       new Date();
-
   }
-
 
   currentWeekEnding =
-    getSaturdayForDate(
-      referenceDate
-    );
+    getSaturdayForDate(referenceDate);
 
+  showScreen("timesheetScreen");
 
-  showScreen(
-    "timesheetScreen"
-  );
-
-
-  document
-    .getElementById(
-      "timesheetCrewName"
-    )
-    .textContent =
-      currentProfile.name +
-      " · " +
-      currentProfile.position;
-
+  document.getElementById("timesheetCrewName").textContent =
+    currentProfile.name +
+    " · " +
+    currentProfile.position;
 
   await buildTimesheet();
 }
 
 
+/* WEEK NAVIGATION */
 
-/* ===================================================
-   CHANGE WEEK
-=================================================== */
+async function changeWeek(days) {
 
-async function changeWeek(
-  days
-) {
-
-  if (!currentWeekEnding) {
-    return;
-  }
-
+  if (!currentWeekEnding) return;
 
   currentWeekEnding.setDate(
-    currentWeekEnding.getDate() +
-    days
+    currentWeekEnding.getDate() + days
   );
-
 
   await buildTimesheet();
 }
-
 
 
 async function goToCurrentWeek() {
 
   currentWeekEnding =
-    getSaturdayForDate(
-      new Date()
-    );
-
+    getSaturdayForDate(new Date());
 
   await buildTimesheet();
 }
 
 
-
-/* ===================================================
-   BUILD TIMESHEET
-=================================================== */
+/* BUILD TIMESHEET */
 
 async function buildTimesheet() {
 
   try {
 
-    clearMessage(
-      "timesheetMessage"
-    );
-
+    clearMessage("timesheetMessage");
 
     document
-      .getElementById(
-        "pdfLoading"
-      )
-      .classList
-      .remove("hidden");
-
+      .getElementById("pdfLoading")
+      .classList.remove("hidden");
 
     document
-      .getElementById(
-        "timesheetPDF"
-      )
-      .classList
-      .add("hidden");
+      .getElementById("timesheetPDF")
+      .classList.add("hidden");
 
+    document.getElementById("openPDFButton").disabled =
+      true;
 
-    document
-      .getElementById(
-        "openPDFButton"
-      )
-      .disabled =
-        true;
-
-
-    document
-      .getElementById(
-        "weekEndingDisplay"
-      )
-      .textContent =
-        formatDisplayDate(
-          currentWeekEnding
-        );
-
+    document.getElementById("weekEndingDisplay").textContent =
+      formatDisplayDate(currentWeekEnding);
 
     const sunday =
-      getSundayForSaturday(
-        currentWeekEnding
-      );
-
+      getSundayForSaturday(currentWeekEnding);
 
     const sundayISO =
-      dateToISO(
-        sunday
-      );
-
+      dateToISO(sunday);
 
     const saturdayISO =
-      dateToISO(
-        currentWeekEnding
-      );
+      dateToISO(currentWeekEnding);
 
 
-    /* -----------------------------------------------
-       GET DTRS
-    ------------------------------------------------ */
+    /* GET DTRS */
 
     const {
       data: dtrs,
       error: dtrError
     } =
       await supabaseClient
-        .from(
-          "dtrs"
-        )
+        .from("dtrs")
         .select("*")
         .eq(
           "crew_profile_id",
           currentProfile.id
         )
-        .gte(
-          "date",
-          sundayISO
-        )
-        .lte(
-          "date",
-          saturdayISO
-        )
-        .order(
-          "date",
-          {
-            ascending: true
-          }
-        );
-
+        .gte("date", sundayISO)
+        .lte("date", saturdayISO)
+        .order("date", {
+          ascending: true
+        });
 
     if (dtrError) {
       throw dtrError;
     }
 
 
-    /* -----------------------------------------------
-       GET ACTIVE TEMPLATE
-    ------------------------------------------------ */
+    /* GET TEMPLATE */
 
     const {
       data: templates,
       error: templateError
     } =
       await supabaseClient
-        .from(
-          "timesheet_templates"
-        )
+        .from("timesheet_templates")
         .select("*")
         .eq(
           "production_id",
           productionId
         )
-        .eq(
-          "is_active",
-          true
-        )
+        .eq("is_active", true)
         .limit(1);
-
 
     if (templateError) {
       throw templateError;
     }
 
-
-    if (
-      !templates ||
-      templates.length === 0
-    ) {
-
+    if (!templates || templates.length === 0) {
       throw new Error(
         "No timesheet template has been configured for this production."
       );
-
     }
-
 
     const template =
       templates[0];
 
 
-    /* -----------------------------------------------
-       GET FIELD MAPPINGS
-    ------------------------------------------------ */
+    /* GET MAPPINGS */
 
     const {
       data: mappings,
       error: mappingError
     } =
       await supabaseClient
-        .from(
-          "timesheet_field_mappings"
-        )
+        .from("timesheet_field_mappings")
         .select("*")
         .eq(
           "template_id",
           template.id
         );
 
-
     if (mappingError) {
       throw mappingError;
     }
 
 
-    /* -----------------------------------------------
-       DOWNLOAD PRIVATE PDF
-    ------------------------------------------------ */
+    /* DOWNLOAD PRIVATE PDF */
 
     const {
       data: pdfBlob,
@@ -3008,13 +1721,8 @@ async function buildTimesheet() {
     } =
       await supabaseClient
         .storage
-        .from(
-          "timesheet-templates"
-        )
-        .download(
-          template.file_path
-        );
-
+        .from("timesheet-templates")
+        .download(template.file_path);
 
     if (downloadError) {
       throw downloadError;
@@ -3022,33 +1730,19 @@ async function buildTimesheet() {
 
 
     const pdfBytes =
-      await pdfBlob
-        .arrayBuffer();
+      await pdfBlob.arrayBuffer();
 
-
-    /* -----------------------------------------------
-       LOAD ORIGINAL PDF
-    ------------------------------------------------ */
-
-    const {
-      PDFDocument
-    } =
+    const { PDFDocument } =
       PDFLib;
 
-
     const pdfDoc =
-      await PDFDocument.load(
-        pdfBytes
-      );
-
+      await PDFDocument.load(pdfBytes);
 
     const form =
       pdfDoc.getForm();
 
 
-    /* -----------------------------------------------
-       BUILD STANDARDIZED DATA
-    ------------------------------------------------ */
+    /* BUILD OUR DATA */
 
     const values =
       buildTimesheetValues(
@@ -3058,148 +1752,249 @@ async function buildTimesheet() {
       );
 
 
-    /* -----------------------------------------------
-       APPLY TEMPLATE MAPPINGS
-    ------------------------------------------------ */
+    /* ===============================================
+       DIAGNOSTIC PDF FILLING
+    ================================================ */
 
-    for (
-      const mapping
-      of mappings
-    ) {
+    const mappingsLoaded =
+      mappings.length;
+
+    let pdfFieldsFound = 0;
+    let valuesAvailable = 0;
+    let fieldsFilled = 0;
+
+    const allPDFFields =
+      form.getFields();
+
+    const pdfFieldNames =
+      allPDFFields.map(
+        field => field.getName()
+      );
+
+    console.log(
+      "PDF FIELD COUNT:",
+      pdfFieldNames.length
+    );
+
+    console.log(
+      "PDF FIELDS:",
+      pdfFieldNames
+    );
+
+    console.log(
+      "MAPPINGS:",
+      mappings
+    );
+
+    console.log(
+      "VALUES:",
+      values
+    );
+
+
+    for (const mapping of mappings) {
+
+      const fieldName =
+        mapping.pdf_field_name;
 
       const value =
-        values[
-          mapping.field_key
-        ];
+        values[mapping.field_key];
+
+
+      if (
+        value !== undefined &&
+        value !== null
+      ) {
+        valuesAvailable++;
+      }
+
+
+      if (
+        fieldName &&
+        pdfFieldNames.includes(fieldName)
+      ) {
+        pdfFieldsFound++;
+      }
 
 
       if (
         value === undefined ||
-        value === null
+        value === null ||
+        !fieldName
       ) {
         continue;
       }
 
 
-      setPDFField(
-        form,
-        mapping.pdf_field_name,
-        value
-      );
+      try {
 
+        const field =
+          form.getField(fieldName);
+
+        const typeName =
+          field.constructor.name;
+
+
+        console.log(
+          "FILLING:",
+          mapping.field_key,
+          "→",
+          fieldName,
+          "=",
+          value,
+          "(" + typeName + ")"
+        );
+
+
+        if (typeName === "PDFCheckBox") {
+
+          if (value === true) {
+            field.check();
+          } else {
+            field.uncheck();
+          }
+
+          fieldsFilled++;
+
+        } else if (typeName === "PDFTextField") {
+
+          field.setText(
+            String(value)
+          );
+
+          fieldsFilled++;
+
+        } else if (typeName === "PDFDropdown") {
+
+          field.select(
+            String(value)
+          );
+
+          fieldsFilled++;
+
+        } else if (typeName === "PDFOptionList") {
+
+          field.select(
+            String(value)
+          );
+
+          fieldsFilled++;
+
+        } else {
+
+          console.warn(
+            "UNHANDLED FIELD:",
+            fieldName,
+            typeName
+          );
+        }
+
+      } catch (error) {
+
+        console.error(
+          "FAILED PDF FIELD:",
+          mapping.field_key,
+          "→",
+          fieldName,
+          error
+        );
+      }
     }
 
 
-    /* -----------------------------------------------
-       UPDATE FIELD APPEARANCES
-    ------------------------------------------------ */
+    /* UPDATE PDF APPEARANCES */
 
     try {
-
       form.updateFieldAppearances();
-
     } catch (appearanceError) {
-
-      console.log(
-        "PDF appearance update:",
+      console.warn(
+        "Appearance update:",
         appearanceError
       );
-
     }
 
 
-    /* -----------------------------------------------
-       SAVE COMPLETED PDF
-    ------------------------------------------------ */
+    /* SAVE COMPLETED PDF */
 
     const completedBytes =
       await pdfDoc.save();
-
 
     const completedBlob =
       new Blob(
         [completedBytes],
         {
-          type:
-            "application/pdf"
+          type: "application/pdf"
         }
       );
 
-
     if (currentPDFUrl) {
-
       URL.revokeObjectURL(
         currentPDFUrl
       );
-
     }
-
 
     currentPDFUrl =
       URL.createObjectURL(
         completedBlob
       );
 
-
     const iframe =
-      document
-        .getElementById(
-          "timesheetPDF"
-        );
-
+      document.getElementById(
+        "timesheetPDF"
+      );
 
     iframe.src =
       currentPDFUrl;
 
-
-    iframe
-      .classList
-      .remove("hidden");
-
+    iframe.classList.remove(
+      "hidden"
+    );
 
     document
-      .getElementById(
-        "pdfLoading"
-      )
-      .classList
-      .add("hidden");
+      .getElementById("pdfLoading")
+      .classList.add("hidden");
+
+    document.getElementById("openPDFButton").disabled =
+      false;
 
 
-    document
-      .getElementById(
-        "openPDFButton"
-      )
-      .disabled =
-        false;
+    /* SHOW DIAGNOSTIC ON SCREEN */
+
+    const dtrCount =
+      dtrs ? dtrs.length : 0;
+
+    const diagnostic =
+      mappingsLoaded +
+      " mappings loaded · " +
+      pdfFieldsFound +
+      " PDF fields found · " +
+      valuesAvailable +
+      " values available · " +
+      fieldsFilled +
+      " fields filled · " +
+      dtrCount +
+      " DTR(s) found";
 
 
-    if (
-      !dtrs ||
-      dtrs.length === 0
-    ) {
+    showMessage(
+      "timesheetMessage",
+      diagnostic,
+      fieldsFilled > 0
+        ? "success"
+        : "error"
+    );
 
-      showMessage(
-        "timesheetMessage",
-        "No DTRs have been submitted for this week yet. Your production information is still shown on the timesheet.",
-        "success"
-      );
-
-    }
 
   } catch (error) {
 
     console.error(
+      "TIMESHEET ERROR:",
       error
     );
 
-
     document
-      .getElementById(
-        "pdfLoading"
-      )
-      .classList
-      .add("hidden");
-
+      .getElementById("pdfLoading")
+      .classList.add("hidden");
 
     showMessage(
       "timesheetMessage",
@@ -3207,15 +2002,11 @@ async function buildTimesheet() {
       "Unable to build timesheet.",
       "error"
     );
-
   }
 }
 
 
-
-/* ===================================================
-   BUILD TIMESHEET VALUES
-=================================================== */
+/* BUILD STANDARDIZED VALUES */
 
 function buildTimesheetValues(
   sunday,
@@ -3226,41 +2017,21 @@ function buildTimesheetValues(
   const values = {};
 
 
-  /* -----------------------------------------------
-     PROFILE
-  ------------------------------------------------ */
+  /* CREW */
 
-  values[
-    "crew.name"
-  ] =
-    currentProfile.name ||
-    "";
+  values["crew.name"] =
+    currentProfile.name || "";
 
-
-  values[
-    "crew.department"
-  ] =
+  values["crew.department"] =
     "Sound";
 
+  values["crew.position"] =
+    currentProfile.position || "";
 
-  values[
-    "crew.position"
-  ] =
-    currentProfile.position ||
-    "";
+  values["week.ending"] =
+    formatPDFDate(saturday);
 
-
-  values[
-    "week.ending"
-  ] =
-    formatPDFDate(
-      saturday
-    );
-
-
-  values[
-    "crew.day_rate"
-  ] =
+  values["crew.day_rate"] =
     currentProfile.day_rate
       ? "$" +
         Number(
@@ -3268,137 +2039,71 @@ function buildTimesheetValues(
         ).toFixed(2)
       : "";
 
+  values["crew.corporation_name"] =
+    currentProfile.corporation_name || "";
 
-  values[
-    "crew.corporation_name"
-  ] =
-    currentProfile
-      .corporation_name ||
-    "";
+  values["crew.gst_number"] =
+    currentProfile.gst_number || "";
 
-
-  values[
-    "crew.gst_number"
-  ] =
-    currentProfile
-      .gst_number ||
-    "";
-
-
-  values[
-    "crew.gst_amount"
-  ] =
-    currentProfile
-      .gst_amount
+  values["crew.gst_amount"] =
+    currentProfile.gst_amount
       ? "$" +
         Number(
-          currentProfile
-            .gst_amount
+          currentProfile.gst_amount
         ).toFixed(2)
       : "";
 
+  values["crew.initials"] =
+    currentProfile.crew_initials || "";
 
-  values[
-    "crew.initials"
-  ] =
-    currentProfile
-      .crew_initials ||
-    "";
+  values["crew.local"] =
+    currentProfile.local_hotel === "Local";
 
+  values["crew.hotel"] =
+    currentProfile.local_hotel === "Hotel";
 
-  values[
-    "crew.local"
-  ] =
-    currentProfile
-      .local_hotel ===
-    "Local";
+  values["crew.bc_resident"] =
+    currentProfile.province === "BC";
 
-
-  values[
-    "crew.hotel"
-  ] =
-    currentProfile
-      .local_hotel ===
-    "Hotel";
+  values["crew.on_resident"] =
+    currentProfile.province === "ON";
 
 
-  values[
-    "crew.bc_resident"
-  ] =
-    currentProfile
-      .province ===
-    "BC";
+  /* KIT / VEHICLE */
 
+  if (currentProfile.fee_type === "Kit") {
 
-  values[
-    "crew.on_resident"
-  ] =
-    currentProfile
-      .province ===
-    "ON";
-
-
-  /* -----------------------------------------------
-     KIT / VEHICLE
-  ------------------------------------------------ */
-
-  if (
-    currentProfile
-      .fee_type ===
-    "Kit"
-  ) {
-
-    values[
-      "crew.kit_fee"
-    ] =
-      currentProfile
-        .kit_rental
+    values["crew.kit_fee"] =
+      currentProfile.kit_rental
         ? "$" +
           Number(
-            currentProfile
-              .kit_rental
+            currentProfile.kit_rental
           ).toFixed(2)
         : "";
 
   } else {
 
-    values[
-      "crew.kit_fee"
-    ] = "";
-
+    values["crew.kit_fee"] = "";
   }
 
 
-  if (
-    currentProfile
-      .fee_type ===
-    "Vehicle"
-  ) {
+  if (currentProfile.fee_type === "Vehicle") {
 
-    values[
-      "crew.vehicle_fee"
-    ] =
-      currentProfile
-        .kit_rental
+    values["crew.vehicle_fee"] =
+      currentProfile.kit_rental
         ? "$" +
           Number(
-            currentProfile
-              .kit_rental
+            currentProfile.kit_rental
           ).toFixed(2)
         : "";
 
   } else {
 
-    values[
-      "crew.vehicle_fee"
-    ] = "";
-
+    values["crew.vehicle_fee"] = "";
   }
 
 
-  /* -----------------------------------------------
-     DAILY DTRS
-  ------------------------------------------------ */
+  /* DAILY */
 
   const dayKeys = [
     "sun",
@@ -3411,11 +2116,7 @@ function buildTimesheetValues(
   ];
 
 
-  for (
-    let i = 0;
-    i < 7;
-    i++
-  ) {
+  for (let i = 0; i < 7; i++) {
 
     const date =
       new Date(
@@ -3427,93 +2128,63 @@ function buildTimesheetValues(
         0
       );
 
-
     date.setDate(
       sunday.getDate() + i
     );
 
-
     const iso =
-      dateToISO(
-        date
-      );
-
+      dateToISO(date);
 
     const key =
       dayKeys[i];
 
-
     const dtr =
       dtrs.find(
-        item =>
-          item.date === iso
+        item => item.date === iso
       );
-
 
     if (!dtr) {
       continue;
     }
 
 
-    values[
-      `${key}.date`
-    ] =
-      formatPDFDate(
-        date
-      );
+    values[`${key}.date`] =
+      formatPDFDate(date);
 
-
-    values[
-      `${key}.in`
-    ] =
+    values[`${key}.in`] =
       minutesToTime(
         dtr.start_minutes
       );
 
-
-    values[
-      `${key}.out`
-    ] =
+    values[`${key}.out`] =
       minutesToTime(
         dtr.end_minutes
       );
 
 
-    if (
-      dtr.no_lunch
-    ) {
+    if (dtr.no_lunch) {
 
-      values[
-        `${key}.lunch_start`
-      ] = "";
+      values[`${key}.lunch_start`] =
+        "";
 
-
-      values[
-        `${key}.lunch_end`
-      ] = "";
+      values[`${key}.lunch_end`] =
+        "";
 
     } else {
 
-      values[
-        `${key}.lunch_start`
-      ] =
+      values[`${key}.lunch_start`] =
         minutesToTime(
           dtr.lunch_start_minutes
         );
 
-
-      values[
-        `${key}.lunch_end`
-      ] =
+      values[`${key}.lunch_end`] =
         minutesToTime(
           dtr.lunch_end_minutes
         );
-
     }
 
 
     let lunchMinutes = 0;
-
 
     if (
       !dtr.no_lunch &&
@@ -3524,7 +2195,6 @@ function buildTimesheetValues(
       lunchMinutes =
         dtr.lunch_end_minutes -
         dtr.lunch_start_minutes;
-
     }
 
 
@@ -3534,21 +2204,13 @@ function buildTimesheetValues(
       lunchMinutes;
 
 
-    values[
-      `${key}.hours`
-    ] =
+    values[`${key}.hours`] =
       minutesToDecimalHours(
         workedMinutes
       );
 
-
-    values[
-      `${key}.province`
-    ] =
-      currentProfile
-        .province ||
-      "";
-
+    values[`${key}.province`] =
+      currentProfile.province || "";
   }
 
 
@@ -3556,125 +2218,11 @@ function buildTimesheetValues(
 }
 
 
-
-/* ===================================================
-   SET PDF FIELD
-=================================================== */
-
-function setPDFField(
-  form,
-  fieldName,
-  value
-) {
-
-  if (!fieldName) {
-    return;
-  }
-
-
-  try {
-
-    const field =
-      form.getField(
-        fieldName
-      );
-
-
-    const typeName =
-      field.constructor.name;
-
-
-    if (
-      typeName ===
-      "PDFCheckBox"
-    ) {
-
-      if (value) {
-
-        field.check();
-
-      } else {
-
-        field.uncheck();
-
-      }
-
-
-      return;
-    }
-
-
-    if (
-      typeName ===
-      "PDFTextField"
-    ) {
-
-      field.setText(
-        String(value)
-      );
-
-
-      return;
-    }
-
-
-    if (
-      typeName ===
-      "PDFDropdown"
-    ) {
-
-      field.select(
-        String(value)
-      );
-
-
-      return;
-    }
-
-
-    if (
-      typeName ===
-      "PDFOptionList"
-    ) {
-
-      field.select(
-        String(value)
-      );
-
-
-      return;
-    }
-
-
-    console.log(
-      "Unhandled PDF field type:",
-      fieldName,
-      typeName
-    );
-
-  } catch (error) {
-
-    console.warn(
-      "Unable to fill PDF field:",
-      fieldName,
-      error
-    );
-
-  }
-}
-
-
-
-/* ===================================================
-   OPEN GENERATED PDF
-=================================================== */
+/* OPEN PDF */
 
 function openGeneratedPDF() {
 
-  if (!currentPDFUrl) {
-    return;
-  }
-
+  if (!currentPDFUrl) return;
 
   window.open(
     currentPDFUrl,
@@ -3683,10 +2231,7 @@ function openGeneratedPDF() {
 }
 
 
-
-/* ===================================================
-   SIGN OUT
-=================================================== */
+/* SIGN OUT */
 
 async function signOut() {
 
@@ -3696,41 +2241,25 @@ async function signOut() {
       currentPDFUrl
     );
 
-    currentPDFUrl =
-      null;
-
+    currentPDFUrl = null;
   }
 
-
-  await supabaseClient
-    .auth
-    .signOut();
-
+  await supabaseClient.auth.signOut();
 
   currentUser = null;
-
   currentProfile = null;
-
   productionId = null;
-
   currentWeekEnding = null;
 
-
-  showScreen(
-    "loginScreen"
-  );
+  showScreen("loginScreen");
 }
 
 
-
-/* ===================================================
-   START APP
-=================================================== */
+/* START */
 
 initialize();
 
 </script>
 
 </body>
-
 </html>
