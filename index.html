@@ -185,6 +185,30 @@ body.is-manager .hod-only{display:block}
   .week-status-grid{gap:4px}
 }
 
+
+/* v18 — HOD Crew Management */
+.department-toolbar{display:flex;gap:8px;margin-bottom:14px}
+.department-toolbar button{margin:0;flex:1;padding:11px 10px}
+.crew-manage-list{display:flex;flex-direction:column;gap:9px}
+.crew-manage-card{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#181818;border:1px solid #333;border-radius:12px;padding:13px}
+.crew-manage-name{font-size:15px;font-weight:700}
+.crew-manage-meta{font-size:12px;color:#888;margin-top:3px}
+.role-pill{font-size:10px;text-transform:uppercase;letter-spacing:.05em;padding:5px 7px;border-radius:999px;background:#222;border:1px solid #3b3b3b;color:#aaa;white-space:nowrap}
+.role-pill.hod{background:#17261b;border-color:#2f5138;color:#b9dfc1}
+.invite-card{background:#181818;border:1px solid #333;border-radius:14px;padding:15px;margin-bottom:14px}
+.invite-card h3{margin:0 0 5px;font-size:17px}
+.invite-card p{margin:0 0 12px;color:#888;font-size:12px;line-height:1.4}
+.invite-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.invite-grid label{margin:0 0 6px;font-size:11px}
+.invite-grid .full{grid-column:1/-1}
+.invite-card button{margin-top:12px}
+.invite-result{display:none;margin-top:12px;padding:11px;border-radius:9px;background:#17261b;border:1px solid #2f5138;color:#b9dfc1;font-size:12px;line-height:1.45}
+.invite-result.show{display:block}
+.invite-link-row{display:flex;gap:7px;margin-top:8px}
+.invite-link-row input{font-size:12px;padding:9px}
+.invite-link-row button{width:auto;margin:0;padding:9px 11px;font-size:12px}
+@media(max-width:390px){.invite-grid{grid-template-columns:1fr}.invite-grid .full{grid-column:auto}}
+
 </style>
 </head>
 <body>
@@ -325,6 +349,27 @@ body.is-manager .hod-only{display:block}
     </div>
   </div>
 
+  <div class="department-toolbar">
+    <button class="secondary" onclick="showDepartmentOverview()">This Week</button>
+    <button class="secondary" onclick="showCrewManagement()">Crew</button>
+  </div>
+
+  <div id="crewManagementPanel" class="hidden">
+    <div class="invite-card">
+      <h3>Invite Crew</h3>
+      <p>Create a production invite. Send the link to the crew member; they create their own account and finish Crew Setup.</p>
+      <div class="invite-grid">
+        <div class="full"><label for="inviteName">Name</label><input id="inviteName" placeholder="Crew member name"></div>
+        <div><label for="inviteEmail">Email</label><input id="inviteEmail" type="email" placeholder="name@example.com"></div>
+        <div><label for="invitePosition">Position</label><select id="invitePosition"><option>A1</option><option>A2</option><option>Bag Mixer</option><option>HOD</option></select></div>
+      </div>
+      <button onclick="createCrewInvite()">Create Invite</button>
+      <div id="inviteResult" class="invite-result"></div>
+    </div>
+    <div id="crewManageList" class="crew-manage-list"></div>
+  </div>
+
+  <div id="departmentOverviewPanel">
   <div class="department-week">
     <button class="secondary" onclick="changeDepartmentWeek(-7)">‹</button>
     <div class="department-week-center" onclick="goToCurrentDepartmentWeek()">
@@ -342,6 +387,7 @@ body.is-manager .hod-only{display:block}
 
   <div id="departmentMessage" class="message"></div>
   <div id="departmentList" class="department-list"></div>
+  </div>
 </div>
 
 <div id="dtrDetailModal" class="dtr-modal hidden" onclick="closeDTRDetail(event)">
@@ -453,10 +499,72 @@ async function clearDay(){
 }
 async function submitDTR(){try{clearMessage("dtrMessage");["startTime","lunchStart","lunchEnd","endTime"].forEach(id=>formatTimeField($(id)));const date=$("dtrDate").value,startValue=$("startTime").value,endValue=$("endTime").value,noLunch=$("noLunch").checked,notes=$("dtrNotes").value.trim();if(!date||!startValue||!endValue)throw Error("Please complete the date, IN and OUT.");const start=parseTimeToMinutes(startValue),end=parseTimeToMinutes(endValue);if(start===null||end===null)throw Error("IN and OUT must use HH:MM format and be between 00:00 and 48:00.");if(end<=start)throw Error("OUT must be later than IN. For after-midnight finishes use 25:00, 26:30, etc.");let ls=null,le=null;if(!noLunch){ls=parseTimeToMinutes($("lunchStart").value);le=parseTimeToMinutes($("lunchEnd").value);if(ls===null||le===null)throw Error("Please enter valid Lunch Start and Lunch End, or select No Lunch.");if(ls<start)throw Error("Lunch Start cannot be before IN.");if(le<=ls)throw Error("Lunch End must be later than Lunch Start.");if(end<=le)throw Error("OUT must be later than Lunch End.")}const wasEditing=!!currentDTR;const{error}=await supabaseClient.from("dtrs").upsert({crew_profile_id:currentProfile.id,date,start_minutes:start,lunch_start_minutes:noLunch?null:ls,lunch_end_minutes:noLunch?null:le,end_minutes:end,no_lunch:noLunch,notes,status:"submitted",updated_at:new Date().toISOString()},{onConflict:"crew_profile_id,date"});if(error)throw error;await loadDTRForSelectedDate();showMessage("dtrMessage",wasEditing?"DTR updated successfully.":"DTR submitted successfully.","success")}catch(e){showMessage("dtrMessage",e.message||"Unable to submit DTR.","error")}}
 
+
+function showDepartmentOverview(){
+  $("crewManagementPanel").classList.add("hidden");
+  $("departmentOverviewPanel").classList.remove("hidden");
+}
+async function showCrewManagement(){
+  $("departmentOverviewPanel").classList.add("hidden");
+  $("crewManagementPanel").classList.remove("hidden");
+  await loadCrewManagement();
+}
+async function loadCrewManagement(){
+  try{
+    $("crewManageList").innerHTML='<div class="department-empty">Loading crew…</div>';
+    const{data:profiles,error}=await supabaseClient.from("crew_profiles").select("*").eq("production_id",productionId).order("name",{ascending:true});
+    if(error)throw error;
+    const{data:memberships,error:membershipError}=await supabaseClient.from("production_memberships").select("user_id,role,status").eq("production_id",productionId);
+    if(membershipError)throw membershipError;
+    const byUser=new Map((memberships||[]).map(m=>[m.user_id,m]));
+    $("crewManageList").innerHTML=(profiles||[]).map(p=>{
+      const m=byUser.get(p.user_id);
+      const role=m?.role||"crew";
+      return `<div class="crew-manage-card"><div><div class="crew-manage-name">${escapeHTML(p.name)}</div><div class="crew-manage-meta">${escapeHTML(p.position||"Crew")} · ${escapeHTML(m?.status||"active")}</div></div><span class="role-pill ${role==="hod"?"hod":""}">${escapeHTML(role)}</span></div>`;
+    }).join("")||'<div class="department-empty">No crew yet.</div>';
+  }catch(e){
+    $("crewManageList").innerHTML=`<div class="department-empty">${escapeHTML(e.message||"Unable to load crew.")}</div>`;
+  }
+}
+async function createCrewInvite(){
+  const name=$("inviteName").value.trim(),email=$("inviteEmail").value.trim().toLowerCase(),position=$("invitePosition").value;
+  const result=$("inviteResult");
+  result.classList.remove("show");
+  if(!name||!email){result.textContent="Enter the crew member’s name and email.";result.classList.add("show");return}
+  try{
+    const token=(crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random().toString(36).slice(2)}`);
+    const expires=new Date(Date.now()+14*24*60*60*1000).toISOString();
+    const{error}=await supabaseClient.from("production_invites").insert({
+      production_id:productionId,
+      invited_by:currentUser.id,
+      email,
+      name,
+      position,
+      token,
+      status:"pending",
+      expires_at:expires
+    });
+    if(error)throw error;
+    const link=`${location.origin}${location.pathname}?invite=${encodeURIComponent(token)}`;
+    result.innerHTML=`Invite created for <strong>${escapeHTML(name)}</strong>.<div class="invite-link-row"><input id="generatedInviteLink" readonly value="${escapeHTML(link)}"><button class="secondary" onclick="copyInviteLink()">Copy</button></div>`;
+    result.classList.add("show");
+    $("inviteName").value="";$("inviteEmail").value="";$("invitePosition").value="A1";
+  }catch(e){
+    result.textContent=e.message||"Unable to create invite.";
+    result.classList.add("show");
+  }
+}
+async function copyInviteLink(){
+  const input=$("generatedInviteLink");if(!input)return;
+  try{await navigator.clipboard.writeText(input.value);showMessage("departmentMessage","Invite link copied.","success")}
+  catch(e){input.select();document.execCommand("copy")}
+}
+
 async function openDepartment(){
   if(!isManager()){showMessage("dtrMessage","Department access is only available to the HOD or production admin.","error");return}
   if(!currentDepartmentWeekEnding)currentDepartmentWeekEnding=getSaturdayForDate(new Date());
   showScreen("departmentScreen");
+  showDepartmentOverview();
   await loadDepartmentDashboard();
 }
 async function changeDepartmentWeek(days){
