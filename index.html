@@ -291,7 +291,6 @@ button:disabled {
 
 <!-- LOGIN -->
 <div id="loginScreen">
-
   <h1>Age of Attraction</h1>
   <h2>Season 2 · Sound Department</h2>
 
@@ -546,7 +545,6 @@ button:disabled {
   </div>
 
   <div class="timesheet-actions">
-
     <button class="secondary" onclick="changeWeek(-7)">
       ← Previous Week
     </button>
@@ -567,7 +565,6 @@ button:disabled {
     >
       Open PDF
     </button>
-
   </div>
 
   <div id="timesheetMessage" class="message"></div>
@@ -598,7 +595,9 @@ button:disabled {
 
 <script>
 
-/* SUPABASE */
+/* ==================================================
+   SUPABASE
+================================================== */
 
 const SUPABASE_URL =
   "https://hyhzcikkoqvvfyiffmla.supabase.co";
@@ -619,7 +618,9 @@ let currentWeekEnding = null;
 let currentPDFUrl = null;
 
 
-/* SCREEN HELPERS */
+/* ==================================================
+   SCREEN HELPERS
+================================================== */
 
 function showScreen(screenId) {
 
@@ -665,7 +666,9 @@ function clearMessage(elementId) {
 }
 
 
-/* DATE HELPERS */
+/* ==================================================
+   DATE HELPERS
+================================================== */
 
 function dateToISO(date) {
 
@@ -713,7 +716,8 @@ function getSaturdayForDate(inputDate) {
       0
     );
 
-  const day = date.getDay();
+  const day =
+    date.getDay();
 
   const daysUntilSaturday =
     (6 - day + 7) % 7;
@@ -775,7 +779,9 @@ function formatPDFDate(date) {
 }
 
 
-/* TIME HELPERS */
+/* ==================================================
+   TIME HELPERS
+================================================== */
 
 function parseTimeToMinutes(value) {
 
@@ -784,9 +790,7 @@ function parseTimeToMinutes(value) {
   const match =
     value.match(/^(\d{1,2}):([0-5]\d)$/);
 
-  if (!match) {
-    return null;
-  }
+  if (!match) return null;
 
   const hours =
     parseInt(match[1], 10);
@@ -857,7 +861,9 @@ function minutesToDecimalHours(minutes) {
 }
 
 
-/* EMPLOYMENT */
+/* ==================================================
+   PROFILE UI
+================================================== */
 
 function updateEmploymentFields() {
 
@@ -874,8 +880,6 @@ function updateEmploymentFields() {
   }
 }
 
-
-/* NO LUNCH */
 
 function toggleLunch() {
 
@@ -900,7 +904,9 @@ function toggleLunch() {
 }
 
 
-/* HOURS PREVIEW */
+/* ==================================================
+   HOURS PREVIEW
+================================================== */
 
 function updateHoursPreview() {
 
@@ -989,7 +995,9 @@ function updateHoursPreview() {
 });
 
 
-/* INITIALIZE */
+/* ==================================================
+   INITIALIZE
+================================================== */
 
 async function initialize() {
 
@@ -1022,7 +1030,9 @@ async function initialize() {
 }
 
 
-/* SIGN UP */
+/* ==================================================
+   AUTH
+================================================== */
 
 async function signUp() {
 
@@ -1067,8 +1077,6 @@ async function signUp() {
 }
 
 
-/* SIGN IN */
-
 async function signIn() {
 
   try {
@@ -1108,7 +1116,9 @@ async function signIn() {
 }
 
 
-/* LOAD PROFILE */
+/* ==================================================
+   LOAD PROFILE
+================================================== */
 
 async function loadProfile() {
 
@@ -1163,8 +1173,6 @@ async function loadProfile() {
 }
 
 
-/* POPULATE PROFILE */
-
 function populateProfileForm() {
 
   if (!currentProfile) return;
@@ -1212,7 +1220,9 @@ function populateProfileForm() {
 }
 
 
-/* FIND PRODUCTION */
+/* ==================================================
+   PRODUCTION
+================================================== */
 
 async function findProduction() {
 
@@ -1236,7 +1246,9 @@ async function findProduction() {
 }
 
 
-/* SAVE PROFILE */
+/* ==================================================
+   SAVE PROFILE
+================================================== */
 
 async function saveProfile() {
 
@@ -1390,7 +1402,9 @@ async function saveProfile() {
 }
 
 
-/* SHOW DTR */
+/* ==================================================
+   DTR
+================================================== */
 
 function showDTR() {
 
@@ -1407,8 +1421,6 @@ function showDTR() {
     currentProfile.position;
 }
 
-
-/* SUBMIT DTR */
 
 async function submitDTR() {
 
@@ -1554,7 +1566,9 @@ async function submitDTR() {
 }
 
 
-/* OPEN TIMESHEET */
+/* ==================================================
+   MY TIMESHEET
+================================================== */
 
 async function openMyTimesheet() {
 
@@ -1567,8 +1581,7 @@ async function openMyTimesheet() {
     referenceDate =
       isoToLocalDate(selectedDate);
   } else {
-    referenceDate =
-      new Date();
+    referenceDate = new Date();
   }
 
   currentWeekEnding =
@@ -1584,8 +1597,6 @@ async function openMyTimesheet() {
   await buildTimesheet();
 }
 
-
-/* WEEK NAVIGATION */
 
 async function changeWeek(days) {
 
@@ -1608,7 +1619,9 @@ async function goToCurrentWeek() {
 }
 
 
-/* BUILD TIMESHEET */
+/* ==================================================
+   BUILD TIMESHEET
+================================================== */
 
 async function buildTimesheet() {
 
@@ -1640,7 +1653,7 @@ async function buildTimesheet() {
       dateToISO(currentWeekEnding);
 
 
-    /* GET DTRS */
+    /* GET WEEK'S DTRS */
 
     const {
       data: dtrs,
@@ -1728,21 +1741,22 @@ async function buildTimesheet() {
       throw downloadError;
     }
 
-
     const pdfBytes =
       await pdfBlob.arrayBuffer();
 
-    const { PDFDocument } =
-      PDFLib;
+
+    /* LOAD PDF */
 
     const pdfDoc =
-      await PDFDocument.load(pdfBytes);
+      await PDFLib.PDFDocument.load(
+        pdfBytes
+      );
 
     const form =
       pdfDoc.getForm();
 
 
-    /* BUILD OUR DATA */
+    /* BUILD VALUES */
 
     const values =
       buildTimesheetValues(
@@ -1752,9 +1766,10 @@ async function buildTimesheet() {
       );
 
 
-    /* ===============================================
-       DIAGNOSTIC PDF FILLING
-    ================================================ */
+    /* =================================================
+       FILL PDF
+       V6 FIX: instanceof instead of constructor.name
+    ================================================= */
 
     const mappingsLoaded =
       mappings.length;
@@ -1762,6 +1777,7 @@ async function buildTimesheet() {
     let pdfFieldsFound = 0;
     let valuesAvailable = 0;
     let fieldsFilled = 0;
+    let fillErrors = 0;
 
     const allPDFFields =
       form.getFields();
@@ -1770,26 +1786,6 @@ async function buildTimesheet() {
       allPDFFields.map(
         field => field.getName()
       );
-
-    console.log(
-      "PDF FIELD COUNT:",
-      pdfFieldNames.length
-    );
-
-    console.log(
-      "PDF FIELDS:",
-      pdfFieldNames
-    );
-
-    console.log(
-      "MAPPINGS:",
-      mappings
-    );
-
-    console.log(
-      "VALUES:",
-      values
-    );
 
 
     for (const mapping of mappings) {
@@ -1831,22 +1827,11 @@ async function buildTimesheet() {
         const field =
           form.getField(fieldName);
 
-        const typeName =
-          field.constructor.name;
 
-
-        console.log(
-          "FILLING:",
-          mapping.field_key,
-          "→",
-          fieldName,
-          "=",
-          value,
-          "(" + typeName + ")"
-        );
-
-
-        if (typeName === "PDFCheckBox") {
+        if (
+          field instanceof
+          PDFLib.PDFCheckBox
+        ) {
 
           if (value === true) {
             field.check();
@@ -1855,41 +1840,61 @@ async function buildTimesheet() {
           }
 
           fieldsFilled++;
+          continue;
+        }
 
-        } else if (typeName === "PDFTextField") {
+
+        if (
+          field instanceof
+          PDFLib.PDFTextField
+        ) {
 
           field.setText(
             String(value)
           );
 
           fieldsFilled++;
-
-        } else if (typeName === "PDFDropdown") {
-
-          field.select(
-            String(value)
-          );
-
-          fieldsFilled++;
-
-        } else if (typeName === "PDFOptionList") {
-
-          field.select(
-            String(value)
-          );
-
-          fieldsFilled++;
-
-        } else {
-
-          console.warn(
-            "UNHANDLED FIELD:",
-            fieldName,
-            typeName
-          );
+          continue;
         }
 
+
+        if (
+          field instanceof
+          PDFLib.PDFDropdown
+        ) {
+
+          field.select(
+            String(value)
+          );
+
+          fieldsFilled++;
+          continue;
+        }
+
+
+        if (
+          field instanceof
+          PDFLib.PDFOptionList
+        ) {
+
+          field.select(
+            String(value)
+          );
+
+          fieldsFilled++;
+          continue;
+        }
+
+
+        console.warn(
+          "Unhandled PDF field:",
+          fieldName
+        );
+
+
       } catch (error) {
+
+        fillErrors++;
 
         console.error(
           "FAILED PDF FIELD:",
@@ -1902,19 +1907,19 @@ async function buildTimesheet() {
     }
 
 
-    /* UPDATE PDF APPEARANCES */
+    /* UPDATE APPEARANCES */
 
     try {
       form.updateFieldAppearances();
-    } catch (appearanceError) {
+    } catch (error) {
       console.warn(
-        "Appearance update:",
-        appearanceError
+        "Unable to update PDF appearances:",
+        error
       );
     }
 
 
-    /* SAVE COMPLETED PDF */
+    /* SAVE */
 
     const completedBytes =
       await pdfDoc.save();
@@ -1938,6 +1943,9 @@ async function buildTimesheet() {
         completedBlob
       );
 
+
+    /* DISPLAY */
+
     const iframe =
       document.getElementById(
         "timesheetPDF"
@@ -1958,7 +1966,7 @@ async function buildTimesheet() {
       false;
 
 
-    /* SHOW DIAGNOSTIC ON SCREEN */
+    /* DIAGNOSTIC */
 
     const dtrCount =
       dtrs ? dtrs.length : 0;
@@ -1973,7 +1981,14 @@ async function buildTimesheet() {
       fieldsFilled +
       " fields filled · " +
       dtrCount +
-      " DTR(s) found";
+      " DTR(s) found" +
+      (
+        fillErrors > 0
+          ? " · " +
+            fillErrors +
+            " fill error(s)"
+          : ""
+      );
 
 
     showMessage(
@@ -2006,7 +2021,9 @@ async function buildTimesheet() {
 }
 
 
-/* BUILD STANDARDIZED VALUES */
+/* ==================================================
+   BUILD TIMESHEET VALUES
+================================================== */
 
 function buildTimesheetValues(
   sunday,
@@ -2017,7 +2034,7 @@ function buildTimesheetValues(
   const values = {};
 
 
-  /* CREW */
+  /* PROFILE */
 
   values["crew.name"] =
     currentProfile.name || "";
@@ -2071,7 +2088,9 @@ function buildTimesheetValues(
 
   /* KIT / VEHICLE */
 
-  if (currentProfile.fee_type === "Kit") {
+  if (
+    currentProfile.fee_type === "Kit"
+  ) {
 
     values["crew.kit_fee"] =
       currentProfile.kit_rental
@@ -2087,7 +2106,9 @@ function buildTimesheetValues(
   }
 
 
-  if (currentProfile.fee_type === "Vehicle") {
+  if (
+    currentProfile.fee_type === "Vehicle"
+  ) {
 
     values["crew.vehicle_fee"] =
       currentProfile.kit_rental
@@ -2103,7 +2124,7 @@ function buildTimesheetValues(
   }
 
 
-  /* DAILY */
+  /* DAILY DTRS */
 
   const dayKeys = [
     "sun",
@@ -2140,7 +2161,8 @@ function buildTimesheetValues(
 
     const dtr =
       dtrs.find(
-        item => item.date === iso
+        item =>
+          item.date === iso
       );
 
     if (!dtr) {
@@ -2218,7 +2240,9 @@ function buildTimesheetValues(
 }
 
 
-/* OPEN PDF */
+/* ==================================================
+   OPEN PDF
+================================================== */
 
 function openGeneratedPDF() {
 
@@ -2231,7 +2255,9 @@ function openGeneratedPDF() {
 }
 
 
-/* SIGN OUT */
+/* ==================================================
+   SIGN OUT
+================================================== */
 
 async function signOut() {
 
@@ -2255,11 +2281,12 @@ async function signOut() {
 }
 
 
-/* START */
+/* ==================================================
+   START
+================================================== */
 
 initialize();
 
 </script>
-
 </body>
 </html>
