@@ -214,6 +214,35 @@ body.is-manager .hod-only{display:block}
 .invite-banner{background:#17261b;border:1px solid #2f5138;color:#d5efda;border-radius:12px;padding:14px;margin-bottom:16px}
 .invite-banner strong{display:block;font-size:16px;margin-bottom:4px}.invite-banner span{font-size:12px;color:#a8c9af}
 .invite-error{background:#2a1717;border:1px solid #633;color:#ffb0b0;border-radius:12px;padding:14px;margin-bottom:16px}
+
+
+/* v20 — compact Department roster + Crew Setup escape */
+.setup-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:4px}
+.setup-header h1{margin:0}
+.setup-header button{width:auto;margin:0;padding:9px 12px;font-size:13px}
+#departmentScreen .department-list{gap:6px}
+#departmentScreen .crew-week-card{padding:9px 10px;border-radius:11px}
+#departmentScreen .crew-week-top{margin-bottom:7px}
+#departmentScreen .crew-week-name{font-size:14px;line-height:1.15}
+#departmentScreen .crew-week-position{font-size:10px;margin-top:1px}
+#departmentScreen .week-status-grid{gap:4px}
+#departmentScreen .day-status{padding:4px 1px!important;border-radius:7px!important;min-height:39px!important}
+#departmentScreen .day-status .day-name{font-size:8px}
+#departmentScreen .day-status .day-mark{font-size:13px;margin-top:2px}
+#departmentScreen .department-week{margin-bottom:9px}
+#departmentScreen .department-week button{padding:7px 4px}
+#departmentScreen .department-week-center{padding:6px 7px}
+#departmentScreen .department-week-date{font-size:14px}
+#departmentScreen .department-summary{margin-bottom:9px}
+#departmentScreen .summary-card{padding:8px 5px;border-radius:10px}
+#departmentScreen .summary-number{font-size:19px}
+#departmentScreen .summary-label{font-size:9px;margin-top:3px}
+@media(max-width:600px){
+  #departmentScreen{padding-left:10px;padding-right:10px}
+  #departmentScreen .department-header{margin-bottom:11px}
+  #departmentScreen .department-toolbar{margin-bottom:10px}
+}
+
 </style>
 </head>
 <body>
@@ -225,7 +254,7 @@ body.is-manager .hod-only{display:block}
 <button onclick="signIn()">Log In</button><button class="secondary" onclick="signUp()">Create Account</button><div id="loginMessage" class="message"></div>
 </div>
 <div id="setupScreen" class="hidden"><div id="inviteSetupBanner" class="invite-banner hidden"></div>
-<h1>Crew Setup</h1><div class="subtitle">Enter your production and payroll information.</div>
+<div class="setup-header"><h1>Crew Setup</h1><button class="secondary" onclick="signOut()">Log Out</button></div><div class="subtitle">Enter your production and payroll information.</div>
 <label>Name</label><input id="crewName">
 <label>Department</label><input value="Sound" disabled>
 <label>Position</label><select id="position"><option value="">Select position</option><option>HOD</option><option>A1</option><option>A2</option><option>Bag Mixer</option></select>
