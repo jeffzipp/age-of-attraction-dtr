@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111111">
+  <title>Age of Attraction DTR</title>
+  <style>
+    html,body,iframe{width:100%;height:100%;margin:0;border:0;background:#111}body{overflow:hidden}iframe{display:block}
+  </style>
+</head>
+<body>
+<iframe id="app" src="./?v=7-inner" title="Age of Attraction DTR"></iframe>
+<script>
+const frame = document.getElementById('app');
+frame.addEventListener('load', () => {
+  try {
+    const w = frame.contentWindow;
+    const P = w.PDFLib;
+    if (!P) return;
+
+    // The CDN build used by the app can return PDF field objects whose
+    // constructor identity is different in Safari. Teach instanceof to
+    // recognize fields by the methods they actually support.
+    const defineHasInstance = (Ctor, test) => {
+      if (!Ctor) return;
+      try {
+        Object.defineProperty(Ctor, Symbol.hasInstance, {
+          configurable: true,
+          value: test
+        });
+      } catch (e) {
+        console.warn('PDF compatibility patch could not modify constructor', e);
+      }
+    };
+
+    defineHasInstance(P.PDFTextField, obj => !!obj && typeof obj.setText === 'function');
+    defineHasInstance(P.PDFCheckBox, obj => !!obj && typeof obj.check === 'function' && typeof obj.uncheck === 'function');
+    defineHasInstance(P.PDFDropdown, obj => !!obj && typeof obj.select === 'function' && typeof obj.setText !== 'function');
+    defineHasInstance(P.PDFOptionList, obj => !!obj && typeof obj.select === 'function' && typeof obj.setText !== 'function');
+
+    console.log('Age of Attraction DTR v7 PDF compatibility patch active');
+  } catch (e) {
+    console.error('Unable to apply v7 PDF compatibility patch', e);
+  }
+});
+</script>
+</body>
+</html>
