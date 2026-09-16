@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,6 +20,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #111;
       color: white;
+      min-height: 100vh;
     }
 
     .container {
@@ -31,6 +33,7 @@
     h1 {
       font-size: 30px;
       margin: 0 0 6px;
+      font-weight: 700;
     }
 
     h2 {
@@ -51,8 +54,8 @@
     }
 
     input,
-    select,
     textarea,
+    select,
     button {
       width: 100%;
       font-family: inherit;
@@ -61,12 +64,31 @@
     }
 
     input,
-    select,
     textarea {
       padding: 14px;
       background: #222;
       color: white;
       border: 1px solid #333;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #888;
+    }
+
+    select {
+      padding: 14px;
+      background: #444;
+      color: white;
+      border: 1px solid #666;
+      appearance: auto;
+    }
+
+    select option {
+      background: #444;
+      color: white;
     }
 
     textarea {
@@ -84,19 +106,30 @@
       cursor: pointer;
     }
 
+    button:active {
+      opacity: 0.8;
+    }
+
     .secondary {
       background: #222;
       color: white;
+      border: 1px solid #333;
     }
 
     .hidden {
       display: none;
     }
 
-    #message {
+    #loginMessage,
+    #setupMessage,
+    #dtrMessage {
       margin-top: 18px;
       color: #aaa;
       line-height: 1.4;
+    }
+
+    .success {
+      color: #9ee493 !important;
     }
 
     .card {
@@ -107,10 +140,15 @@
       margin-top: 20px;
     }
 
-    .success {
-      color: #9ee493;
+    .card strong {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 5px;
     }
 
+    #crewDisplayPosition {
+      color: #999;
+    }
   </style>
 </head>
 
@@ -118,19 +156,34 @@
 
 <div class="container">
 
-  <!-- LOGIN -->
+  <!-- LOGIN SCREEN -->
   <div id="loginScreen">
 
     <h1>Age of Attraction</h1>
-    <div class="subtitle">Season 2 · Sound Department</div>
+
+    <div class="subtitle">
+      Season 2 · Sound Department
+    </div>
 
     <label>Email</label>
-    <input id="email" type="email" autocomplete="email">
+    <input
+      id="email"
+      type="email"
+      autocomplete="email"
+      placeholder="Email"
+    >
 
     <label>Password</label>
-    <input id="password" type="password" autocomplete="current-password">
+    <input
+      id="password"
+      type="password"
+      autocomplete="current-password"
+      placeholder="Password"
+    >
 
-    <button onclick="signIn()">Log In</button>
+    <button onclick="signIn()">
+      Log In
+    </button>
 
     <button class="secondary" onclick="signUp()">
       Create Account
@@ -141,88 +194,185 @@
   </div>
 
 
-  <!-- CREW SETUP -->
+  <!-- CREW SETUP SCREEN -->
   <div id="setupScreen" class="hidden">
 
     <h1>Welcome</h1>
+
     <div class="subtitle">
       Let's set up your sound department profile.
     </div>
 
     <label>Name</label>
-    <input id="crewName" type="text" placeholder="Full name">
+
+    <input
+      id="crewName"
+      type="text"
+      placeholder="Full name"
+      autocomplete="name"
+    >
+
 
     <label>Position</label>
+
     <select id="position">
-      <option value="">Select position</option>
-      <option value="HOD">HOD</option>
-      <option value="A1">A1</option>
-      <option value="A2">A2</option>
-      <option value="Bag Mixer">Bag Mixer</option>
+
+      <option value="">
+        Select position
+      </option>
+
+      <option value="HOD">
+        HOD
+      </option>
+
+      <option value="A1">
+        A1
+      </option>
+
+      <option value="A2">
+        A2
+      </option>
+
+      <option value="Bag Mixer">
+        Bag Mixer
+      </option>
+
     </select>
 
+
     <label>Day Rate</label>
-    <input id="dayRate" type="number" step="0.01" placeholder="650.00">
+
+    <input
+      id="dayRate"
+      type="number"
+      step="0.01"
+      placeholder="650.00"
+      inputmode="decimal"
+    >
+
 
     <label>Kit Rental</label>
-    <input id="kitRental" type="number" step="0.01" placeholder="350.00">
+
+    <input
+      id="kitRental"
+      type="number"
+      step="0.01"
+      placeholder="350.00"
+      inputmode="decimal"
+    >
+
 
     <label>Kit / Equipment Notes</label>
+
     <textarea
       id="equipmentNotes"
       placeholder="Optional equipment information"
     ></textarea>
 
-    <button onclick="saveProfile()">Save Profile</button>
+
+    <button onclick="saveProfile()">
+      Save Profile
+    </button>
 
     <div id="setupMessage"></div>
 
   </div>
 
 
-  <!-- DAILY DTR -->
+  <!-- DAILY DTR SCREEN -->
   <div id="dtrScreen" class="hidden">
 
     <h1>Daily DTR</h1>
+
     <div class="subtitle">
       Age of Attraction · Season 2
     </div>
 
+
     <div class="card">
+
       <strong id="crewDisplayName"></strong>
+
       <div id="crewDisplayPosition"></div>
+
     </div>
 
+
     <label>Date</label>
-    <input id="dtrDate" type="date">
+
+    <input
+      id="dtrDate"
+      type="date"
+    >
+
 
     <label>Start Time</label>
-    <input id="startTime" type="time">
+
+    <input
+      id="startTime"
+      type="time"
+    >
+
 
     <label>Lunch Duration</label>
+
     <select id="lunchMinutes">
-      <option value="0">No lunch</option>
-      <option value="30">30 minutes</option>
-      <option value="45">45 minutes</option>
-      <option value="60">1 hour</option>
-      <option value="75">1 hour 15 minutes</option>
-      <option value="90">1 hour 30 minutes</option>
+
+      <option value="0">
+        No lunch
+      </option>
+
+      <option value="30">
+        30 minutes
+      </option>
+
+      <option value="45">
+        45 minutes
+      </option>
+
+      <option value="60">
+        1 hour
+      </option>
+
+      <option value="75">
+        1 hour 15 minutes
+      </option>
+
+      <option value="90">
+        1 hour 30 minutes
+      </option>
+
     </select>
 
+
     <label>End Time</label>
-    <input id="endTime" type="time">
+
+    <input
+      id="endTime"
+      type="time"
+    >
+
 
     <label>Notes</label>
+
     <textarea
       id="dtrNotes"
       placeholder="Optional notes"
     ></textarea>
 
-    <button onclick="submitDTR()">Submit DTR</button>
 
-    <button class="secondary" onclick="signOut()">
+    <button onclick="submitDTR()">
+      Submit DTR
+    </button>
+
+
+    <button
+      class="secondary"
+      onclick="signOut()"
+    >
       Log Out
     </button>
+
 
     <div id="dtrMessage"></div>
 
@@ -250,15 +400,16 @@ let currentUser = null;
 let currentProfile = null;
 
 
-/* -------------------------
+/* ==========================
    STARTUP
-------------------------- */
+========================== */
 
 async function initialize() {
 
   const {
     data: { session }
   } = await supabaseClient.auth.getSession();
+
 
   if (session) {
 
@@ -271,17 +422,24 @@ async function initialize() {
 }
 
 
-/* -------------------------
+/* ==========================
    SIGN UP
-------------------------- */
+========================== */
 
 async function signUp() {
 
   const email =
-    document.getElementById("email").value.trim();
+    document
+      .getElementById("email")
+      .value
+      .trim();
+
 
   const password =
-    document.getElementById("password").value;
+    document
+      .getElementById("password")
+      .value;
+
 
   if (!email || !password) {
 
@@ -290,20 +448,30 @@ async function signUp() {
     );
 
     return;
+
   }
+
 
   const { error } =
     await supabaseClient.auth.signUp({
-      email,
-      password
+
+      email: email,
+
+      password: password
+
     });
+
 
   if (error) {
 
-    showLoginMessage(error.message);
+    showLoginMessage(
+      error.message
+    );
 
     return;
+
   }
+
 
   showLoginMessage(
     "Account created. You can now log in."
@@ -312,30 +480,59 @@ async function signUp() {
 }
 
 
-/* -------------------------
+/* ==========================
    LOGIN
-------------------------- */
+========================== */
 
 async function signIn() {
 
   const email =
-    document.getElementById("email").value.trim();
+    document
+      .getElementById("email")
+      .value
+      .trim();
+
 
   const password =
-    document.getElementById("password").value;
+    document
+      .getElementById("password")
+      .value;
 
-  const { data, error } =
+
+  if (!email || !password) {
+
+    showLoginMessage(
+      "Please enter your email and password."
+    );
+
+    return;
+
+  }
+
+
+  const {
+    data,
+    error
+  } =
     await supabaseClient.auth.signInWithPassword({
-      email,
-      password
+
+      email: email,
+
+      password: password
+
     });
+
 
   if (error) {
 
-    showLoginMessage(error.message);
+    showLoginMessage(
+      error.message
+    );
 
     return;
+
   }
+
 
   currentUser = data.user;
 
@@ -344,18 +541,22 @@ async function signIn() {
 }
 
 
-/* -------------------------
+/* ==========================
    LOAD PROFILE
-------------------------- */
+========================== */
 
 async function loadProfile() {
 
-  const { data, error } =
+  const {
+    data,
+    error
+  } =
     await supabaseClient
       .from("crew_profiles")
       .select("*")
       .eq("user_id", currentUser.id)
       .maybeSingle();
+
 
   if (error) {
 
@@ -366,7 +567,9 @@ async function loadProfile() {
     );
 
     return;
+
   }
+
 
   if (!data) {
 
@@ -383,30 +586,46 @@ async function loadProfile() {
 }
 
 
-/* -------------------------
+/* ==========================
    SAVE PROFILE
-------------------------- */
+========================== */
 
 async function saveProfile() {
 
   const name =
-    document.getElementById("crewName").value.trim();
+    document
+      .getElementById("crewName")
+      .value
+      .trim();
+
 
   const position =
-    document.getElementById("position").value;
+    document
+      .getElementById("position")
+      .value;
+
 
   const dayRate =
     parseFloat(
-      document.getElementById("dayRate").value
+      document
+        .getElementById("dayRate")
+        .value
     ) || 0;
+
 
   const kitRental =
     parseFloat(
-      document.getElementById("kitRental").value
+      document
+        .getElementById("kitRental")
+        .value
     ) || 0;
 
+
   const equipmentNotes =
-    document.getElementById("equipmentNotes").value.trim();
+    document
+      .getElementById("equipmentNotes")
+      .value
+      .trim();
 
 
   if (!name || !position) {
@@ -416,12 +635,16 @@ async function saveProfile() {
     );
 
     return;
+
   }
 
 
-  /* Get Age of Attraction S2 */
+  /* Find production */
 
-  const { data: production, error: productionError } =
+  const {
+    data: production,
+    error: productionError
+  } =
     await supabaseClient
       .from("productions")
       .select("id")
@@ -439,22 +662,41 @@ async function saveProfile() {
     );
 
     return;
+
   }
 
 
   /* Save profile */
 
-  const { data, error } =
+  const {
+    data,
+    error
+  } =
     await supabaseClient
       .from("crew_profiles")
       .insert({
-        user_id: currentUser.id,
-        production_id: production.id,
-        name: name,
-        position: position,
-        day_rate: dayRate,
-        kit_rental: kitRental,
-        equipment_notes: equipmentNotes
+
+        user_id:
+          currentUser.id,
+
+        production_id:
+          production.id,
+
+        name:
+          name,
+
+        position:
+          position,
+
+        day_rate:
+          dayRate,
+
+        kit_rental:
+          kitRental,
+
+        equipment_notes:
+          equipmentNotes
+
       })
       .select()
       .single();
@@ -464,9 +706,12 @@ async function saveProfile() {
 
     console.error(error);
 
-    showSetupMessage(error.message);
+    showSetupMessage(
+      error.message
+    );
 
     return;
+
   }
 
 
@@ -477,9 +722,9 @@ async function saveProfile() {
 }
 
 
-/* -------------------------
+/* ==========================
    SHOW SETUP
-------------------------- */
+========================== */
 
 function showSetup() {
 
@@ -487,16 +732,22 @@ function showSetup() {
     .getElementById("loginScreen")
     .classList.add("hidden");
 
+
   document
     .getElementById("setupScreen")
     .classList.remove("hidden");
 
+
+  document
+    .getElementById("dtrScreen")
+    .classList.add("hidden");
+
 }
 
 
-/* -------------------------
+/* ==========================
    SHOW DTR
-------------------------- */
+========================== */
 
 function showDTR() {
 
@@ -504,54 +755,82 @@ function showDTR() {
     .getElementById("loginScreen")
     .classList.add("hidden");
 
+
   document
     .getElementById("setupScreen")
     .classList.add("hidden");
+
 
   document
     .getElementById("dtrScreen")
     .classList.remove("hidden");
 
 
-  document.getElementById("crewDisplayName")
-    .textContent = currentProfile.name;
+  document
+    .getElementById("crewDisplayName")
+    .textContent =
+      currentProfile.name;
 
-  document.getElementById("crewDisplayPosition")
-    .textContent = currentProfile.position;
+
+  document
+    .getElementById("crewDisplayPosition")
+    .textContent =
+      currentProfile.position;
 
 
   /* Default date to today */
 
   const today =
-    new Date().toISOString().split("T")[0];
+    new Date()
+      .toISOString()
+      .split("T")[0];
 
-  document.getElementById("dtrDate").value = today;
+
+  document
+    .getElementById("dtrDate")
+    .value =
+      today;
 
 }
 
 
-/* -------------------------
+/* ==========================
    SUBMIT DTR
-------------------------- */
+========================== */
 
 async function submitDTR() {
 
   const date =
-    document.getElementById("dtrDate").value;
+    document
+      .getElementById("dtrDate")
+      .value;
+
 
   const start =
-    document.getElementById("startTime").value;
+    document
+      .getElementById("startTime")
+      .value;
+
 
   const lunch =
     parseInt(
-      document.getElementById("lunchMinutes").value
+      document
+        .getElementById("lunchMinutes")
+        .value
     );
 
+
   const end =
-    document.getElementById("endTime").value;
+    document
+      .getElementById("endTime")
+      .value;
+
 
   const notes =
-    document.getElementById("dtrNotes").value.trim();
+    document
+      .getElementById("dtrNotes")
+      .value
+      .trim();
 
 
   if (!date || !start || !end) {
@@ -561,19 +840,35 @@ async function submitDTR() {
     );
 
     return;
+
   }
 
 
-  const { error } =
+  const {
+    error
+  } =
     await supabaseClient
       .from("dtrs")
       .insert({
-        crew_profile_id: currentProfile.id,
-        date: date,
-        start_time: start,
-        lunch_minutes: lunch,
-        end_time: end,
-        notes: notes
+
+        crew_profile_id:
+          currentProfile.id,
+
+        date:
+          date,
+
+        start_time:
+          start,
+
+        lunch_minutes:
+          lunch,
+
+        end_time:
+          end,
+
+        notes:
+          notes
+
       });
 
 
@@ -581,9 +876,12 @@ async function submitDTR() {
 
     console.error(error);
 
-    showDTRMessage(error.message);
+    showDTRMessage(
+      error.message
+    );
 
     return;
+
   }
 
 
@@ -595,9 +893,9 @@ async function submitDTR() {
 }
 
 
-/* -------------------------
+/* ==========================
    LOG OUT
-------------------------- */
+========================== */
 
 async function signOut() {
 
@@ -608,30 +906,43 @@ async function signOut() {
 }
 
 
-/* -------------------------
+/* ==========================
    MESSAGES
-------------------------- */
+========================== */
 
 function showLoginMessage(message) {
 
-  document.getElementById("loginMessage")
-    .textContent = message;
+  document
+    .getElementById("loginMessage")
+    .textContent =
+      message;
 
 }
+
 
 function showSetupMessage(message) {
 
-  document.getElementById("setupMessage")
-    .textContent = message;
+  document
+    .getElementById("setupMessage")
+    .textContent =
+      message;
 
 }
 
-function showDTRMessage(message, success = false) {
+
+function showDTRMessage(
+  message,
+  success = false
+) {
 
   const element =
-    document.getElementById("dtrMessage");
+    document
+      .getElementById("dtrMessage");
 
-  element.textContent = message;
+
+  element.textContent =
+    message;
+
 
   element.className =
     success ? "success" : "";
@@ -639,9 +950,9 @@ function showDTRMessage(message, success = false) {
 }
 
 
-/* -------------------------
-   RUN
-------------------------- */
+/* ==========================
+   START APPLICATION
+========================== */
 
 initialize();
 
@@ -649,3 +960,4 @@ initialize();
 
 </body>
 </html>
+```
