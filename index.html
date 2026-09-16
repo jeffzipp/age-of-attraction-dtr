@@ -6,220 +6,27 @@
 <meta name="theme-color" content="#111111">
 <title>Age of Attraction DTR</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#111;color:#fff;font-family:Arial,Helvetica,sans-serif;min-height:100vh}.container{max-width:600px;margin:auto;padding:24px 20px 50px}.container.wide{max-width:1100px}h1{margin:0 0 6px;font-size:28px}h2{margin:0 0 25px;font-size:18px;font-weight:normal;color:#aaa}label{display:block;margin:18px 0 7px;font-size:14px;color:#ccc}input,select,textarea{width:100%;padding:13px;border-radius:7px;border:1px solid #555;background:#333;color:#fff;font-size:16px}select{background:#444}textarea{min-height:90px;resize:vertical}input:disabled{opacity:.4}button{width:100%;padding:14px;margin-top:22px;border:0;border-radius:7px;background:#fff;color:#111;font-size:16px;font-weight:bold;cursor:pointer}button.secondary{background:#333;color:#fff;border:1px solid #555}button.danger{background:#2a1717;color:#ffb0b0;border:1px solid #633;margin-top:10px}button:disabled{opacity:.4;cursor:default}.subtitle{color:#888;margin-bottom:25px}.message{display:none;margin-top:18px;padding:12px;border-radius:7px}.message.success{display:block;background:#18351f;color:#a8e6b4}.message.error{display:block;background:#3a1818;color:#ffb0b0}.hidden{display:none!important}.time-help{margin-top:6px;font-size:13px;color:#888}.hours-preview{margin-top:20px;padding:15px;background:#1d1d1d;border:1px solid #333;border-radius:7px;text-align:center}.hours-number{font-size:22px;font-weight:bold}.hours-detail{margin-top:5px;font-size:13px;color:#999}.top-bar{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:25px}.top-bar button{width:auto;margin:0;padding:8px 12px;font-size:13px}.section{margin-top:30px;padding-top:5px;border-top:1px solid #333}.section-title{margin-top:20px;font-size:16px;font-weight:bold}.checkbox-row{display:flex;align-items:center;gap:12px;margin-top:22px;padding:14px;background:#1d1d1d;border:1px solid #444;border-radius:7px}.checkbox-row input{width:20px;height:20px;margin:0}.timesheet-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}.timesheet-actions button{width:auto;margin:0;flex:1;min-width:120px}.week-ending{text-align:center;padding:15px;margin-bottom:15px;background:#1d1d1d;border:1px solid #333;border-radius:8px}.week-ending-label{color:#888;font-size:12px;text-transform:uppercase;letter-spacing:1px}.week-ending-date{margin-top:5px;font-size:20px;font-weight:bold}.pdf-container{background:#222;border:1px solid #333;border-radius:8px;overflow:hidden}#timesheetPDF{display:block;width:100%;height:75vh;min-height:600px;border:0;background:#fff}.loading{padding:50px 20px;text-align:center;color:#aaa}.timesheet-note{margin-top:12px;color:#777;font-size:13px;text-align:center}.editing-badge{display:none;margin:0 0 12px;padding:10px 12px;border-radius:7px;background:#332b16;color:#ffe39b}.editing-badge.show{display:block}@media(max-width:600px){#timesheetPDF{height:68vh;min-height:500px}.timesheet-actions{display:grid;grid-template-columns:1fr 1fr}.timesheet-actions button{width:100%}}
+*{box-sizing:border-box}body{margin:0;background:#111;color:#fff;font-family:Arial,Helvetica,sans-serif;min-height:100vh}.container{max-width:600px;margin:auto;padding:24px 20px 50px}.container.wide{max-width:1100px}h1{margin:0 0 6px;font-size:28px}h2{margin:0 0 25px;font-size:18px;font-weight:normal;color:#aaa}label{display:block;margin:18px 0 7px;font-size:14px;color:#ccc}input,select,textarea{width:100%;padding:13px;border-radius:7px;border:1px solid #555;background:#333;color:#fff;font-size:16px}select{background:#444}textarea{min-height:90px;resize:vertical}input:disabled{opacity:.4}button{width:100%;padding:14px;margin-top:22px;border:0;border-radius:7px;background:#fff;color:#111;font-size:16px;font-weight:bold;cursor:pointer}button.secondary{background:#333;color:#fff;border:1px solid #555}button:disabled{opacity:.4;cursor:default}.subtitle{color:#888;margin-bottom:25px}.message{display:none;margin-top:18px;padding:12px;border-radius:7px}.message.success{display:block;background:#18351f;color:#a8e6b4}.message.error{display:block;background:#3a1818;color:#ffb0b0}.hidden{display:none!important}.time-help{margin-top:6px;font-size:13px;color:#888}.hours-preview{margin-top:20px;padding:15px;background:#1d1d1d;border:1px solid #333;border-radius:7px;text-align:center}.hours-number{font-size:22px;font-weight:bold}.hours-detail{margin-top:5px;font-size:13px;color:#999}.top-bar{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:25px}.top-bar button{width:auto;margin:0;padding:8px 12px;font-size:13px}.section{margin-top:30px;padding-top:5px;border-top:1px solid #333}.section-title{margin-top:20px;font-size:16px;font-weight:bold}.checkbox-row{display:flex;align-items:center;gap:12px;margin-top:22px;padding:14px;background:#1d1d1d;border:1px solid #444;border-radius:7px}.checkbox-row input{width:20px;height:20px;margin:0}.timesheet-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}.timesheet-actions button{width:auto;margin:0;flex:1;min-width:120px}.week-ending{text-align:center;padding:15px;margin-bottom:15px;background:#1d1d1d;border:1px solid #333;border-radius:8px}.week-ending-label{color:#888;font-size:12px;text-transform:uppercase;letter-spacing:1px}.week-ending-date{margin-top:5px;font-size:20px;font-weight:bold}.pdf-container{background:#222;border:1px solid #333;border-radius:8px;overflow:hidden}#timesheetPDF{display:block;width:100%;height:75vh;min-height:600px;border:0;background:#fff}.loading{padding:50px 20px;text-align:center;color:#aaa}.timesheet-note{margin-top:12px;color:#777;font-size:13px;text-align:center}.editing-badge{display:none;margin:0 0 12px;padding:10px 12px;border-radius:7px;background:#332b16;color:#ffe39b}.editing-badge.show{display:block}@media(max-width:600px){#timesheetPDF{height:68vh;min-height:500px}.timesheet-actions{display:grid;grid-template-columns:1fr 1fr}.timesheet-actions button{width:100%}}
 
-/* v13 — compact mobile DTR */
-.dtr-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px}
-.dtr-header h1{font-size:30px;line-height:1.05;margin:0 0 5px}
-.dtr-header .subtitle{margin:0;color:#888;font-size:15px}
-.dtr-header-actions{display:flex;gap:8px}
-.dtr-header-actions button{width:auto;margin:0;padding:9px 11px;font-size:13px;border-radius:8px}
-.dtr-card{background:#181818;border:1px solid #303030;border-radius:14px;padding:14px;margin-top:12px}
-.date-row{display:flex;align-items:center;gap:12px}
-.date-row .date-label{font-size:12px;color:#888;text-transform:uppercase;letter-spacing:.08em;min-width:38px}
-.date-row input[type="date"]{margin:0;padding:10px 12px;background:#222;border-color:#3b3b3b;font-size:16px}
-.time-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-.time-cell label{margin:0 0 6px;font-size:12px;color:#888;font-weight:bold;letter-spacing:.08em}
-.time-cell input{padding:14px 10px;text-align:center;font-size:22px;font-weight:600;background:#222;border-color:#3b3b3b}
-.time-cell input::placeholder{font-size:18px;font-weight:400;color:#666}
-.no-lunch-row{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding:11px 2px;border-top:1px solid #2d2d2d}
-.no-lunch-row span{font-size:15px;color:#ccc}
-.switch{position:relative;width:50px;height:30px;flex:0 0 auto}
-.switch input{opacity:0;width:0;height:0;position:absolute}
-.switch-slider{position:absolute;inset:0;border-radius:999px;background:#444;transition:.18s}
-.switch-slider:before{content:"";position:absolute;width:24px;height:24px;left:3px;top:3px;border-radius:50%;background:#fff;transition:.18s}
-.switch input:checked + .switch-slider{background:#777}
-.switch input:checked + .switch-slider:before{transform:translateX(20px)}
-#dtrScreen .hours-preview{margin-top:12px;padding:12px;border-radius:12px;background:#181818}
-#dtrScreen .hours-number{font-size:20px}
-#dtrScreen .hours-detail{font-size:12px}
-#dtrScreen .editing-badge{margin:12px 0 0;font-size:13px}
-.notes-disclosure{margin-top:12px;border-top:1px solid #292929;padding-top:10px}
-.notes-disclosure summary{cursor:pointer;color:#aaa;font-size:14px;padding:6px 2px;list-style:none}
-.notes-disclosure summary::-webkit-details-marker{display:none}
-.notes-disclosure summary:before{content:"+ ";color:#fff}
-.notes-disclosure[open] summary:before{content:"− "}
-.notes-disclosure textarea{margin-top:8px;min-height:72px;background:#222;border-color:#3b3b3b}
-.dtr-primary{margin-top:14px}
-#clearDayButton{font-size:14px;padding:11px;margin-top:8px;background:transparent!important;border-color:#4a2a2a!important}
-.dtr-foot-link{margin-top:12px!important;background:transparent!important;border:0!important;color:#aaa!important;padding:9px!important;font-size:14px!important}
-#dtrScreen .message{margin-top:12px}
-@media(max-width:600px){
-  .container{padding:18px 16px 34px}
-  #dtrScreen{max-width:520px;margin:0 auto}
-  .dtr-header h1{font-size:28px}
-  .time-grid{gap:10px}
-  .time-cell input{font-size:21px;padding:13px 8px}
-}
-
-
-/* v14 — stronger Timesheet navigation + iPhone PDF preview */
-.timesheet-launch{display:flex;align-items:center;gap:13px;width:100%;margin:0 0 14px;padding:16px;border-radius:14px;background:#202020;color:#fff;border:1px solid #4a4a4a;text-align:left}
-.timesheet-launch-icon{font-size:24px;line-height:1}
-.timesheet-launch-copy{flex:1}.timesheet-launch-title{font-size:17px;font-weight:700}.timesheet-launch-sub{font-size:12px;color:#888;margin-top:3px;font-weight:400}.timesheet-launch-arrow{font-size:24px;color:#aaa}
-.timesheet-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}.timesheet-header h1{margin:0 0 5px}.timesheet-header .subtitle{margin:0}.back-dtr{width:auto;margin:0;padding:9px 12px;font-size:13px}
-.week-nav{display:grid;grid-template-columns:48px 1fr 48px;align-items:stretch;gap:8px;margin:0 0 10px}.week-nav button{margin:0;min-width:0;padding:12px 8px}.week-nav .week-center{background:#1d1d1d;border:1px solid #3b3b3b;border-radius:10px;text-align:center;padding:9px 8px;cursor:pointer}.week-nav .week-ending-label{font-size:10px}.week-nav .week-ending-date{font-size:16px;margin-top:3px}
-.pdf-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.pdf-actions button{margin:0;padding:12px 10px;min-width:0}
-.pdf-container{width:100%;max-width:100%;padding:10px;background:#1a1a1a;border:1px solid #333;border-radius:12px;overflow:hidden}.pdf-preview-wrap{width:100%;display:flex;justify-content:center;overflow:hidden;background:#252525;border-radius:7px}.pdf-preview-wrap canvas{display:block;max-width:100%;height:auto;background:white}.pdf-preview-caption{text-align:center;color:#777;font-size:11px;padding-top:8px}
-#timesheetPDF{display:none!important}.loading{padding:45px 15px}
-@media(max-width:600px){.container.wide{max-width:100%;padding-left:14px;padding-right:14px}.timesheet-header{margin-bottom:14px}.timesheet-header h1{font-size:28px}.week-nav{grid-template-columns:44px 1fr 44px}.week-nav button{font-size:20px;padding:10px 5px}.pdf-container{padding:8px}.timesheet-note{font-size:11px;margin-top:8px}}
-
-
-/* v15 — clean My Timesheet launch card */
-.timesheet-launch{
-  display:grid!important;
-  grid-template-columns:42px minmax(0,1fr) 24px!important;
-  align-items:center!important;
-  column-gap:14px!important;
-  padding:18px!important;
-  min-height:94px!important;
-}
-.timesheet-launch-icon{
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  width:42px!important;
-  height:42px!important;
-  font-size:30px!important;
-}
-.timesheet-launch-copy{
-  display:flex!important;
-  flex-direction:column!important;
-  min-width:0!important;
-  gap:5px!important;
-}
-.timesheet-launch-title{
-  display:block!important;
-  font-size:20px!important;
-  line-height:1.15!important;
-  font-weight:700!important;
-  white-space:nowrap!important;
-}
-.timesheet-launch-sub{
-  display:block!important;
-  margin:0!important;
-  font-size:13px!important;
-  line-height:1.35!important;
-  color:#929292!important;
-  font-weight:400!important;
-}
-.timesheet-launch-arrow{
-  display:flex!important;
-  align-items:center!important;
-  justify-content:flex-end!important;
-  font-size:30px!important;
-  line-height:1!important;
-  color:#aaa!important;
-}
-@media(max-width:390px){
-  .timesheet-launch{grid-template-columns:36px minmax(0,1fr) 20px!important;column-gap:11px!important;padding:16px!important}
-  .timesheet-launch-icon{width:36px!important;height:36px!important;font-size:26px!important}
-  .timesheet-launch-title{font-size:18px!important}
-  .timesheet-launch-sub{font-size:12px!important}
-}
-
-
-/* v16 — submitted DTR status */
-#dtrScreen .editing-badge{
-  background:#17261b!important;
-  border:1px solid #2f5138!important;
-  color:#b9dfc1!important;
-  padding:10px 12px!important;
-  border-radius:9px!important;
-  font-size:13px!important;
-  line-height:1.35!important;
-}
-#dtrScreen .editing-badge.show{
-  display:block!important;
-}
-
-
-/* v17 — HOD Department dashboard */
-.hod-only{display:none}
-body.is-manager .hod-only{display:block}
-.dtr-header-actions{display:flex!important;gap:8px!important;align-items:center!important}
-.dtr-header-actions button{width:auto!important;margin:0!important}
-.department-button{padding:9px 12px!important;font-size:13px!important}
-.department-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}
-.department-header h1{margin:0 0 5px}
-.department-header .subtitle{margin:0}
-.department-header-actions{display:flex;gap:8px}
-.department-header-actions button{width:auto;margin:0;padding:9px 12px;font-size:13px}
-.department-week{display:grid;grid-template-columns:44px 1fr 44px;gap:8px;align-items:stretch;margin-bottom:14px}
-.department-week button{margin:0;padding:10px 5px;font-size:20px}
-.department-week-center{background:#1d1d1d;border:1px solid #3b3b3b;border-radius:10px;text-align:center;padding:9px 8px;cursor:pointer}
-.department-week-label{font-size:10px;color:#777;text-transform:uppercase;letter-spacing:.06em}
-.department-week-date{font-size:16px;font-weight:700;margin-top:3px}
-.department-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-.summary-card{background:#181818;border:1px solid #333;border-radius:12px;padding:12px 8px;text-align:center}
-.summary-number{font-size:22px;font-weight:750;line-height:1.1}
-.summary-label{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.04em;margin-top:5px}
-.department-list{display:flex;flex-direction:column;gap:10px}
-.crew-week-card{background:#181818;border:1px solid #333;border-radius:14px;padding:14px}
-.crew-week-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
-.crew-week-name{font-size:16px;font-weight:700}
-.crew-week-position{font-size:12px;color:#888;margin-top:2px}
-.week-status-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
-.day-status{appearance:none;-webkit-appearance:none;margin:0!important;padding:7px 2px!important;min-width:0!important;border-radius:8px!important;background:#222!important;border:1px solid #383838!important;color:#777!important;text-align:center!important}
-.day-status.submitted{background:#17261b!important;border-color:#2f5138!important;color:#b9dfc1!important}
-.day-status.today{outline:1px solid #777}
-.day-status .day-name{display:block;font-size:9px;font-weight:700;text-transform:uppercase}
-.day-status .day-mark{display:block;font-size:14px;line-height:1;margin-top:4px}
-.department-empty{padding:30px 15px;text-align:center;color:#777;background:#181818;border:1px solid #333;border-radius:12px}
-.dtr-modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:flex-end;justify-content:center;padding:14px;z-index:1000}
-.dtr-modal.hidden{display:none!important}
-.dtr-modal-card{width:100%;max-width:520px;background:#171717;border:1px solid #3b3b3b;border-radius:18px;padding:18px;max-height:82vh;overflow:auto}
-.dtr-modal-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px}
-.dtr-modal-title{font-size:20px;font-weight:750}
-.dtr-modal-sub{font-size:12px;color:#888;margin-top:4px}
-.dtr-modal-close{width:auto!important;margin:0!important;padding:7px 10px!important}
-.dtr-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.dtr-detail{background:#222;border:1px solid #333;border-radius:10px;padding:11px}
-.dtr-detail-label{font-size:9px;color:#777;text-transform:uppercase;letter-spacing:.05em}
-.dtr-detail-value{font-size:17px;font-weight:700;margin-top:4px}
-.dtr-detail.full{grid-column:1/-1}
-@media(max-width:390px){
-  .department-summary{gap:6px}
-  .summary-number{font-size:20px}
-  .crew-week-card{padding:12px}
-  .week-status-grid{gap:4px}
-}
-
-
-/* v18 — HOD Crew Management */
-.department-toolbar{display:flex;gap:8px;margin-bottom:14px}
-.department-toolbar button{margin:0;flex:1;padding:11px 10px}
-.crew-manage-list{display:flex;flex-direction:column;gap:9px}
-.crew-manage-card{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#181818;border:1px solid #333;border-radius:12px;padding:13px}
-.crew-manage-name{font-size:15px;font-weight:700}
-.crew-manage-meta{font-size:12px;color:#888;margin-top:3px}
-.role-pill{font-size:10px;text-transform:uppercase;letter-spacing:.05em;padding:5px 7px;border-radius:999px;background:#222;border:1px solid #3b3b3b;color:#aaa;white-space:nowrap}
-.role-pill.hod{background:#17261b;border-color:#2f5138;color:#b9dfc1}
-.invite-card{background:#181818;border:1px solid #333;border-radius:14px;padding:15px;margin-bottom:14px}
-.invite-card h3{margin:0 0 5px;font-size:17px}
-.invite-card p{margin:0 0 12px;color:#888;font-size:12px;line-height:1.4}
-.invite-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.invite-grid label{margin:0 0 6px;font-size:11px}
-.invite-grid .full{grid-column:1/-1}
-.invite-card button{margin-top:12px}
-.invite-result{display:none;margin-top:12px;padding:11px;border-radius:9px;background:#17261b;border:1px solid #2f5138;color:#b9dfc1;font-size:12px;line-height:1.45}
-.invite-result.show{display:block}
-.invite-link-row{display:flex;gap:7px;margin-top:8px}
-.invite-link-row input{font-size:12px;padding:9px}
-.invite-link-row button{width:auto;margin:0;padding:9px 11px;font-size:12px}
-@media(max-width:390px){.invite-grid{grid-template-columns:1fr}.invite-grid .full{grid-column:auto}}
+/* v19 — invite onboarding */
+.invite-banner{background:#17261b;border:1px solid #2f5138;color:#d5efda;border-radius:12px;padding:14px;margin-bottom:16px}
+.invite-banner strong{display:block;font-size:16px;margin-bottom:4px}.invite-banner span{font-size:12px;color:#a8c9af}
+.invite-error{background:#2a1717;border:1px solid #633;color:#ffb0b0;border-radius:12px;padding:14px;margin-bottom:16px}
+.invite-lock{opacity:.72}
 
 </style>
 </head>
 <body>
 <div id="appContainer" class="container">
 <div id="loginScreen">
+<div id="inviteLoginBanner" class="invite-banner hidden"></div>
 <h1>Age of Attraction</h1><h2>Season 2 · Sound Department</h2>
 <label>Email</label><input type="email" id="email" autocomplete="email">
 <label>Password</label><input type="password" id="password" autocomplete="current-password">
 <button onclick="signIn()">Log In</button><button class="secondary" onclick="signUp()">Create Account</button><div id="loginMessage" class="message"></div>
 </div>
 <div id="setupScreen" class="hidden">
+<div id="inviteSetupBanner" class="invite-banner hidden"></div>
 <h1>Crew Setup</h1><div class="subtitle">Enter your production and payroll information.</div>
 <label>Name</label><input id="crewName">
 <label>Department</label><input value="Sound" disabled>
@@ -231,498 +38,110 @@ body.is-manager .hod-only{display:block}
 <button onclick="saveProfile()">Save Profile</button><div id="setupMessage" class="message"></div>
 </div>
 <div id="dtrScreen" class="hidden">
-<div class="dtr-header">
-  <div>
-    <h1>Daily DTR</h1>
-    <div class="subtitle" id="crewGreeting"></div>
-  </div>
-  <div class="dtr-header-actions">
-    <button id="departmentButton" class="secondary department-button hod-only" onclick="openDepartment()">Department</button>
-    <button class="secondary" onclick="signOut()">Log Out</button>
-  </div>
-</div>
-
-<button class="timesheet-launch" onclick="openMyTimesheet()">
-  <span class="timesheet-launch-icon" aria-hidden="true">▤</span>
-  <span class="timesheet-launch-copy"><span class="timesheet-launch-title">My Timesheet</span><span class="timesheet-launch-sub">View, open or send your weekly PDF</span></span>
-  <span class="timesheet-launch-arrow">›</span>
-</button>
-
-<div class="dtr-card">
-  <div class="date-row">
-    <div class="date-label">Date</div>
-    <input type="date" id="dtrDate" onchange="loadDTRForSelectedDate()">
-  </div>
-
-  <div id="editingBadge" class="editing-badge">
-    ✓ DTR Submitted — You can edit this day below.
-  </div>
-
-  <div class="time-grid">
-    <div class="time-cell">
-      <label>IN</label>
-      <input type="text" id="startTime" placeholder="08:00" inputmode="numeric" maxlength="5" autocomplete="off">
-    </div>
-
-    <div class="time-cell">
-      <label>OUT</label>
-      <input type="text" id="endTime" placeholder="27:00" inputmode="numeric" maxlength="5" autocomplete="off">
-    </div>
-
-    <div class="time-cell">
-      <label>LUNCH</label>
-      <input type="text" id="lunchStart" placeholder="13:00" inputmode="numeric" maxlength="5" autocomplete="off">
-    </div>
-
-    <div class="time-cell">
-      <label>RETURN</label>
-      <input type="text" id="lunchEnd" placeholder="13:30" inputmode="numeric" maxlength="5" autocomplete="off">
-    </div>
-  </div>
-
-  <div id="lunchFields"></div>
-
-  <label class="no-lunch-row">
-    <span>No Lunch</span>
-    <span class="switch">
-      <input type="checkbox" id="noLunch" onchange="toggleLunch()">
-      <span class="switch-slider"></span>
-    </span>
-  </label>
-</div>
-
-<div id="hoursPreview" class="hours-preview hidden">
-  <div id="hoursNumber" class="hours-number"></div>
-  <div id="hoursDetail" class="hours-detail"></div>
-</div>
-
-<details class="notes-disclosure">
-  <summary>Add note</summary>
-  <textarea id="dtrNotes" placeholder="Optional notes about the day"></textarea>
-</details>
-
-<button id="submitDTRButton" class="dtr-primary" onclick="submitDTR()">Submit DTR</button>
-<button id="clearDayButton" class="danger hidden" onclick="clearDay()">Clear Day</button>
-<div id="dtrMessage" class="message"></div>
-
+<div class="top-bar"><div><h1>Daily DTR</h1><div class="subtitle" id="crewGreeting"></div></div><button class="secondary" onclick="signOut()">Log Out</button></div>
+<button class="secondary" onclick="openMyTimesheet()">My Timesheet</button>
+<label>Date</label><input type="date" id="dtrDate" onchange="loadDTRForSelectedDate()">
+<div id="editingBadge" class="editing-badge">Existing DTR loaded — edit anything below and tap Update DTR.</div>
+<label>IN</label><input type="text" id="startTime" placeholder="08:00" inputmode="numeric" maxlength="5" autocomplete="off"><div class="time-help">24-hour format</div>
+<label class="checkbox-row"><input type="checkbox" id="noLunch" onchange="toggleLunch()"><span>No Lunch</span></label>
+<div id="lunchFields"><label>Lunch Start</label><input type="text" id="lunchStart" placeholder="13:00" inputmode="numeric" maxlength="5" autocomplete="off"><label>Lunch End</label><input type="text" id="lunchEnd" placeholder="13:30" inputmode="numeric" maxlength="5" autocomplete="off"></div>
+<label>OUT</label><input type="text" id="endTime" placeholder="26:30" inputmode="numeric" maxlength="5" autocomplete="off"><div class="time-help">For after-midnight finishes use 25:00, 26:30, etc. Maximum 48:00.</div>
+<div id="hoursPreview" class="hours-preview hidden"><div id="hoursNumber" class="hours-number"></div><div id="hoursDetail" class="hours-detail"></div></div>
+<label>Notes</label><textarea id="dtrNotes" placeholder="Optional notes about the day"></textarea>
+<button id="submitDTRButton" onclick="submitDTR()">Submit DTR</button><div id="dtrMessage" class="message"></div>
 </div>
 <div id="timesheetScreen" class="hidden">
-<div class="timesheet-header">
-  <div><h1>My Timesheet</h1><div class="subtitle" id="timesheetCrewName"></div></div>
-  <button class="secondary back-dtr" onclick="showDTR()">← DTR</button>
-</div>
-
-<div class="week-nav">
-  <button class="secondary" onclick="changeWeek(-7)" aria-label="Previous week">‹</button>
-  <div class="week-center" onclick="goToCurrentWeek()" title="Go to this week">
-    <div class="week-ending-label">Week Ending</div>
-    <div id="weekEndingDisplay" class="week-ending-date"></div>
-  </div>
-  <button class="secondary" onclick="changeWeek(7)" aria-label="Next week">›</button>
-</div>
-
-<div class="pdf-actions">
-  <button id="openPDFButton" class="secondary" onclick="openGeneratedPDF()" disabled>Open PDF</button>
-  <button id="sendPDFButton" class="secondary" onclick="sendGeneratedPDF()" disabled>Send PDF</button>
-</div>
-
-<div id="timesheetMessage" class="message"></div>
-<div class="pdf-container">
-  <div id="pdfLoading" class="loading">Building your timesheet...</div>
-  <div id="pdfPreviewWrap" class="pdf-preview-wrap hidden"><canvas id="timesheetCanvas"></canvas></div>
-  <div id="pdfPreviewCaption" class="pdf-preview-caption hidden">Preview · Open PDF for full size</div>
-  <iframe id="timesheetPDF" class="hidden" title="Weekly Timesheet"></iframe>
-</div>
-<div class="timesheet-note">Production timesheet populated from your submitted DTRs.</div>
+<div class="top-bar"><div><h1>My Timesheet</h1><div class="subtitle" id="timesheetCrewName"></div></div><button class="secondary" onclick="showDTR()">DTR</button></div>
+<div class="week-ending"><div class="week-ending-label">Week Ending</div><div id="weekEndingDisplay" class="week-ending-date"></div></div>
+<div class="timesheet-actions"><button class="secondary" onclick="changeWeek(-7)">← Previous Week</button><button class="secondary" onclick="goToCurrentWeek()">This Week</button><button class="secondary" onclick="changeWeek(7)">Next Week →</button><button id="openPDFButton" class="secondary" onclick="openGeneratedPDF()" disabled>Open PDF</button></div>
+<div id="timesheetMessage" class="message"></div><div class="pdf-container"><div id="pdfLoading" class="loading">Building your timesheet...</div><iframe id="timesheetPDF" class="hidden" title="Weekly Timesheet"></iframe></div><div class="timesheet-note">Production timesheet populated from your submitted DTRs.</div>
 </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+// v19 — invite onboarding
+let activeInvite=null;
+function getInviteToken(){return new URLSearchParams(location.search).get("invite")}
+async function loadInviteFromURL(){
+  const token=getInviteToken(); if(!token)return;
+  try{
+    const{data,error}=await supabaseClient.rpc("get_production_invite",{invite_token:token});
+    if(error)throw error;
+    const inv=Array.isArray(data)?data[0]:data;
+    if(!inv)throw new Error("This invite is invalid, expired, or has already been used.");
+    activeInvite=inv;
+    const copy=`<strong>You’ve been invited to ${escapeHTML(inv.production_name||"this production")}${inv.season?" · "+escapeHTML(inv.season):""}</strong><span>${escapeHTML(inv.name)} · ${escapeHTML(inv.position)} · ${escapeHTML(inv.email)}</span>`;
+    ["inviteLoginBanner","inviteSetupBanner"].forEach(id=>{const el=$(id);if(el){el.innerHTML=copy;el.classList.remove("hidden")}});
+    const emailInput=$("email"); if(emailInput){emailInput.value=inv.email||"";emailInput.readOnly=true;emailInput.classList.add("invite-lock")}
+  }catch(e){
+    const el=$("inviteLoginBanner");if(el){el.className="invite-error";el.textContent=e.message||"Unable to load invite."}
+  }
+}
+async function acceptActiveInvite(){
+  if(!activeInvite)return true;
+  try{
+    const token=getInviteToken();
+    const{data,error}=await supabaseClient.rpc("accept_production_invite",{invite_token:token});
+    if(error)throw error;
+    const accepted=Array.isArray(data)?data[0]:data;
+    if(accepted?.production_id)productionId=accepted.production_id;
+    activeInvite={...activeInvite,...accepted};
+    return true;
+  }catch(e){
+    console.error("Invite acceptance failed",e);
+    const target=$("setupMessage")||$("loginMessage");
+    if(target){target.textContent=e.message||"Unable to accept invite.";target.className="message error"}
+    return false;
+  }
+}
+function prefillSetupFromInvite(){
+  if(!activeInvite)return;
+  const name=$("name"); if(name&&!name.value)name.value=activeInvite.name||"";
+  const pos=$("position"); if(pos)pos.value=activeInvite.crew_position||pos.value;
+}
+document.addEventListener("DOMContentLoaded",()=>{loadInviteFromURL().then(prefillSetupFromInvite)});
 
-<div id="departmentScreen" class="hidden">
-  <div class="department-header">
-    <div>
-      <h1>Department</h1>
-      <div class="subtitle">Age of Attraction · Season 2 · Sound</div>
-    </div>
-    <div class="department-header-actions">
-      <button class="secondary" onclick="showDTR()">My DTR</button>
-      <button class="secondary" onclick="signOut()">Log Out</button>
-    </div>
-  </div>
 
-  <div class="department-toolbar">
-    <button class="secondary" onclick="showDepartmentOverview()">This Week</button>
-    <button class="secondary" onclick="showCrewManagement()">Crew</button>
-  </div>
+supabaseClient.auth.onAuthStateChange(async(event,session)=>{
+  if(session?.user && activeInvite){
+    currentUser=session.user;
+    if(await acceptActiveInvite())prefillSetupFromInvite();
+  }
+});
 
-  <div id="crewManagementPanel" class="hidden">
-    <div class="invite-card">
-      <h3>Invite Crew</h3>
-      <p>Create a production invite. Send the link to the crew member; they create their own account and finish Crew Setup.</p>
-      <div class="invite-grid">
-        <div class="full"><label for="inviteName">Name</label><input id="inviteName" placeholder="Crew member name"></div>
-        <div><label for="inviteEmail">Email</label><input id="inviteEmail" type="email" placeholder="name@example.com"></div>
-        <div><label for="invitePosition">Position</label><select id="invitePosition"><option>A1</option><option>A2</option><option>Bag Mixer</option><option>HOD</option></select></div>
-      </div>
-      <button onclick="createCrewInvite()">Create Invite</button>
-      <div id="inviteResult" class="invite-result"></div>
-    </div>
-    <div id="crewManageList" class="crew-manage-list"></div>
-  </div>
-
-  <div id="departmentOverviewPanel">
-  <div class="department-week">
-    <button class="secondary" onclick="changeDepartmentWeek(-7)">‹</button>
-    <div class="department-week-center" onclick="goToCurrentDepartmentWeek()">
-      <div class="department-week-label">Week Ending</div>
-      <div id="departmentWeekEnding" class="department-week-date"></div>
-    </div>
-    <button class="secondary" onclick="changeDepartmentWeek(7)">›</button>
-  </div>
-
-  <div class="department-summary">
-    <div class="summary-card"><div id="departmentCrewCount" class="summary-number">—</div><div class="summary-label">Crew</div></div>
-    <div class="summary-card"><div id="departmentSubmittedCount" class="summary-number">—</div><div class="summary-label">Submitted</div></div>
-    <div class="summary-card"><div id="departmentMissingCount" class="summary-number">—</div><div class="summary-label">Missing</div></div>
-  </div>
-
-  <div id="departmentMessage" class="message"></div>
-  <div id="departmentList" class="department-list"></div>
-  </div>
-</div>
-
-<div id="dtrDetailModal" class="dtr-modal hidden" onclick="closeDTRDetail(event)">
-  <div class="dtr-modal-card" onclick="event.stopPropagation()">
-    <div class="dtr-modal-head">
-      <div>
-        <div id="detailCrewName" class="dtr-modal-title"></div>
-        <div id="detailDate" class="dtr-modal-sub"></div>
-      </div>
-      <button class="secondary dtr-modal-close" onclick="closeDTRDetail()">Close</button>
-    </div>
-    <div id="dtrDetailBody" class="dtr-detail-grid"></div>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</script>
 <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 <script>
 const SUPABASE_URL="https://hyhzcikkoqvvfyiffmla.supabase.co";
 const SUPABASE_KEY="sb_publishable_Gl1oRE_S8bRTiI65vCnHRQ_InR0_wX1";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let currentUser=null,currentProfile=null,productionId=null,currentWeekEnding=null,currentPDFUrl=null,currentPDFBlob=null,currentDTR=null,currentMembership=null,currentDepartmentWeekEnding=null,departmentDTRMap=new Map();
+let currentUser=null,currentProfile=null,productionId=null,currentWeekEnding=null,currentPDFUrl=null,currentDTR=null;
 const $=id=>document.getElementById(id);
-function showScreen(id){["loginScreen","setupScreen","dtrScreen","timesheetScreen","departmentScreen"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");$("appContainer").classList.toggle("wide",id==="timesheetScreen"||id==="departmentScreen")}
+function showScreen(id){["loginScreen","setupScreen","dtrScreen","timesheetScreen"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");$("appContainer").classList.toggle("wide",id==="timesheetScreen")}
 function showMessage(id,msg,type){$(id).textContent=msg;$(id).className="message "+type}function clearMessage(id){$(id).textContent="";$(id).className="message"}
 function dateToISO(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}function isoToLocalDate(s){const p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2],12)}function todayString(){return dateToISO(new Date())}
 function getSaturdayForDate(input){const d=new Date(input.getFullYear(),input.getMonth(),input.getDate(),12);d.setDate(d.getDate()+(6-d.getDay()+7)%7);return d}function getSundayForSaturday(s){const d=new Date(s.getFullYear(),s.getMonth(),s.getDate(),12);d.setDate(d.getDate()-6);return d}
 function formatDisplayDate(d){return d.toLocaleDateString("en-CA",{weekday:"long",month:"long",day:"numeric",year:"numeric"})}function formatPDFDate(d){return `${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getDate()).padStart(2,"0")}/${d.getFullYear()}`}
-function normalizeTimeInput(value){
-  const raw=(value||"").trim();
-  if(!raw)return"";
-  if(raw.includes(":"))return raw;
-  const digits=raw.replace(/\D/g,"");
-  if(digits.length<3||digits.length>4)return raw;
-  const hours=Number(digits.slice(0,-2));
-  const minutes=Number(digits.slice(-2));
-  if(minutes>59||hours>48||(hours===48&&minutes>0))return raw;
-  return `${hours}:${String(minutes).padStart(2,"0")}`;
-}
-function formatTimeField(field){
-  field.value=normalizeTimeInput(field.value);
-  updateHoursPreview();
-}
 function parseTimeToMinutes(v){const m=(v||"").trim().match(/^(\d{1,2}):([0-5]\d)$/);if(!m)return null;const h=+m[1],min=+m[2];if(h<0||h>48||(h===48&&min>0))return null;return h*60+min}function minutesToTime(n){if(n===null||n===undefined)return"";return `${String(Math.floor(n/60)).padStart(2,"0")}:${String(n%60).padStart(2,"0")}`}function minutesToDisplay(n){const h=Math.floor(n/60),m=n%60;return m?`${h}h ${m}m`:`${h}h`}function minutesToDecimalHours(n){return(n/60).toFixed(2).replace(/\.00$/,"").replace(/(\.\d)0$/,"$1")}
 function updateEmploymentFields(){$("corporationFields").classList.toggle("hidden",$("employmentType").value!=="Incorporated Contractor")}
-function toggleLunch(){
-  const n=$("noLunch").checked;
-  $("lunchStart").disabled=n;
-  $("lunchEnd").disabled=n;
-  if(n){$("lunchStart").value="";$("lunchEnd").value=""}
-  updateHoursPreview();
-}
+function toggleLunch(){const n=$("noLunch").checked;$("lunchStart").disabled=n;$("lunchEnd").disabled=n;if(n){$("lunchStart").value="";$("lunchEnd").value=""}updateHoursPreview()}
 function updateHoursPreview(){const s=parseTimeToMinutes($("startTime").value),e=parseTimeToMinutes($("endTime").value),n=$("noLunch").checked,p=$("hoursPreview");if(s===null||e===null||e<=s){p.classList.add("hidden");return}let lunch=0;if(!n){const a=parseTimeToMinutes($("lunchStart").value),b=parseTimeToMinutes($("lunchEnd").value);if(a===null||b===null||a<s||b<=a||e<=b){p.classList.add("hidden");return}lunch=b-a}const total=e-s-lunch;$("hoursNumber").textContent="Total: "+minutesToDisplay(total);$("hoursDetail").textContent=n?"No Lunch":"Lunch: "+minutesToDisplay(lunch);p.classList.remove("hidden")}
-["startTime","lunchStart","lunchEnd","endTime"].forEach(id=>{
-  const field=$(id);
-  field.addEventListener("input",()=>{
-    if(!field.value.includes(":")){
-      field.value=field.value.replace(/\D/g,"").slice(0,4);
-      if(field.value.length===4)field.value=normalizeTimeInput(field.value);
-    }
-    updateHoursPreview();
-  });
-  field.addEventListener("blur",()=>formatTimeField(field));
-});
+["startTime","lunchStart","lunchEnd","endTime"].forEach(id=>$(id).addEventListener("input",updateHoursPreview));
 async function initialize(){try{const{data:{session}}=await supabaseClient.auth.getSession();if(!session){showScreen("loginScreen");return}currentUser=session.user;await loadProfile()}catch(e){showScreen("loginScreen");showMessage("loginMessage",e.message||"Unable to connect.","error")}}
 async function signUp(){try{const email=$("email").value.trim(),password=$("password").value;if(!email||!password)throw Error("Please enter an email and password.");const{data,error}=await supabaseClient.auth.signUp({email,password});if(error)throw error;currentUser=data.user;showMessage("loginMessage","Account created. You can now log in.","success")}catch(e){showMessage("loginMessage",e.message||"Unable to create account.","error")}}
 async function signIn(){try{const email=$("email").value.trim(),password=$("password").value;if(!email||!password)throw Error("Please enter an email and password.");const{data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;currentUser=data.user;await loadProfile()}catch(e){showMessage("loginMessage",e.message||"Unable to log in.","error")}}
-async function loadProfile(){try{
-  const{data,error}=await supabaseClient.from("crew_profiles").select("*").eq("user_id",currentUser.id).limit(1);
-  if(error)throw error;
-  if(!data||!data.length){await findProduction();showScreen("setupScreen");return}
-  currentProfile=data[0];
-  productionId=currentProfile.production_id;
-  await loadMembership();
-  if(!currentProfile.employment_type||!currentProfile.local_hotel||!currentProfile.province||!currentProfile.crew_initials){populateProfileForm();showScreen("setupScreen");return}
-  await showDTR();
-}catch(e){showScreen("loginScreen");showMessage("loginMessage",e.message||"Unable to load profile.","error")}}
-async function loadMembership(){
-  currentMembership=null;
-  document.body.classList.remove("is-manager");
-  if(!currentUser||!productionId)return;
-  const{data,error}=await supabaseClient.from("production_memberships").select("*").eq("user_id",currentUser.id).eq("production_id",productionId).limit(1);
-  if(error)throw error;
-  currentMembership=data&&data.length?data[0]:null;
-  if(currentMembership&&currentMembership.status==="active"&&["hod","admin"].includes(currentMembership.role))document.body.classList.add("is-manager");
-}
-function isManager(){return !!(currentMembership&&currentMembership.status==="active"&&["hod","admin"].includes(currentMembership.role))}
+async function loadProfile(){try{const{data,error}=await supabaseClient.from("crew_profiles").select("*").eq("user_id",currentUser.id).limit(1);if(error)throw error;if(!data||!data.length){await findProduction();showScreen("setupScreen");return}currentProfile=data[0];productionId=currentProfile.production_id;if(!currentProfile.employment_type||!currentProfile.local_hotel||!currentProfile.province||!currentProfile.crew_initials){populateProfileForm();showScreen("setupScreen");return}await showDTR()}catch(e){showScreen("loginScreen");showMessage("loginMessage",e.message||"Unable to load profile.","error")}}
 function populateProfileForm(){if(!currentProfile)return;const p=currentProfile;$("crewName").value=p.name||"";$("position").value=p.position||"";$("employmentType").value=p.employment_type||"";$("dayRate").value=p.day_rate||0;$("kitRental").value=p.kit_rental||0;$("equipmentNotes").value=p.equipment_notes||"";$("feeType").value=p.fee_type||"None";$("localHotel").value=p.local_hotel||"";$("province").value=p.province||"";$("corporationName").value=p.corporation_name||"";$("gstNumber").value=p.gst_number||"";$("gstAmount").value=p.gst_amount||"";$("crewInitials").value=p.crew_initials||"";updateEmploymentFields()}
 async function findProduction(){const{data,error}=await supabaseClient.from("productions").select("*").eq("name","Age of Attraction").eq("season","Season 2").limit(1);if(error)throw error;if(!data||!data.length)throw Error("Unable to find the production.");productionId=data[0].id}
-async function saveProfile(){try{clearMessage("setupMessage");const employment_type=$("employmentType").value;const profile={user_id:currentUser.id,production_id:productionId,name:$("crewName").value.trim(),position:$("position").value,employment_type,day_rate:parseFloat($("dayRate").value)||0,kit_rental:parseFloat($("kitRental").value)||0,fee_type:$("feeType").value,equipment_notes:$("equipmentNotes").value.trim(),local_hotel:$("localHotel").value,province:$("province").value,crew_initials:$("crewInitials").value.trim().toUpperCase(),corporation_name:employment_type==="Incorporated Contractor"?$("corporationName").value.trim():null,gst_number:employment_type==="Incorporated Contractor"?$("gstNumber").value.trim():null,gst_amount:employment_type==="Incorporated Contractor"?(parseFloat($("gstAmount").value)||0):null};if(!profile.name||!profile.position||!profile.employment_type||!profile.local_hotel||!profile.province||!profile.crew_initials)throw Error("Please complete all required fields.");if(employment_type==="Incorporated Contractor"&&(!profile.corporation_name||!profile.gst_number))throw Error("Please enter your corporation name and GST number.");if(!productionId)await findProduction();profile.production_id=productionId;let r=currentProfile?await supabaseClient.from("crew_profiles").update(profile).eq("id",currentProfile.id).select().single():await supabaseClient.from("crew_profiles").insert(profile).select().single();if(r.error)throw r.error;currentProfile=r.data;productionId=currentProfile.production_id;await loadMembership();await showDTR()}catch(e){showMessage("setupMessage",e.message||"Unable to save profile.","error")}}
-function resetDTRForm(){currentDTR=null;$("startTime").value="";$("lunchStart").value="";$("lunchEnd").value="";$("endTime").value="";$("noLunch").checked=false;$("dtrNotes").value="";$("submitDTRButton").textContent="Submit DTR";$("clearDayButton").classList.add("hidden");$("editingBadge").classList.remove("show");toggleLunch();updateHoursPreview()}
+async function saveProfile(){try{clearMessage("setupMessage");const employment_type=$("employmentType").value;const profile={user_id:currentUser.id,production_id:productionId,name:$("crewName").value.trim(),position:$("position").value,employment_type,day_rate:parseFloat($("dayRate").value)||0,kit_rental:parseFloat($("kitRental").value)||0,fee_type:$("feeType").value,equipment_notes:$("equipmentNotes").value.trim(),local_hotel:$("localHotel").value,province:$("province").value,crew_initials:$("crewInitials").value.trim().toUpperCase(),corporation_name:employment_type==="Incorporated Contractor"?$("corporationName").value.trim():null,gst_number:employment_type==="Incorporated Contractor"?$("gstNumber").value.trim():null,gst_amount:employment_type==="Incorporated Contractor"?(parseFloat($("gstAmount").value)||0):null};if(!profile.name||!profile.position||!profile.employment_type||!profile.local_hotel||!profile.province||!profile.crew_initials)throw Error("Please complete all required fields.");if(employment_type==="Incorporated Contractor"&&(!profile.corporation_name||!profile.gst_number))throw Error("Please enter your corporation name and GST number.");if(!productionId)await findProduction();profile.production_id=productionId;let r=currentProfile?await supabaseClient.from("crew_profiles").update(profile).eq("id",currentProfile.id).select().single():await supabaseClient.from("crew_profiles").insert(profile).select().single();if(r.error)throw r.error;currentProfile=r.data;await showDTR()}catch(e){showMessage("setupMessage",e.message||"Unable to save profile.","error")}}
+function resetDTRForm(){currentDTR=null;$("startTime").value="";$("lunchStart").value="";$("lunchEnd").value="";$("endTime").value="";$("noLunch").checked=false;$("dtrNotes").value="";$("submitDTRButton").textContent="Submit DTR";$("editingBadge").classList.remove("show");toggleLunch();updateHoursPreview()}
 async function showDTR(){showScreen("dtrScreen");if(!$("dtrDate").value)$("dtrDate").value=todayString();$("crewGreeting").textContent=currentProfile.name+" · "+currentProfile.position;await loadDTRForSelectedDate()}
-async function loadDTRForSelectedDate(){if(!currentProfile)return;clearMessage("dtrMessage");const date=$("dtrDate").value;if(!date)return;const{data,error}=await supabaseClient.from("dtrs").select("*").eq("crew_profile_id",currentProfile.id).eq("date",date).limit(1);if(error){showMessage("dtrMessage",error.message||"Unable to load DTR.","error");return}if(!data||!data.length){resetDTRForm();return}const d=data[0];currentDTR=d;$("startTime").value=minutesToTime(d.start_minutes);$("endTime").value=minutesToTime(d.end_minutes);$("noLunch").checked=!!d.no_lunch;$("lunchStart").value=d.no_lunch?"":minutesToTime(d.lunch_start_minutes);$("lunchEnd").value=d.no_lunch?"":minutesToTime(d.lunch_end_minutes);$("dtrNotes").value=d.notes||"";$("submitDTRButton").textContent="Update DTR";$("clearDayButton").classList.remove("hidden");$("editingBadge").classList.add("show");toggleLunch();updateHoursPreview()}
-async function clearDay(){
-  if(!currentDTR||!currentProfile)return;
-  const date=$("dtrDate").value;
-  const displayDate=formatDisplayDate(isoToLocalDate(date));
-  if(!confirm(`Clear ${displayDate}?\n\nThis will permanently remove this day's DTR. Use this if the date was entered by mistake or you had the day off.`))return;
-  try{
-    clearMessage("dtrMessage");
-    const{error}=await supabaseClient.from("dtrs").delete().eq("id",currentDTR.id).eq("crew_profile_id",currentProfile.id);
-    if(error)throw error;
-    resetDTRForm();
-    showMessage("dtrMessage",`${displayDate} cleared successfully. No DTR is submitted for this day.`,"success");
-  }catch(e){
-    showMessage("dtrMessage",e.message||"Unable to clear this day.","error");
-  }
-}
-async function submitDTR(){try{clearMessage("dtrMessage");["startTime","lunchStart","lunchEnd","endTime"].forEach(id=>formatTimeField($(id)));const date=$("dtrDate").value,startValue=$("startTime").value,endValue=$("endTime").value,noLunch=$("noLunch").checked,notes=$("dtrNotes").value.trim();if(!date||!startValue||!endValue)throw Error("Please complete the date, IN and OUT.");const start=parseTimeToMinutes(startValue),end=parseTimeToMinutes(endValue);if(start===null||end===null)throw Error("IN and OUT must use HH:MM format and be between 00:00 and 48:00.");if(end<=start)throw Error("OUT must be later than IN. For after-midnight finishes use 25:00, 26:30, etc.");let ls=null,le=null;if(!noLunch){ls=parseTimeToMinutes($("lunchStart").value);le=parseTimeToMinutes($("lunchEnd").value);if(ls===null||le===null)throw Error("Please enter valid Lunch Start and Lunch End, or select No Lunch.");if(ls<start)throw Error("Lunch Start cannot be before IN.");if(le<=ls)throw Error("Lunch End must be later than Lunch Start.");if(end<=le)throw Error("OUT must be later than Lunch End.")}const wasEditing=!!currentDTR;const{error}=await supabaseClient.from("dtrs").upsert({crew_profile_id:currentProfile.id,date,start_minutes:start,lunch_start_minutes:noLunch?null:ls,lunch_end_minutes:noLunch?null:le,end_minutes:end,no_lunch:noLunch,notes,status:"submitted",updated_at:new Date().toISOString()},{onConflict:"crew_profile_id,date"});if(error)throw error;await loadDTRForSelectedDate();showMessage("dtrMessage",wasEditing?"DTR updated successfully.":"DTR submitted successfully.","success")}catch(e){showMessage("dtrMessage",e.message||"Unable to submit DTR.","error")}}
-
-
-function showDepartmentOverview(){
-  $("crewManagementPanel").classList.add("hidden");
-  $("departmentOverviewPanel").classList.remove("hidden");
-}
-async function showCrewManagement(){
-  $("departmentOverviewPanel").classList.add("hidden");
-  $("crewManagementPanel").classList.remove("hidden");
-  await loadCrewManagement();
-}
-async function loadCrewManagement(){
-  try{
-    $("crewManageList").innerHTML='<div class="department-empty">Loading crew…</div>';
-    const{data:profiles,error}=await supabaseClient.from("crew_profiles").select("*").eq("production_id",productionId).order("name",{ascending:true});
-    if(error)throw error;
-    const{data:memberships,error:membershipError}=await supabaseClient.from("production_memberships").select("user_id,role,status").eq("production_id",productionId);
-    if(membershipError)throw membershipError;
-    const byUser=new Map((memberships||[]).map(m=>[m.user_id,m]));
-    $("crewManageList").innerHTML=(profiles||[]).map(p=>{
-      const m=byUser.get(p.user_id);
-      const role=m?.role||"crew";
-      return `<div class="crew-manage-card"><div><div class="crew-manage-name">${escapeHTML(p.name)}</div><div class="crew-manage-meta">${escapeHTML(p.position||"Crew")} · ${escapeHTML(m?.status||"active")}</div></div><span class="role-pill ${role==="hod"?"hod":""}">${escapeHTML(role)}</span></div>`;
-    }).join("")||'<div class="department-empty">No crew yet.</div>';
-  }catch(e){
-    $("crewManageList").innerHTML=`<div class="department-empty">${escapeHTML(e.message||"Unable to load crew.")}</div>`;
-  }
-}
-async function createCrewInvite(){
-  const name=$("inviteName").value.trim(),email=$("inviteEmail").value.trim().toLowerCase(),position=$("invitePosition").value;
-  const result=$("inviteResult");
-  result.classList.remove("show");
-  if(!name||!email){result.textContent="Enter the crew member’s name and email.";result.classList.add("show");return}
-  try{
-    const token=(crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random().toString(36).slice(2)}`);
-    const expires=new Date(Date.now()+14*24*60*60*1000).toISOString();
-    const{error}=await supabaseClient.from("production_invites").insert({
-      production_id:productionId,
-      invited_by:currentUser.id,
-      email,
-      name,
-      position,
-      token,
-      status:"pending",
-      expires_at:expires
-    });
-    if(error)throw error;
-    const link=`${location.origin}${location.pathname}?invite=${encodeURIComponent(token)}`;
-    result.innerHTML=`Invite created for <strong>${escapeHTML(name)}</strong>.<div class="invite-link-row"><input id="generatedInviteLink" readonly value="${escapeHTML(link)}"><button class="secondary" onclick="copyInviteLink()">Copy</button></div>`;
-    result.classList.add("show");
-    $("inviteName").value="";$("inviteEmail").value="";$("invitePosition").value="A1";
-  }catch(e){
-    result.textContent=e.message||"Unable to create invite.";
-    result.classList.add("show");
-  }
-}
-async function copyInviteLink(){
-  const input=$("generatedInviteLink");if(!input)return;
-  try{await navigator.clipboard.writeText(input.value);showMessage("departmentMessage","Invite link copied.","success")}
-  catch(e){input.select();document.execCommand("copy")}
-}
-
-async function openDepartment(){
-  if(!isManager()){showMessage("dtrMessage","Department access is only available to the HOD or production admin.","error");return}
-  if(!currentDepartmentWeekEnding)currentDepartmentWeekEnding=getSaturdayForDate(new Date());
-  showScreen("departmentScreen");
-  showDepartmentOverview();
-  await loadDepartmentDashboard();
-}
-async function changeDepartmentWeek(days){
-  if(!currentDepartmentWeekEnding)currentDepartmentWeekEnding=getSaturdayForDate(new Date());
-  currentDepartmentWeekEnding.setDate(currentDepartmentWeekEnding.getDate()+days);
-  await loadDepartmentDashboard();
-}
-async function goToCurrentDepartmentWeek(){
-  currentDepartmentWeekEnding=getSaturdayForDate(new Date());
-  await loadDepartmentDashboard();
-}
-function escapeHTML(v){
-  return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
-async function loadDepartmentDashboard(){
-  try{
-    clearMessage("departmentMessage");
-    $("departmentList").innerHTML='<div class="department-empty">Loading department…</div>';
-    $("departmentWeekEnding").textContent=formatDisplayDate(currentDepartmentWeekEnding);
-    const sunday=getSundayForSaturday(currentDepartmentWeekEnding);
-    const sundayISO=dateToISO(sunday),saturdayISO=dateToISO(currentDepartmentWeekEnding);
-
-    const{data:crew,error:crewError}=await supabaseClient.from("crew_profiles").select("*").eq("production_id",productionId).order("name",{ascending:true});
-    if(crewError)throw crewError;
-    const profiles=crew||[];
-    const profileIds=profiles.map(p=>p.id);
-
-    let dtrs=[];
-    if(profileIds.length){
-      const{data,error}=await supabaseClient.from("dtrs").select("*").in("crew_profile_id",profileIds).gte("date",sundayISO).lte("date",saturdayISO).order("date",{ascending:true});
-      if(error)throw error;
-      dtrs=data||[];
-    }
-
-    departmentDTRMap=new Map();
-    for(const d of dtrs)departmentDTRMap.set(`${d.crew_profile_id}|${d.date}`,d);
-
-    const today=todayString();
-    let submitted=0,missing=0;
-    const dayDates=[];
-    for(let i=0;i<7;i++){const d=new Date(sunday);d.setDate(sunday.getDate()+i);dayDates.push(dateToISO(d))}
-    const relevantDates=dayDates.filter(x=>x<=today);
-    for(const p of profiles){
-      for(const date of relevantDates){
-        if(departmentDTRMap.has(`${p.id}|${date}`))submitted++; else missing++;
-      }
-    }
-
-    $("departmentCrewCount").textContent=profiles.length;
-    $("departmentSubmittedCount").textContent=submitted;
-    $("departmentMissingCount").textContent=missing;
-
-    if(!profiles.length){
-      $("departmentList").innerHTML='<div class="department-empty">No crew profiles are connected to this production yet.</div>';
-      return;
-    }
-
-    const dayNames=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-    $("departmentList").innerHTML=profiles.map(p=>{
-      const days=dayDates.map((date,i)=>{
-        const dtr=departmentDTRMap.get(`${p.id}|${date}`);
-        const cls=`day-status${dtr?" submitted":""}${date===today?" today":""}`;
-        const disabled=dtr?"":" disabled";
-        return `<button class="${cls}"${disabled} onclick="openDTRDetail('${p.id}','${date}')"><span class="day-name">${dayNames[i]}</span><span class="day-mark">${dtr?"✓":"—"}</span></button>`;
-      }).join("");
-      return `<div class="crew-week-card"><div class="crew-week-top"><div><div class="crew-week-name">${escapeHTML(p.name)}</div><div class="crew-week-position">${escapeHTML(p.position||"Crew")}</div></div></div><div class="week-status-grid">${days}</div></div>`;
-    }).join("");
-  }catch(e){
-    console.error("DEPARTMENT ERROR",e);
-    $("departmentList").innerHTML="";
-    showMessage("departmentMessage",e.message||"Unable to load department.","error");
-  }
-}
-function openDTRDetail(profileId,date){
-  const dtr=departmentDTRMap.get(`${profileId}|${date}`);
-  if(!dtr)return;
-  const card=[...document.querySelectorAll(".crew-week-card")].find(()=>false);
-  const profileName=(()=>{
-    const keys=[...departmentDTRMap.keys()];
-    return "";
-  })();
-  // Resolve crew name from the visible card data by querying the profile again only when needed.
-  supabaseClient.from("crew_profiles").select("name,position").eq("id",profileId).single().then(({data,error})=>{
-    if(error||!data)return;
-    $("detailCrewName").textContent=data.name+" · "+(data.position||"Crew");
-    $("detailDate").textContent=formatDisplayDate(isoToLocalDate(date));
-    const total=calculateDTRMinutes(dtr);
-    const lunch=dtr.no_lunch?null:(dtr.lunch_end_minutes-dtr.lunch_start_minutes);
-    const note=dtr.notes?`<div class="dtr-detail full"><div class="dtr-detail-label">Note</div><div class="dtr-detail-value" style="font-size:14px">${escapeHTML(dtr.notes)}</div></div>`:"";
-    $("dtrDetailBody").innerHTML=
-      `<div class="dtr-detail"><div class="dtr-detail-label">IN</div><div class="dtr-detail-value">${minutesToTime(dtr.start_minutes)}</div></div>`+
-      `<div class="dtr-detail"><div class="dtr-detail-label">OUT</div><div class="dtr-detail-value">${minutesToTime(dtr.end_minutes)}</div></div>`+
-      `<div class="dtr-detail"><div class="dtr-detail-label">Lunch</div><div class="dtr-detail-value">${dtr.no_lunch?"No Lunch":minutesToTime(dtr.lunch_start_minutes)+"–"+minutesToTime(dtr.lunch_end_minutes)}</div></div>`+
-      `<div class="dtr-detail"><div class="dtr-detail-label">Total</div><div class="dtr-detail-value">${total===null?"—":minutesToDisplay(total)}</div></div>`+note;
-    $("dtrDetailModal").classList.remove("hidden");
-  });
-}
-function calculateDTRMinutes(d){
-  if(!d||d.start_minutes===null||d.end_minutes===null)return null;
-  let total=d.end_minutes-d.start_minutes;
-  if(!d.no_lunch&&d.lunch_start_minutes!==null&&d.lunch_end_minutes!==null)total-=d.lunch_end_minutes-d.lunch_start_minutes;
-  return total>=0?total:null;
-}
-function closeDTRDetail(event){
-  if(event&&event.target!==$("dtrDetailModal"))return;
-  $("dtrDetailModal").classList.add("hidden");
-}
-
+async function loadDTRForSelectedDate(){if(!currentProfile)return;clearMessage("dtrMessage");const date=$("dtrDate").value;if(!date)return;const{data,error}=await supabaseClient.from("dtrs").select("*").eq("crew_profile_id",currentProfile.id).eq("date",date).limit(1);if(error){showMessage("dtrMessage",error.message||"Unable to load DTR.","error");return}if(!data||!data.length){resetDTRForm();return}const d=data[0];currentDTR=d;$("startTime").value=minutesToTime(d.start_minutes);$("endTime").value=minutesToTime(d.end_minutes);$("noLunch").checked=!!d.no_lunch;$("lunchStart").value=d.no_lunch?"":minutesToTime(d.lunch_start_minutes);$("lunchEnd").value=d.no_lunch?"":minutesToTime(d.lunch_end_minutes);$("dtrNotes").value=d.notes||"";$("submitDTRButton").textContent="Update DTR";$("editingBadge").classList.add("show");toggleLunch();updateHoursPreview()}
+async function submitDTR(){try{clearMessage("dtrMessage");const date=$("dtrDate").value,startValue=$("startTime").value,endValue=$("endTime").value,noLunch=$("noLunch").checked,notes=$("dtrNotes").value.trim();if(!date||!startValue||!endValue)throw Error("Please complete the date, IN and OUT.");const start=parseTimeToMinutes(startValue),end=parseTimeToMinutes(endValue);if(start===null||end===null)throw Error("IN and OUT must use HH:MM format and be between 00:00 and 48:00.");if(end<=start)throw Error("OUT must be later than IN. For after-midnight finishes use 25:00, 26:30, etc.");let ls=null,le=null;if(!noLunch){ls=parseTimeToMinutes($("lunchStart").value);le=parseTimeToMinutes($("lunchEnd").value);if(ls===null||le===null)throw Error("Please enter valid Lunch Start and Lunch End, or select No Lunch.");if(ls<start)throw Error("Lunch Start cannot be before IN.");if(le<=ls)throw Error("Lunch End must be later than Lunch Start.");if(end<=le)throw Error("OUT must be later than Lunch End.")}const wasEditing=!!currentDTR;const{error}=await supabaseClient.from("dtrs").upsert({crew_profile_id:currentProfile.id,date,start_minutes:start,lunch_start_minutes:noLunch?null:ls,lunch_end_minutes:noLunch?null:le,end_minutes:end,no_lunch:noLunch,notes,status:"submitted",updated_at:new Date().toISOString()},{onConflict:"crew_profile_id,date"});if(error)throw error;await loadDTRForSelectedDate();showMessage("dtrMessage",wasEditing?"DTR updated successfully.":"DTR submitted successfully.","success")}catch(e){showMessage("dtrMessage",e.message||"Unable to submit DTR.","error")}}
 async function openMyTimesheet(){const selected=$("dtrDate").value;currentWeekEnding=getSaturdayForDate(selected?isoToLocalDate(selected):new Date());showScreen("timesheetScreen");$("timesheetCrewName").textContent=currentProfile.name+" · "+currentProfile.position;await buildTimesheet()}async function changeWeek(days){if(!currentWeekEnding)return;currentWeekEnding.setDate(currentWeekEnding.getDate()+days);await buildTimesheet()}async function goToCurrentWeek(){currentWeekEnding=getSaturdayForDate(new Date());await buildTimesheet()}
-async function renderTimesheetPreview(blob){
-  const wrap=$("pdfPreviewWrap"),canvas=$("timesheetCanvas"),caption=$("pdfPreviewCaption");
-  try{
-    wrap.classList.add("hidden");caption.classList.add("hidden");
-    if(window.pdfjsLib){pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js"}
-    const data=await blob.arrayBuffer();
-    const pdf=await pdfjsLib.getDocument({data}).promise;
-    const page=await pdf.getPage(1);
-    const base=page.getViewport({scale:1});
-    const available=Math.max(280,(wrap.parentElement.clientWidth||360)-20);
-    const scale=available/base.width;
-    const viewport=page.getViewport({scale});
-    const ratio=window.devicePixelRatio||1;
-    canvas.width=Math.floor(viewport.width*ratio);canvas.height=Math.floor(viewport.height*ratio);
-    canvas.style.width=Math.floor(viewport.width)+"px";canvas.style.height=Math.floor(viewport.height)+"px";
-    const ctx=canvas.getContext("2d");
-    await page.render({canvasContext:ctx,viewport,transform:ratio!==1?[ratio,0,0,ratio,0,0]:null}).promise;
-    wrap.classList.remove("hidden");caption.classList.remove("hidden");
-  }catch(e){console.warn("PDF preview failed",e);}
-}
-async function buildTimesheet(){try{clearMessage("timesheetMessage");$("pdfLoading").classList.remove("hidden");$("timesheetPDF").classList.add("hidden");$("pdfPreviewWrap").classList.add("hidden");$("pdfPreviewCaption").classList.add("hidden");$("openPDFButton").disabled=true;$("sendPDFButton").disabled=true;$("weekEndingDisplay").textContent=formatDisplayDate(currentWeekEnding);const sunday=getSundayForSaturday(currentWeekEnding),sundayISO=dateToISO(sunday),saturdayISO=dateToISO(currentWeekEnding);const{data:dtrs,error:dtrError}=await supabaseClient.from("dtrs").select("*").eq("crew_profile_id",currentProfile.id).gte("date",sundayISO).lte("date",saturdayISO).order("date",{ascending:true});if(dtrError)throw dtrError;const{data:templates,error:templateError}=await supabaseClient.from("timesheet_templates").select("*").eq("production_id",productionId).eq("is_active",true).limit(1);if(templateError)throw templateError;if(!templates||!templates.length)throw Error("No timesheet template has been configured for this production.");const template=templates[0];const{data:mappings,error:mappingError}=await supabaseClient.from("timesheet_field_mappings").select("*").eq("template_id",template.id);if(mappingError)throw mappingError;const{data:pdfBlob,error:downloadError}=await supabaseClient.storage.from("timesheet-templates").download(template.file_path);if(downloadError)throw downloadError;const pdfDoc=await PDFLib.PDFDocument.load(await pdfBlob.arrayBuffer()),form=pdfDoc.getForm(),values=buildTimesheetValues(sunday,currentWeekEnding,dtrs||[]);let filled=0,errors=0;for(const mapping of mappings){const name=mapping.pdf_field_name,value=values[mapping.field_key];if(value===undefined||value===null||!name)continue;try{const field=form.getField(name);if(typeof field.setText==="function"){field.setText(String(value??""));filled++;continue}if(typeof field.check==="function"&&typeof field.uncheck==="function"){value===true?field.check():field.uncheck();filled++;continue}if(typeof field.select==="function"){field.select(String(value??""));filled++;continue}console.warn("Unhandled PDF field",name)}catch(e){errors++;console.error("PDF field failed",mapping.field_key,name,e)}}try{form.updateFieldAppearances()}catch(e){console.warn("Appearance update failed",e)}const bytes=await pdfDoc.save(),blob=new Blob([bytes],{type:"application/pdf"});if(currentPDFUrl)URL.revokeObjectURL(currentPDFUrl);currentPDFBlob=blob;currentPDFUrl=URL.createObjectURL(blob);$("timesheetPDF").src=currentPDFUrl;$("pdfLoading").classList.add("hidden");await renderTimesheetPreview(blob);$("openPDFButton").disabled=false;$("sendPDFButton").disabled=false;if(!filled)showMessage("timesheetMessage","The PDF loaded, but no mapped fields could be filled.","error");else if(errors)showMessage("timesheetMessage",`${errors} PDF field(s) could not be filled.`,"error")}catch(e){console.error("TIMESHEET ERROR",e);$("pdfLoading").classList.add("hidden");showMessage("timesheetMessage",e.message||"Unable to build timesheet.","error")}}
+async function buildTimesheet(){try{clearMessage("timesheetMessage");$("pdfLoading").classList.remove("hidden");$("timesheetPDF").classList.add("hidden");$("openPDFButton").disabled=true;$("weekEndingDisplay").textContent=formatDisplayDate(currentWeekEnding);const sunday=getSundayForSaturday(currentWeekEnding),sundayISO=dateToISO(sunday),saturdayISO=dateToISO(currentWeekEnding);const{data:dtrs,error:dtrError}=await supabaseClient.from("dtrs").select("*").eq("crew_profile_id",currentProfile.id).gte("date",sundayISO).lte("date",saturdayISO).order("date",{ascending:true});if(dtrError)throw dtrError;const{data:templates,error:templateError}=await supabaseClient.from("timesheet_templates").select("*").eq("production_id",productionId).eq("is_active",true).limit(1);if(templateError)throw templateError;if(!templates||!templates.length)throw Error("No timesheet template has been configured for this production.");const template=templates[0];const{data:mappings,error:mappingError}=await supabaseClient.from("timesheet_field_mappings").select("*").eq("template_id",template.id);if(mappingError)throw mappingError;const{data:pdfBlob,error:downloadError}=await supabaseClient.storage.from("timesheet-templates").download(template.file_path);if(downloadError)throw downloadError;const pdfDoc=await PDFLib.PDFDocument.load(await pdfBlob.arrayBuffer()),form=pdfDoc.getForm(),values=buildTimesheetValues(sunday,currentWeekEnding,dtrs||[]);let filled=0,errors=0;for(const mapping of mappings){const name=mapping.pdf_field_name,value=values[mapping.field_key];if(value===undefined||value===null||!name)continue;try{const field=form.getField(name);if(typeof field.setText==="function"){field.setText(String(value??""));filled++;continue}if(typeof field.check==="function"&&typeof field.uncheck==="function"){value===true?field.check():field.uncheck();filled++;continue}if(typeof field.select==="function"){field.select(String(value??""));filled++;continue}console.warn("Unhandled PDF field",name)}catch(e){errors++;console.error("PDF field failed",mapping.field_key,name,e)}}try{form.updateFieldAppearances()}catch(e){console.warn("Appearance update failed",e)}const bytes=await pdfDoc.save(),blob=new Blob([bytes],{type:"application/pdf"});if(currentPDFUrl)URL.revokeObjectURL(currentPDFUrl);currentPDFUrl=URL.createObjectURL(blob);$("timesheetPDF").src=currentPDFUrl;$("timesheetPDF").classList.remove("hidden");$("pdfLoading").classList.add("hidden");$("openPDFButton").disabled=false;if(!filled)showMessage("timesheetMessage","The PDF loaded, but no mapped fields could be filled.","error");else if(errors)showMessage("timesheetMessage",`${errors} PDF field(s) could not be filled.`,"error")}catch(e){console.error("TIMESHEET ERROR",e);$("pdfLoading").classList.add("hidden");showMessage("timesheetMessage",e.message||"Unable to build timesheet.","error")}}
 function buildTimesheetValues(sunday,saturday,dtrs){const v={};v["crew.name"]=currentProfile.name||"";v["crew.department"]="Sound";v["crew.position"]=currentProfile.position||"";v["week.ending"]=formatPDFDate(saturday);v["crew.day_rate"]=currentProfile.day_rate?"$"+Number(currentProfile.day_rate).toFixed(2):"";v["crew.corporation_name"]=currentProfile.corporation_name||"";v["crew.gst_number"]=currentProfile.gst_number||"";v["crew.gst_amount"]=currentProfile.gst_amount?"$"+Number(currentProfile.gst_amount).toFixed(2):"";v["crew.initials"]=currentProfile.crew_initials||"";v["crew.local"]=currentProfile.local_hotel==="Local";v["crew.hotel"]=currentProfile.local_hotel==="Hotel";v["crew.bc_resident"]=currentProfile.province==="BC";v["crew.on_resident"]=currentProfile.province==="ON";v["crew.kit_fee"]=currentProfile.fee_type==="Kit"&&currentProfile.kit_rental?"$"+Number(currentProfile.kit_rental).toFixed(2):"";v["crew.vehicle_fee"]=currentProfile.fee_type==="Vehicle"&&currentProfile.kit_rental?"$"+Number(currentProfile.kit_rental).toFixed(2):"";const keys=["sun","mon","tue","wed","thu","fri","sat"];for(let i=0;i<7;i++){const date=new Date(sunday.getFullYear(),sunday.getMonth(),sunday.getDate()+i,12),iso=dateToISO(date),key=keys[i],d=dtrs.find(x=>x.date===iso);if(!d)continue;v[`${key}.date`]=formatPDFDate(date);v[`${key}.in`]=minutesToTime(d.start_minutes);v[`${key}.out`]=minutesToTime(d.end_minutes);v[`${key}.lunch_start`]=d.no_lunch?"":minutesToTime(d.lunch_start_minutes);v[`${key}.lunch_end`]=d.no_lunch?"":minutesToTime(d.lunch_end_minutes);let lunch=0;if(!d.no_lunch&&d.lunch_start_minutes!==null&&d.lunch_end_minutes!==null)lunch=d.lunch_end_minutes-d.lunch_start_minutes;v[`${key}.hours`]=minutesToDecimalHours(d.end_minutes-d.start_minutes-lunch);v[`${key}.province`]=currentProfile.province||""}return v}
 function openGeneratedPDF(){if(currentPDFUrl)window.open(currentPDFUrl,"_blank")}
-function safeFilenamePart(value){return String(value||"").trim().replace(/[^a-zA-Z0-9]+/g,"_").replace(/^_+|_+$/g,"")||"Timesheet"}
-async function sendGeneratedPDF(){
-  try{
-    if(!currentPDFBlob||!currentWeekEnding)throw Error("Your timesheet PDF is not ready yet.");
-    const crew=safeFilenamePart(currentProfile?.name||"Crew");
-    const production="Age_of_Attraction_S2";
-    const weekEnding=dateToISO(currentWeekEnding);
-    const filename=`${crew}_${production}_WE_${weekEnding}.pdf`;
-    const file=new File([currentPDFBlob],filename,{type:"application/pdf"});
-    if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){
-      await navigator.share({files:[file],title:`${currentProfile?.name||"Crew"} Timesheet`,text:`Timesheet - Week Ending ${formatDisplayDate(currentWeekEnding)}`});
-      return;
-    }
-    const link=document.createElement("a");
-    link.href=currentPDFUrl;
-    link.download=filename;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    showMessage("timesheetMessage","Sharing is not available in this browser, so the PDF was saved instead.","success");
-  }catch(e){
-    if(e&&e.name==="AbortError")return;
-    showMessage("timesheetMessage",e.message||"Unable to share PDF.","error");
-  }
-}
-async function signOut(){if(currentPDFUrl){URL.revokeObjectURL(currentPDFUrl);currentPDFUrl=null}currentPDFBlob=null;await supabaseClient.auth.signOut();currentUser=currentProfile=productionId=currentWeekEnding=currentDTR=currentMembership=currentDepartmentWeekEnding=null;departmentDTRMap=new Map();document.body.classList.remove("is-manager");showScreen("loginScreen")}
+async function signOut(){if(currentPDFUrl){URL.revokeObjectURL(currentPDFUrl);currentPDFUrl=null}await supabaseClient.auth.signOut();currentUser=currentProfile=productionId=currentWeekEnding=currentDTR=null;showScreen("loginScreen")}
 initialize();
 </script>
 </body>
