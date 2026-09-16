@@ -209,17 +209,22 @@ body.is-manager .hod-only{display:block}
 .invite-link-row button{width:auto;margin:0;padding:9px 11px;font-size:12px}
 @media(max-width:390px){.invite-grid{grid-template-columns:1fr}.invite-grid .full{grid-column:auto}}
 
+
+/* v19 — invite onboarding */
+.invite-banner{background:#17261b;border:1px solid #2f5138;color:#d5efda;border-radius:12px;padding:14px;margin-bottom:16px}
+.invite-banner strong{display:block;font-size:16px;margin-bottom:4px}.invite-banner span{font-size:12px;color:#a8c9af}
+.invite-error{background:#2a1717;border:1px solid #633;color:#ffb0b0;border-radius:12px;padding:14px;margin-bottom:16px}
 </style>
 </head>
 <body>
 <div id="appContainer" class="container">
-<div id="loginScreen">
+<div id="loginScreen"><div id="inviteLoginBanner" class="invite-banner hidden"></div>
 <h1>Age of Attraction</h1><h2>Season 2 · Sound Department</h2>
 <label>Email</label><input type="email" id="email" autocomplete="email">
 <label>Password</label><input type="password" id="password" autocomplete="current-password">
 <button onclick="signIn()">Log In</button><button class="secondary" onclick="signUp()">Create Account</button><div id="loginMessage" class="message"></div>
 </div>
-<div id="setupScreen" class="hidden">
+<div id="setupScreen" class="hidden"><div id="inviteSetupBanner" class="invite-banner hidden"></div>
 <h1>Crew Setup</h1><div class="subtitle">Enter your production and payroll information.</div>
 <label>Name</label><input id="crewName">
 <label>Department</label><input value="Sound" disabled>
@@ -403,7 +408,16 @@ body.is-manager .hod-only{display:block}
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+// v19 — invite onboarding layered onto known-good v18
+let activeInvite=null,inviteAcceptedThisSession=false;
+function inviteTokenFromURL(){return new URLSearchParams(location.search).get("invite")}
+function renderInviteBanner(inv){const h=`<strong>You’ve been invited to ${escapeHTML(inv.production_name||"this production")}${inv.season?" · "+escapeHTML(inv.season):""}</strong><span>${escapeHTML(inv.name||"")} · ${escapeHTML(inv.crew_position||"")} · ${escapeHTML(inv.email||"")}</span>`;["inviteLoginBanner","inviteSetupBanner"].forEach(id=>{const el=$(id);if(el){el.innerHTML=h;el.className="invite-banner"}})}
+function prefillInviteSetup(){if(!activeInvite)return;if($("crewName")&&!$("crewName").value)$("crewName").value=activeInvite.name||"";if($("position")&&activeInvite.crew_position)$("position").value=activeInvite.crew_position}
+async function loadInvite(){const token=inviteTokenFromURL();if(!token)return;try{const{data,error}=await supabaseClient.rpc("get_production_invite",{invite_token:token});if(error)throw error;const inv=Array.isArray(data)?data[0]:data;if(!inv)throw Error("This invite is invalid, expired, or has already been used.");activeInvite=inv;renderInviteBanner(inv);prefillInviteSetup();if($("email"))$("email").value=inv.email||""}catch(e){const el=$("inviteLoginBanner");if(el){el.textContent=e.message;el.className="invite-error"}}}
+async function acceptActiveInvite(){if(!activeInvite||inviteAcceptedThisSession||!currentUser)return true;try{const{data,error}=await supabaseClient.rpc("accept_production_invite",{invite_token:inviteTokenFromURL()});if(error)throw error;const a=Array.isArray(data)?data[0]:data;inviteAcceptedThisSession=true;if(a?.production_id)productionId=a.production_id;if(a?.name)activeInvite.name=a.name;if(a?.crew_position)activeInvite.crew_position=a.crew_position;prefillInviteSetup();return true}catch(e){showMessage("loginMessage",e.message||"Unable to accept invite.","error");return false}}
+
+</script>
 <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 <script>
@@ -453,10 +467,10 @@ function updateHoursPreview(){const s=parseTimeToMinutes($("startTime").value),e
   });
   field.addEventListener("blur",()=>formatTimeField(field));
 });
-async function initialize(){try{const{data:{session}}=await supabaseClient.auth.getSession();if(!session){showScreen("loginScreen");return}currentUser=session.user;await loadProfile()}catch(e){showScreen("loginScreen");showMessage("loginMessage",e.message||"Unable to connect.","error")}}
+async function initialize(){try{await loadInvite();const{data:{session}}=await supabaseClient.auth.getSession();if(!session){showScreen("loginScreen");return}currentUser=session.user;await loadProfile()}catch(e){showScreen("loginScreen");showMessage("loginMessage",e.message||"Unable to connect.","error")}}
 async function signUp(){try{const email=$("email").value.trim(),password=$("password").value;if(!email||!password)throw Error("Please enter an email and password.");const{data,error}=await supabaseClient.auth.signUp({email,password});if(error)throw error;currentUser=data.user;showMessage("loginMessage","Account created. You can now log in.","success")}catch(e){showMessage("loginMessage",e.message||"Unable to create account.","error")}}
 async function signIn(){try{const email=$("email").value.trim(),password=$("password").value;if(!email||!password)throw Error("Please enter an email and password.");const{data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;currentUser=data.user;await loadProfile()}catch(e){showMessage("loginMessage",e.message||"Unable to log in.","error")}}
-async function loadProfile(){try{
+async function loadProfile(){try{if(activeInvite){const ok=await acceptActiveInvite();if(!ok){showScreen("loginScreen");return}}
   const{data,error}=await supabaseClient.from("crew_profiles").select("*").eq("user_id",currentUser.id).limit(1);
   if(error)throw error;
   if(!data||!data.length){await findProduction();showScreen("setupScreen");return}
