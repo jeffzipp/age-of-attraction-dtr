@@ -4,10 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#111111">
+
   <title>Age of Attraction DTR</title>
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -43,7 +46,9 @@
       color: #ccc;
     }
 
-    input, select, textarea {
+    input,
+    select,
+    textarea {
       width: 100%;
       padding: 13px;
       border-radius: 7px;
@@ -61,6 +66,11 @@
     textarea {
       min-height: 90px;
       resize: vertical;
+    }
+
+    input:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
     }
 
     input:focus,
@@ -87,6 +97,10 @@
       background: #333;
       color: white;
       border: 1px solid #555;
+    }
+
+    button:hover {
+      opacity: 0.9;
     }
 
     .subtitle {
@@ -172,6 +186,31 @@
       font-size: 16px;
       font-weight: bold;
     }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 22px;
+      padding: 14px;
+      background: #1d1d1d;
+      border: 1px solid #444;
+      border-radius: 7px;
+      cursor: pointer;
+    }
+
+    .checkbox-row input {
+      width: 20px;
+      height: 20px;
+      margin: 0;
+      padding: 0;
+      accent-color: white;
+    }
+
+    .checkbox-row span {
+      font-size: 16px;
+      color: white;
+    }
   </style>
 </head>
 
@@ -187,22 +226,44 @@
     <h2>Season 2 · Sound Department</h2>
 
     <label>Email</label>
-    <input type="email" id="email" autocomplete="email">
+    <input
+      type="email"
+      id="email"
+      autocomplete="email"
+    >
 
     <label>Password</label>
-    <input type="password" id="password" autocomplete="current-password">
+    <input
+      type="password"
+      id="password"
+      autocomplete="current-password"
+    >
 
-    <button onclick="signIn()">Log In</button>
-    <button class="secondary" onclick="signUp()">Create Account</button>
+    <button onclick="signIn()">
+      Log In
+    </button>
 
-    <div id="loginMessage" class="message"></div>
+    <button
+      class="secondary"
+      onclick="signUp()"
+    >
+      Create Account
+    </button>
+
+    <div
+      id="loginMessage"
+      class="message"
+    ></div>
 
   </div>
 
 
   <!-- CREW SETUP -->
 
-  <div id="setupScreen" class="hidden">
+  <div
+    id="setupScreen"
+    class="hidden"
+  >
 
     <h1>Crew Setup</h1>
 
@@ -211,10 +272,19 @@
     </div>
 
     <label>Name</label>
-    <input type="text" id="crewName">
+    <input
+      type="text"
+      id="crewName"
+    >
+
 
     <label>Department</label>
-    <input type="text" value="Sound" disabled>
+    <input
+      type="text"
+      value="Sound"
+      disabled
+    >
+
 
     <label>Position</label>
 
@@ -229,26 +299,42 @@
 
     <label>Employee Type</label>
 
-    <select id="employmentType" onchange="updateEmploymentFields()">
+    <select
+      id="employmentType"
+      onchange="updateEmploymentFields()"
+    >
       <option value="">Select type</option>
-      <option value="Employee">Employee</option>
+      <option value="Employee">
+        Employee
+      </option>
       <option value="Incorporated Contractor">
         Incorporated Contractor
       </option>
     </select>
 
 
-    <div id="corporationFields" class="hidden section">
+    <!-- CORPORATION -->
+
+    <div
+      id="corporationFields"
+      class="hidden section"
+    >
 
       <div class="section-title">
         Corporation Information
       </div>
 
       <label>Corporation Name</label>
-      <input type="text" id="corporationName">
+      <input
+        type="text"
+        id="corporationName"
+      >
 
       <label>GST #</label>
-      <input type="text" id="gstNumber">
+      <input
+        type="text"
+        id="gstNumber"
+      >
 
       <label>GST Amount</label>
       <input
@@ -261,6 +347,8 @@
 
     </div>
 
+
+    <!-- RATE -->
 
     <div class="section">
 
@@ -310,11 +398,14 @@
     </div>
 
 
+    <!-- PRODUCTION INFO -->
+
     <div class="section">
 
       <div class="section-title">
         Production Information
       </div>
+
 
       <label>Local / Hotel</label>
 
@@ -350,20 +441,32 @@
       Save Profile
     </button>
 
-    <div id="setupMessage" class="message"></div>
+    <div
+      id="setupMessage"
+      class="message"
+    ></div>
 
   </div>
 
 
-  <!-- DAILY DTR -->
+  <!-- DTR -->
 
-  <div id="dtrScreen" class="hidden">
+  <div
+    id="dtrScreen"
+    class="hidden"
+  >
 
     <div class="top-bar">
 
       <div>
+
         <h1>Daily DTR</h1>
-        <div class="subtitle" id="crewGreeting"></div>
+
+        <div
+          class="subtitle"
+          id="crewGreeting"
+        ></div>
+
       </div>
 
       <button
@@ -377,7 +480,11 @@
 
 
     <label>Date</label>
-    <input type="date" id="dtrDate">
+
+    <input
+      type="date"
+      id="dtrDate"
+    >
 
 
     <label>IN</label>
@@ -396,28 +503,47 @@
     </div>
 
 
-    <label>Lunch Start</label>
+    <!-- NO LUNCH -->
 
-    <input
-      type="text"
-      id="lunchStart"
-      placeholder="13:00"
-      inputmode="numeric"
-      maxlength="5"
-      autocomplete="off"
-    >
+    <label class="checkbox-row">
+
+      <input
+        type="checkbox"
+        id="noLunch"
+        onchange="toggleLunch()"
+      >
+
+      <span>No Lunch</span>
+
+    </label>
 
 
-    <label>Lunch End</label>
+    <div id="lunchFields">
 
-    <input
-      type="text"
-      id="lunchEnd"
-      placeholder="13:30"
-      inputmode="numeric"
-      maxlength="5"
-      autocomplete="off"
-    >
+      <label>Lunch Start</label>
+
+      <input
+        type="text"
+        id="lunchStart"
+        placeholder="13:00"
+        inputmode="numeric"
+        maxlength="5"
+        autocomplete="off"
+      >
+
+
+      <label>Lunch End</label>
+
+      <input
+        type="text"
+        id="lunchEnd"
+        placeholder="13:30"
+        inputmode="numeric"
+        maxlength="5"
+        autocomplete="off"
+      >
+
+    </div>
 
 
     <label>OUT</label>
@@ -435,6 +561,8 @@
       For after-midnight finishes use 25:00, 26:30, etc. Maximum 48:00.
     </div>
 
+
+    <!-- HOURS PREVIEW -->
 
     <div
       id="hoursPreview"
@@ -466,7 +594,10 @@
       Submit DTR
     </button>
 
-    <div id="dtrMessage" class="message"></div>
+    <div
+      id="dtrMessage"
+      class="message"
+    ></div>
 
   </div>
 
@@ -496,6 +627,10 @@ let productionId = null;
 
 
 
+// -----------------------------------------------------
+// SCREEN HELPERS
+// -----------------------------------------------------
+
 function showScreen(screenId) {
 
   document
@@ -517,7 +652,11 @@ function showScreen(screenId) {
 
 
 
-function showMessage(elementId, message, type) {
+function showMessage(
+  elementId,
+  message,
+  type
+) {
 
   const element =
     document.getElementById(elementId);
@@ -530,6 +669,10 @@ function showMessage(elementId, message, type) {
 
 
 
+// -----------------------------------------------------
+// DATE
+// -----------------------------------------------------
+
 function todayString() {
 
   const now = new Date();
@@ -538,44 +681,70 @@ function todayString() {
     now.getFullYear();
 
   const month =
-    String(now.getMonth() + 1)
-      .padStart(2, "0");
+    String(
+      now.getMonth() + 1
+    ).padStart(2, "0");
 
   const day =
-    String(now.getDate())
-      .padStart(2, "0");
+    String(
+      now.getDate()
+    ).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
 }
 
 
 
+// -----------------------------------------------------
+// TIME
+// -----------------------------------------------------
+
 function parseTimeToMinutes(value) {
 
   value = value.trim();
 
   const match =
-    value.match(/^(\d{1,2}):([0-5]\d)$/);
+    value.match(
+      /^(\d{1,2}):([0-5]\d)$/
+    );
 
   if (!match) {
     return null;
   }
 
+
   const hours =
-    parseInt(match[1], 10);
+    parseInt(
+      match[1],
+      10
+    );
 
   const minutes =
-    parseInt(match[2], 10);
+    parseInt(
+      match[2],
+      10
+    );
 
-  if (hours < 0 || hours > 48) {
+
+  if (
+    hours < 0 ||
+    hours > 48
+  ) {
     return null;
   }
 
-  if (hours === 48 && minutes > 0) {
+
+  if (
+    hours === 48 &&
+    minutes > 0
+  ) {
     return null;
   }
 
-  return (hours * 60) + minutes;
+
+  return (
+    hours * 60
+  ) + minutes;
 }
 
 
@@ -583,129 +752,241 @@ function parseTimeToMinutes(value) {
 function minutesToDisplay(minutes) {
 
   const hours =
-    Math.floor(minutes / 60);
+    Math.floor(
+      minutes / 60
+    );
 
   const mins =
     minutes % 60;
 
+
   if (mins === 0) {
     return `${hours}h`;
   }
+
 
   return `${hours}h ${mins}m`;
 }
 
 
 
+// -----------------------------------------------------
+// EMPLOYEE / CORPORATION
+// -----------------------------------------------------
+
 function updateEmploymentFields() {
 
   const type =
-    document.getElementById(
-      "employmentType"
-    ).value;
+    document
+      .getElementById(
+        "employmentType"
+      )
+      .value;
 
   const fields =
-    document.getElementById(
-      "corporationFields"
-    );
+    document
+      .getElementById(
+        "corporationFields"
+      );
 
-  if (type === "Incorporated Contractor") {
 
-    fields.classList.remove("hidden");
+  if (
+    type ===
+    "Incorporated Contractor"
+  ) {
+
+    fields
+      .classList
+      .remove("hidden");
 
   } else {
 
-    fields.classList.add("hidden");
+    fields
+      .classList
+      .add("hidden");
 
   }
 }
 
 
 
+// -----------------------------------------------------
+// NO LUNCH
+// -----------------------------------------------------
+
+function toggleLunch() {
+
+  const noLunch =
+    document
+      .getElementById(
+        "noLunch"
+      )
+      .checked;
+
+  const lunchStart =
+    document
+      .getElementById(
+        "lunchStart"
+      );
+
+  const lunchEnd =
+    document
+      .getElementById(
+        "lunchEnd"
+      );
+
+
+  lunchStart.disabled =
+    noLunch;
+
+  lunchEnd.disabled =
+    noLunch;
+
+
+  if (noLunch) {
+
+    lunchStart.value = "";
+    lunchEnd.value = "";
+
+  }
+
+
+  updateHoursPreview();
+}
+
+
+
+// -----------------------------------------------------
+// HOURS PREVIEW
+// -----------------------------------------------------
+
 function updateHoursPreview() {
 
   const start =
     parseTimeToMinutes(
-      document.getElementById(
-        "startTime"
-      ).value
-    );
-
-  const lunchStart =
-    parseTimeToMinutes(
-      document.getElementById(
-        "lunchStart"
-      ).value
-    );
-
-  const lunchEnd =
-    parseTimeToMinutes(
-      document.getElementById(
-        "lunchEnd"
-      ).value
+      document
+        .getElementById(
+          "startTime"
+        )
+        .value
     );
 
   const end =
     parseTimeToMinutes(
-      document.getElementById(
-        "endTime"
-      ).value
+      document
+        .getElementById(
+          "endTime"
+        )
+        .value
     );
 
+  const noLunch =
+    document
+      .getElementById(
+        "noLunch"
+      )
+      .checked;
 
   const preview =
-    document.getElementById(
-      "hoursPreview"
-    );
+    document
+      .getElementById(
+        "hoursPreview"
+      );
 
 
   if (
     start === null ||
-    lunchStart === null ||
-    lunchEnd === null ||
-    end === null
+    end === null ||
+    end <= start
   ) {
 
-    preview.classList.add("hidden");
+    preview
+      .classList
+      .add("hidden");
 
     return;
   }
 
 
-  if (
-    lunchStart < start ||
-    lunchEnd <= lunchStart ||
-    end <= lunchEnd
-  ) {
+  let lunchMinutes = 0;
 
-    preview.classList.add("hidden");
 
-    return;
+  if (!noLunch) {
+
+    const lunchStart =
+      parseTimeToMinutes(
+        document
+          .getElementById(
+            "lunchStart"
+          )
+          .value
+      );
+
+    const lunchEnd =
+      parseTimeToMinutes(
+        document
+          .getElementById(
+            "lunchEnd"
+          )
+          .value
+      );
+
+
+    if (
+      lunchStart === null ||
+      lunchEnd === null ||
+      lunchStart < start ||
+      lunchEnd <= lunchStart ||
+      end <= lunchEnd
+    ) {
+
+      preview
+        .classList
+        .add("hidden");
+
+      return;
+    }
+
+
+    lunchMinutes =
+      lunchEnd -
+      lunchStart;
   }
 
-
-  const lunchMinutes =
-    lunchEnd - lunchStart;
 
   const totalMinutes =
-    end - start - lunchMinutes;
+    end -
+    start -
+    lunchMinutes;
 
 
-  document.getElementById(
-    "hoursNumber"
-  ).textContent =
-    "Total: " +
-    minutesToDisplay(totalMinutes);
+  document
+    .getElementById(
+      "hoursNumber"
+    )
+    .textContent =
+      "Total: " +
+      minutesToDisplay(
+        totalMinutes
+      );
 
 
-  document.getElementById(
-    "hoursDetail"
-  ).textContent =
-    "Lunch: " +
-    minutesToDisplay(lunchMinutes);
+  document
+    .getElementById(
+      "hoursDetail"
+    )
+    .textContent =
+      noLunch
+        ? "No Lunch"
+        : "Lunch: " +
+          minutesToDisplay(
+            lunchMinutes
+          );
 
 
-  preview.classList.remove("hidden");
+  preview
+    .classList
+    .remove("hidden");
 }
 
 
@@ -728,17 +1009,25 @@ function updateHoursPreview() {
 
 
 
+// -----------------------------------------------------
+// INITIALIZE
+// -----------------------------------------------------
+
 async function initialize() {
 
   const {
     data: { session }
   } =
-    await supabaseClient.auth.getSession();
+    await supabaseClient
+      .auth
+      .getSession();
 
 
   if (!session) {
 
-    showScreen("loginScreen");
+    showScreen(
+      "loginScreen"
+    );
 
     return;
   }
@@ -752,21 +1041,32 @@ async function initialize() {
 
 
 
+// -----------------------------------------------------
+// SIGN UP
+// -----------------------------------------------------
+
 async function signUp() {
 
   const email =
     document
-      .getElementById("email")
+      .getElementById(
+        "email"
+      )
       .value
       .trim();
 
   const password =
     document
-      .getElementById("password")
+      .getElementById(
+        "password"
+      )
       .value;
 
 
-  if (!email || !password) {
+  if (
+    !email ||
+    !password
+  ) {
 
     showMessage(
       "loginMessage",
@@ -778,11 +1078,16 @@ async function signUp() {
   }
 
 
-  const { data, error } =
-    await supabaseClient.auth.signUp({
-      email,
-      password
-    });
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .auth
+      .signUp({
+        email,
+        password
+      });
 
 
   if (error) {
@@ -810,21 +1115,32 @@ async function signUp() {
 
 
 
+// -----------------------------------------------------
+// SIGN IN
+// -----------------------------------------------------
+
 async function signIn() {
 
   const email =
     document
-      .getElementById("email")
+      .getElementById(
+        "email"
+      )
       .value
       .trim();
 
   const password =
     document
-      .getElementById("password")
+      .getElementById(
+        "password"
+      )
       .value;
 
 
-  if (!email || !password) {
+  if (
+    !email ||
+    !password
+  ) {
 
     showMessage(
       "loginMessage",
@@ -836,8 +1152,12 @@ async function signIn() {
   }
 
 
-  const { data, error } =
-    await supabaseClient.auth
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .auth
       .signInWithPassword({
         email,
         password
@@ -864,6 +1184,10 @@ async function signIn() {
 
 
 
+// -----------------------------------------------------
+// LOAD PROFILE
+// -----------------------------------------------------
+
 async function loadProfile() {
 
   const {
@@ -871,7 +1195,9 @@ async function loadProfile() {
     error
   } =
     await supabaseClient
-      .from("crew_profiles")
+      .from(
+        "crew_profiles"
+      )
       .select("*")
       .eq(
         "user_id",
@@ -888,7 +1214,9 @@ async function loadProfile() {
       "error"
     );
 
-    showScreen("loginScreen");
+    showScreen(
+      "loginScreen"
+    );
 
     return;
   }
@@ -901,7 +1229,9 @@ async function loadProfile() {
 
     await findProduction();
 
-    showScreen("setupScreen");
+    showScreen(
+      "setupScreen"
+    );
 
     return;
   }
@@ -911,28 +1241,26 @@ async function loadProfile() {
     profiles[0];
 
   productionId =
-    currentProfile.production_id;
+    currentProfile
+      .production_id;
 
-
-  /*
-    Existing profiles were created
-    before the new payroll fields existed.
-
-    If the important new fields are
-    missing, send the user back through
-    setup so they can complete them.
-  */
 
   if (
-    !currentProfile.employment_type ||
-    !currentProfile.local_hotel ||
-    !currentProfile.province ||
-    !currentProfile.crew_initials
+    !currentProfile
+      .employment_type ||
+    !currentProfile
+      .local_hotel ||
+    !currentProfile
+      .province ||
+    !currentProfile
+      .crew_initials
   ) {
 
     populateProfileForm();
 
-    showScreen("setupScreen");
+    showScreen(
+      "setupScreen"
+    );
 
     return;
   }
@@ -943,6 +1271,10 @@ async function loadProfile() {
 
 
 
+// -----------------------------------------------------
+// POPULATE PROFILE
+// -----------------------------------------------------
+
 function populateProfileForm() {
 
   if (!currentProfile) {
@@ -950,82 +1282,132 @@ function populateProfileForm() {
   }
 
 
-  document.getElementById(
-    "crewName"
-  ).value =
-    currentProfile.name || "";
+  document
+    .getElementById(
+      "crewName"
+    )
+    .value =
+      currentProfile.name ||
+      "";
 
 
-  document.getElementById(
-    "position"
-  ).value =
-    currentProfile.position || "";
+  document
+    .getElementById(
+      "position"
+    )
+    .value =
+      currentProfile.position ||
+      "";
 
 
-  document.getElementById(
-    "employmentType"
-  ).value =
-    currentProfile.employment_type || "";
+  document
+    .getElementById(
+      "employmentType"
+    )
+    .value =
+      currentProfile
+        .employment_type ||
+      "";
 
 
-  document.getElementById(
-    "dayRate"
-  ).value =
-    currentProfile.day_rate || 0;
+  document
+    .getElementById(
+      "dayRate"
+    )
+    .value =
+      currentProfile
+        .day_rate ||
+      0;
 
 
-  document.getElementById(
-    "kitRental"
-  ).value =
-    currentProfile.kit_rental || 0;
+  document
+    .getElementById(
+      "kitRental"
+    )
+    .value =
+      currentProfile
+        .kit_rental ||
+      0;
 
 
-  document.getElementById(
-    "equipmentNotes"
-  ).value =
-    currentProfile.equipment_notes || "";
+  document
+    .getElementById(
+      "equipmentNotes"
+    )
+    .value =
+      currentProfile
+        .equipment_notes ||
+      "";
 
 
-  document.getElementById(
-    "feeType"
-  ).value =
-    currentProfile.fee_type || "None";
+  document
+    .getElementById(
+      "feeType"
+    )
+    .value =
+      currentProfile
+        .fee_type ||
+      "None";
 
 
-  document.getElementById(
-    "localHotel"
-  ).value =
-    currentProfile.local_hotel || "";
+  document
+    .getElementById(
+      "localHotel"
+    )
+    .value =
+      currentProfile
+        .local_hotel ||
+      "";
 
 
-  document.getElementById(
-    "province"
-  ).value =
-    currentProfile.province || "";
+  document
+    .getElementById(
+      "province"
+    )
+    .value =
+      currentProfile
+        .province ||
+      "";
 
 
-  document.getElementById(
-    "corporationName"
-  ).value =
-    currentProfile.corporation_name || "";
+  document
+    .getElementById(
+      "corporationName"
+    )
+    .value =
+      currentProfile
+        .corporation_name ||
+      "";
 
 
-  document.getElementById(
-    "gstNumber"
-  ).value =
-    currentProfile.gst_number || "";
+  document
+    .getElementById(
+      "gstNumber"
+    )
+    .value =
+      currentProfile
+        .gst_number ||
+      "";
 
 
-  document.getElementById(
-    "gstAmount"
-  ).value =
-    currentProfile.gst_amount || "";
+  document
+    .getElementById(
+      "gstAmount"
+    )
+    .value =
+      currentProfile
+        .gst_amount ||
+      "";
 
 
-  document.getElementById(
-    "crewInitials"
-  ).value =
-    currentProfile.crew_initials || "";
+  document
+    .getElementById(
+      "crewInitials"
+    )
+    .value =
+      currentProfile
+        .crew_initials ||
+      "";
 
 
   updateEmploymentFields();
@@ -1033,11 +1415,20 @@ function populateProfileForm() {
 
 
 
+// -----------------------------------------------------
+// FIND PRODUCTION
+// -----------------------------------------------------
+
 async function findProduction() {
 
-  const { data, error } =
+  const {
+    data,
+    error
+  } =
     await supabaseClient
-      .from("productions")
+      .from(
+        "productions"
+      )
       .select("*")
       .eq(
         "name",
@@ -1063,7 +1454,10 @@ async function findProduction() {
   }
 
 
-  if (!data || data.length === 0) {
+  if (
+    !data ||
+    data.length === 0
+  ) {
 
     showMessage(
       "setupMessage",
@@ -1081,17 +1475,25 @@ async function findProduction() {
 
 
 
+// -----------------------------------------------------
+// SAVE PROFILE
+// -----------------------------------------------------
+
 async function saveProfile() {
 
   const name =
     document
-      .getElementById("crewName")
+      .getElementById(
+        "crewName"
+      )
       .value
       .trim();
 
   const position =
     document
-      .getElementById("position")
+      .getElementById(
+        "position"
+      )
       .value;
 
   const employmentType =
@@ -1103,23 +1505,28 @@ async function saveProfile() {
 
   const dayRate =
     parseFloat(
-      document.getElementById(
-        "dayRate"
-      ).value
+      document
+        .getElementById(
+          "dayRate"
+        )
+        .value
     ) || 0;
 
   const kitRental =
     parseFloat(
-      document.getElementById(
-        "kitRental"
-      ).value
+      document
+        .getElementById(
+          "kitRental"
+        )
+        .value
     ) || 0;
 
   const feeType =
     document
       .getElementById(
         "feeType"
-      ).value;
+      )
+      .value;
 
   const equipmentNotes =
     document
@@ -1133,13 +1540,15 @@ async function saveProfile() {
     document
       .getElementById(
         "localHotel"
-      ).value;
+      )
+      .value;
 
   const province =
     document
       .getElementById(
         "province"
-      ).value;
+      )
+      .value;
 
   const crewInitials =
     document
@@ -1168,9 +1577,11 @@ async function saveProfile() {
 
   const gstAmount =
     parseFloat(
-      document.getElementById(
-        "gstAmount"
-      ).value
+      document
+        .getElementById(
+          "gstAmount"
+        )
+        .value
     ) || 0;
 
 
@@ -1196,7 +1607,10 @@ async function saveProfile() {
   if (
     employmentType ===
       "Incorporated Contractor" &&
-    (!corporationName || !gstNumber)
+    (
+      !corporationName ||
+      !gstNumber
+    )
   ) {
 
     showMessage(
@@ -1274,7 +1688,6 @@ async function saveProfile() {
         "Incorporated Contractor"
         ? gstAmount
         : null
-
   };
 
 
@@ -1285,8 +1698,12 @@ async function saveProfile() {
 
     result =
       await supabaseClient
-        .from("crew_profiles")
-        .update(profileData)
+        .from(
+          "crew_profiles"
+        )
+        .update(
+          profileData
+        )
         .eq(
           "id",
           currentProfile.id
@@ -1298,8 +1715,12 @@ async function saveProfile() {
 
     result =
       await supabaseClient
-        .from("crew_profiles")
-        .insert(profileData)
+        .from(
+          "crew_profiles"
+        )
+        .insert(
+          profileData
+        )
         .select()
         .single();
 
@@ -1321,32 +1742,45 @@ async function saveProfile() {
   currentProfile =
     result.data;
 
-
   showDTR();
 }
 
 
 
+// -----------------------------------------------------
+// SHOW DTR
+// -----------------------------------------------------
+
 function showDTR() {
 
-  showScreen("dtrScreen");
+  showScreen(
+    "dtrScreen"
+  );
 
 
-  document.getElementById(
-    "dtrDate"
-  ).value =
-    todayString();
+  document
+    .getElementById(
+      "dtrDate"
+    )
+    .value =
+      todayString();
 
 
-  document.getElementById(
-    "crewGreeting"
-  ).textContent =
-    currentProfile.name +
-    " · " +
-    currentProfile.position;
+  document
+    .getElementById(
+      "crewGreeting"
+    )
+    .textContent =
+      currentProfile.name +
+      " · " +
+      currentProfile.position;
 }
 
 
+
+// -----------------------------------------------------
+// SUBMIT DTR
+// -----------------------------------------------------
 
 async function submitDTR() {
 
@@ -1354,31 +1788,29 @@ async function submitDTR() {
     document
       .getElementById(
         "dtrDate"
-      ).value;
+      )
+      .value;
 
   const startValue =
     document
       .getElementById(
         "startTime"
-      ).value;
-
-  const lunchStartValue =
-    document
-      .getElementById(
-        "lunchStart"
-      ).value;
-
-  const lunchEndValue =
-    document
-      .getElementById(
-        "lunchEnd"
-      ).value;
+      )
+      .value;
 
   const endValue =
     document
       .getElementById(
         "endTime"
-      ).value;
+      )
+      .value;
+
+  const noLunch =
+    document
+      .getElementById(
+        "noLunch"
+      )
+      .checked;
 
   const notes =
     document
@@ -1392,14 +1824,12 @@ async function submitDTR() {
   if (
     !date ||
     !startValue ||
-    !lunchStartValue ||
-    !lunchEndValue ||
     !endValue
   ) {
 
     showMessage(
       "dtrMessage",
-      "Please complete IN, Lunch Start, Lunch End and OUT.",
+      "Please complete the date, IN and OUT.",
       "error"
     );
 
@@ -1408,59 +1838,24 @@ async function submitDTR() {
 
 
   const startMinutes =
-    parseTimeToMinutes(startValue);
-
-  const lunchStartMinutes =
     parseTimeToMinutes(
-      lunchStartValue
-    );
-
-  const lunchEndMinutes =
-    parseTimeToMinutes(
-      lunchEndValue
+      startValue
     );
 
   const endMinutes =
-    parseTimeToMinutes(endValue);
+    parseTimeToMinutes(
+      endValue
+    );
 
 
   if (
     startMinutes === null ||
-    lunchStartMinutes === null ||
-    lunchEndMinutes === null ||
     endMinutes === null
   ) {
 
     showMessage(
       "dtrMessage",
-      "Times must use HH:MM format and be between 00:00 and 48:00.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  if (lunchStartMinutes < startMinutes) {
-
-    showMessage(
-      "dtrMessage",
-      "Lunch Start cannot be before IN.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  if (
-    lunchEndMinutes <=
-    lunchStartMinutes
-  ) {
-
-    showMessage(
-      "dtrMessage",
-      "Lunch End must be later than Lunch Start.",
+      "IN and OUT must use HH:MM format and be between 00:00 and 48:00.",
       "error"
     );
 
@@ -1470,12 +1865,12 @@ async function submitDTR() {
 
   if (
     endMinutes <=
-    lunchEndMinutes
+    startMinutes
   ) {
 
     showMessage(
       "dtrMessage",
-      "OUT must be later than Lunch End. For after-midnight finishes, use 25:00, 26:30, etc.",
+      "OUT must be later than IN. For after-midnight finishes use 25:00, 26:30, etc.",
       "error"
     );
 
@@ -1483,11 +1878,127 @@ async function submitDTR() {
   }
 
 
-  const { error } =
+  let lunchStartMinutes =
+    null;
+
+  let lunchEndMinutes =
+    null;
+
+
+  if (!noLunch) {
+
+    const lunchStartValue =
+      document
+        .getElementById(
+          "lunchStart"
+        )
+        .value;
+
+    const lunchEndValue =
+      document
+        .getElementById(
+          "lunchEnd"
+        )
+        .value;
+
+
+    if (
+      !lunchStartValue ||
+      !lunchEndValue
+    ) {
+
+      showMessage(
+        "dtrMessage",
+        "Please enter Lunch Start and Lunch End, or select No Lunch.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    lunchStartMinutes =
+      parseTimeToMinutes(
+        lunchStartValue
+      );
+
+    lunchEndMinutes =
+      parseTimeToMinutes(
+        lunchEndValue
+      );
+
+
+    if (
+      lunchStartMinutes === null ||
+      lunchEndMinutes === null
+    ) {
+
+      showMessage(
+        "dtrMessage",
+        "Lunch times must use HH:MM format.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    if (
+      lunchStartMinutes <
+      startMinutes
+    ) {
+
+      showMessage(
+        "dtrMessage",
+        "Lunch Start cannot be before IN.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    if (
+      lunchEndMinutes <=
+      lunchStartMinutes
+    ) {
+
+      showMessage(
+        "dtrMessage",
+        "Lunch End must be later than Lunch Start.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    if (
+      endMinutes <=
+      lunchEndMinutes
+    ) {
+
+      showMessage(
+        "dtrMessage",
+        "OUT must be later than Lunch End.",
+        "error"
+      );
+
+      return;
+    }
+  }
+
+
+  const {
+    error
+  } =
     await supabaseClient
-      .from("dtrs")
+      .from(
+        "dtrs"
+      )
       .upsert(
         {
+
           crew_profile_id:
             currentProfile.id,
 
@@ -1498,13 +2009,20 @@ async function submitDTR() {
             startMinutes,
 
           lunch_start_minutes:
-            lunchStartMinutes,
+            noLunch
+              ? null
+              : lunchStartMinutes,
 
           lunch_end_minutes:
-            lunchEndMinutes,
+            noLunch
+              ? null
+              : lunchEndMinutes,
 
           end_minutes:
             endMinutes,
+
+          no_lunch:
+            noLunch,
 
           notes:
             notes,
@@ -1513,7 +2031,9 @@ async function submitDTR() {
             "submitted",
 
           updated_at:
-            new Date().toISOString()
+            new Date()
+              .toISOString()
+
         },
         {
           onConflict:
@@ -1543,15 +2063,23 @@ async function submitDTR() {
 
 
 
+// -----------------------------------------------------
+// SIGN OUT
+// -----------------------------------------------------
+
 async function signOut() {
 
-  await supabaseClient.auth.signOut();
+  await supabaseClient
+    .auth
+    .signOut();
 
   currentUser = null;
   currentProfile = null;
   productionId = null;
 
-  showScreen("loginScreen");
+  showScreen(
+    "loginScreen"
+  );
 }
 
 
