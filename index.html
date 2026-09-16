@@ -118,6 +118,21 @@
   .timesheet-launch-sub{font-size:12px!important}
 }
 
+
+/* v16 — submitted DTR status */
+#dtrScreen .editing-badge{
+  background:#17261b!important;
+  border:1px solid #2f5138!important;
+  color:#b9dfc1!important;
+  padding:10px 12px!important;
+  border-radius:9px!important;
+  font-size:13px!important;
+  line-height:1.35!important;
+}
+#dtrScreen .editing-badge.show{
+  display:block!important;
+}
+
 </style>
 </head>
 <body>
@@ -163,7 +178,7 @@
   </div>
 
   <div id="editingBadge" class="editing-badge">
-    Existing DTR loaded — edit anything below and tap Update DTR.
+    ✓ DTR Submitted — You can edit this day below.
   </div>
 
   <div class="time-grid">
