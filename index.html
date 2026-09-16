@@ -52,6 +52,18 @@
   .time-cell input{font-size:21px;padding:13px 8px}
 }
 
+
+/* v14 — stronger Timesheet navigation + iPhone PDF preview */
+.timesheet-launch{display:flex;align-items:center;gap:13px;width:100%;margin:0 0 14px;padding:16px;border-radius:14px;background:#202020;color:#fff;border:1px solid #4a4a4a;text-align:left}
+.timesheet-launch-icon{font-size:24px;line-height:1}
+.timesheet-launch-copy{flex:1}.timesheet-launch-title{font-size:17px;font-weight:700}.timesheet-launch-sub{font-size:12px;color:#888;margin-top:3px;font-weight:400}.timesheet-launch-arrow{font-size:24px;color:#aaa}
+.timesheet-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}.timesheet-header h1{margin:0 0 5px}.timesheet-header .subtitle{margin:0}.back-dtr{width:auto;margin:0;padding:9px 12px;font-size:13px}
+.week-nav{display:grid;grid-template-columns:48px 1fr 48px;align-items:stretch;gap:8px;margin:0 0 10px}.week-nav button{margin:0;min-width:0;padding:12px 8px}.week-nav .week-center{background:#1d1d1d;border:1px solid #3b3b3b;border-radius:10px;text-align:center;padding:9px 8px;cursor:pointer}.week-nav .week-ending-label{font-size:10px}.week-nav .week-ending-date{font-size:16px;margin-top:3px}
+.pdf-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.pdf-actions button{margin:0;padding:12px 10px;min-width:0}
+.pdf-container{width:100%;max-width:100%;padding:10px;background:#1a1a1a;border:1px solid #333;border-radius:12px;overflow:hidden}.pdf-preview-wrap{width:100%;display:flex;justify-content:center;overflow:hidden;background:#252525;border-radius:7px}.pdf-preview-wrap canvas{display:block;max-width:100%;height:auto;background:white}.pdf-preview-caption{text-align:center;color:#777;font-size:11px;padding-top:8px}
+#timesheetPDF{display:none!important}.loading{padding:45px 15px}
+@media(max-width:600px){.container.wide{max-width:100%;padding-left:14px;padding-right:14px}.timesheet-header{margin-bottom:14px}.timesheet-header h1{font-size:28px}.week-nav{grid-template-columns:44px 1fr 44px}.week-nav button{font-size:20px;padding:10px 5px}.pdf-container{padding:8px}.timesheet-note{font-size:11px;margin-top:8px}}
+
 </style>
 </head>
 <body>
@@ -83,6 +95,12 @@
     <button class="secondary" onclick="signOut()">Log Out</button>
   </div>
 </div>
+
+<button class="timesheet-launch" onclick="openMyTimesheet()">
+  <span class="timesheet-launch-icon">▣</span>
+  <span class="timesheet-launch-copy"><span class="timesheet-launch-title">My Timesheet</span><span class="timesheet-launch-sub">View, open or send your weekly PDF</span></span>
+  <span class="timesheet-launch-arrow">›</span>
+</button>
 
 <div class="dtr-card">
   <div class="date-row">
@@ -141,17 +159,40 @@
 <button id="clearDayButton" class="danger hidden" onclick="clearDay()">Clear Day</button>
 <div id="dtrMessage" class="message"></div>
 
-<button class="dtr-foot-link" onclick="openMyTimesheet()">▣ My Timesheet</button>
 </div>
 <div id="timesheetScreen" class="hidden">
-<div class="top-bar"><div><h1>My Timesheet</h1><div class="subtitle" id="timesheetCrewName"></div></div><button class="secondary" onclick="showDTR()">DTR</button></div>
-<div class="week-ending"><div class="week-ending-label">Week Ending</div><div id="weekEndingDisplay" class="week-ending-date"></div></div>
-<div class="timesheet-actions"><button class="secondary" onclick="changeWeek(-7)">← Previous Week</button><button class="secondary" onclick="goToCurrentWeek()">This Week</button><button class="secondary" onclick="changeWeek(7)">Next Week →</button><button id="openPDFButton" class="secondary" onclick="openGeneratedPDF()" disabled>Open PDF</button><button id="sendPDFButton" class="secondary" onclick="sendGeneratedPDF()" disabled>Send PDF</button></div>
-<div id="timesheetMessage" class="message"></div><div class="pdf-container"><div id="pdfLoading" class="loading">Building your timesheet...</div><iframe id="timesheetPDF" class="hidden" title="Weekly Timesheet"></iframe></div><div class="timesheet-note">Production timesheet populated from your submitted DTRs.</div>
+<div class="timesheet-header">
+  <div><h1>My Timesheet</h1><div class="subtitle" id="timesheetCrewName"></div></div>
+  <button class="secondary back-dtr" onclick="showDTR()">← DTR</button>
+</div>
+
+<div class="week-nav">
+  <button class="secondary" onclick="changeWeek(-7)" aria-label="Previous week">‹</button>
+  <div class="week-center" onclick="goToCurrentWeek()" title="Go to this week">
+    <div class="week-ending-label">Week Ending</div>
+    <div id="weekEndingDisplay" class="week-ending-date"></div>
+  </div>
+  <button class="secondary" onclick="changeWeek(7)" aria-label="Next week">›</button>
+</div>
+
+<div class="pdf-actions">
+  <button id="openPDFButton" class="secondary" onclick="openGeneratedPDF()" disabled>Open PDF</button>
+  <button id="sendPDFButton" class="secondary" onclick="sendGeneratedPDF()" disabled>Send PDF</button>
+</div>
+
+<div id="timesheetMessage" class="message"></div>
+<div class="pdf-container">
+  <div id="pdfLoading" class="loading">Building your timesheet...</div>
+  <div id="pdfPreviewWrap" class="pdf-preview-wrap hidden"><canvas id="timesheetCanvas"></canvas></div>
+  <div id="pdfPreviewCaption" class="pdf-preview-caption hidden">Preview · Open PDF for full size</div>
+  <iframe id="timesheetPDF" class="hidden" title="Weekly Timesheet"></iframe>
+</div>
+<div class="timesheet-note">Production timesheet populated from your submitted DTRs.</div>
 </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 <script>
 const SUPABASE_URL="https://hyhzcikkoqvvfyiffmla.supabase.co";
 const SUPABASE_KEY="sb_publishable_Gl1oRE_S8bRTiI65vCnHRQ_InR0_wX1";
@@ -226,7 +267,27 @@ async function clearDay(){
 }
 async function submitDTR(){try{clearMessage("dtrMessage");["startTime","lunchStart","lunchEnd","endTime"].forEach(id=>formatTimeField($(id)));const date=$("dtrDate").value,startValue=$("startTime").value,endValue=$("endTime").value,noLunch=$("noLunch").checked,notes=$("dtrNotes").value.trim();if(!date||!startValue||!endValue)throw Error("Please complete the date, IN and OUT.");const start=parseTimeToMinutes(startValue),end=parseTimeToMinutes(endValue);if(start===null||end===null)throw Error("IN and OUT must use HH:MM format and be between 00:00 and 48:00.");if(end<=start)throw Error("OUT must be later than IN. For after-midnight finishes use 25:00, 26:30, etc.");let ls=null,le=null;if(!noLunch){ls=parseTimeToMinutes($("lunchStart").value);le=parseTimeToMinutes($("lunchEnd").value);if(ls===null||le===null)throw Error("Please enter valid Lunch Start and Lunch End, or select No Lunch.");if(ls<start)throw Error("Lunch Start cannot be before IN.");if(le<=ls)throw Error("Lunch End must be later than Lunch Start.");if(end<=le)throw Error("OUT must be later than Lunch End.")}const wasEditing=!!currentDTR;const{error}=await supabaseClient.from("dtrs").upsert({crew_profile_id:currentProfile.id,date,start_minutes:start,lunch_start_minutes:noLunch?null:ls,lunch_end_minutes:noLunch?null:le,end_minutes:end,no_lunch:noLunch,notes,status:"submitted",updated_at:new Date().toISOString()},{onConflict:"crew_profile_id,date"});if(error)throw error;await loadDTRForSelectedDate();showMessage("dtrMessage",wasEditing?"DTR updated successfully.":"DTR submitted successfully.","success")}catch(e){showMessage("dtrMessage",e.message||"Unable to submit DTR.","error")}}
 async function openMyTimesheet(){const selected=$("dtrDate").value;currentWeekEnding=getSaturdayForDate(selected?isoToLocalDate(selected):new Date());showScreen("timesheetScreen");$("timesheetCrewName").textContent=currentProfile.name+" · "+currentProfile.position;await buildTimesheet()}async function changeWeek(days){if(!currentWeekEnding)return;currentWeekEnding.setDate(currentWeekEnding.getDate()+days);await buildTimesheet()}async function goToCurrentWeek(){currentWeekEnding=getSaturdayForDate(new Date());await buildTimesheet()}
-async function buildTimesheet(){try{clearMessage("timesheetMessage");$("pdfLoading").classList.remove("hidden");$("timesheetPDF").classList.add("hidden");$("openPDFButton").disabled=true;$("sendPDFButton").disabled=true;$("weekEndingDisplay").textContent=formatDisplayDate(currentWeekEnding);const sunday=getSundayForSaturday(currentWeekEnding),sundayISO=dateToISO(sunday),saturdayISO=dateToISO(currentWeekEnding);const{data:dtrs,error:dtrError}=await supabaseClient.from("dtrs").select("*").eq("crew_profile_id",currentProfile.id).gte("date",sundayISO).lte("date",saturdayISO).order("date",{ascending:true});if(dtrError)throw dtrError;const{data:templates,error:templateError}=await supabaseClient.from("timesheet_templates").select("*").eq("production_id",productionId).eq("is_active",true).limit(1);if(templateError)throw templateError;if(!templates||!templates.length)throw Error("No timesheet template has been configured for this production.");const template=templates[0];const{data:mappings,error:mappingError}=await supabaseClient.from("timesheet_field_mappings").select("*").eq("template_id",template.id);if(mappingError)throw mappingError;const{data:pdfBlob,error:downloadError}=await supabaseClient.storage.from("timesheet-templates").download(template.file_path);if(downloadError)throw downloadError;const pdfDoc=await PDFLib.PDFDocument.load(await pdfBlob.arrayBuffer()),form=pdfDoc.getForm(),values=buildTimesheetValues(sunday,currentWeekEnding,dtrs||[]);let filled=0,errors=0;for(const mapping of mappings){const name=mapping.pdf_field_name,value=values[mapping.field_key];if(value===undefined||value===null||!name)continue;try{const field=form.getField(name);if(typeof field.setText==="function"){field.setText(String(value??""));filled++;continue}if(typeof field.check==="function"&&typeof field.uncheck==="function"){value===true?field.check():field.uncheck();filled++;continue}if(typeof field.select==="function"){field.select(String(value??""));filled++;continue}console.warn("Unhandled PDF field",name)}catch(e){errors++;console.error("PDF field failed",mapping.field_key,name,e)}}try{form.updateFieldAppearances()}catch(e){console.warn("Appearance update failed",e)}const bytes=await pdfDoc.save(),blob=new Blob([bytes],{type:"application/pdf"});if(currentPDFUrl)URL.revokeObjectURL(currentPDFUrl);currentPDFBlob=blob;currentPDFUrl=URL.createObjectURL(blob);$("timesheetPDF").src=currentPDFUrl;$("timesheetPDF").classList.remove("hidden");$("pdfLoading").classList.add("hidden");$("openPDFButton").disabled=false;$("sendPDFButton").disabled=false;if(!filled)showMessage("timesheetMessage","The PDF loaded, but no mapped fields could be filled.","error");else if(errors)showMessage("timesheetMessage",`${errors} PDF field(s) could not be filled.`,"error")}catch(e){console.error("TIMESHEET ERROR",e);$("pdfLoading").classList.add("hidden");showMessage("timesheetMessage",e.message||"Unable to build timesheet.","error")}}
+async function renderTimesheetPreview(blob){
+  const wrap=$("pdfPreviewWrap"),canvas=$("timesheetCanvas"),caption=$("pdfPreviewCaption");
+  try{
+    wrap.classList.add("hidden");caption.classList.add("hidden");
+    if(window.pdfjsLib){pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js"}
+    const data=await blob.arrayBuffer();
+    const pdf=await pdfjsLib.getDocument({data}).promise;
+    const page=await pdf.getPage(1);
+    const base=page.getViewport({scale:1});
+    const available=Math.max(280,(wrap.parentElement.clientWidth||360)-20);
+    const scale=available/base.width;
+    const viewport=page.getViewport({scale});
+    const ratio=window.devicePixelRatio||1;
+    canvas.width=Math.floor(viewport.width*ratio);canvas.height=Math.floor(viewport.height*ratio);
+    canvas.style.width=Math.floor(viewport.width)+"px";canvas.style.height=Math.floor(viewport.height)+"px";
+    const ctx=canvas.getContext("2d");
+    await page.render({canvasContext:ctx,viewport,transform:ratio!==1?[ratio,0,0,ratio,0,0]:null}).promise;
+    wrap.classList.remove("hidden");caption.classList.remove("hidden");
+  }catch(e){console.warn("PDF preview failed",e);}
+}
+async function buildTimesheet(){try{clearMessage("timesheetMessage");$("pdfLoading").classList.remove("hidden");$("timesheetPDF").classList.add("hidden");$("pdfPreviewWrap").classList.add("hidden");$("pdfPreviewCaption").classList.add("hidden");$("openPDFButton").disabled=true;$("sendPDFButton").disabled=true;$("weekEndingDisplay").textContent=formatDisplayDate(currentWeekEnding);const sunday=getSundayForSaturday(currentWeekEnding),sundayISO=dateToISO(sunday),saturdayISO=dateToISO(currentWeekEnding);const{data:dtrs,error:dtrError}=await supabaseClient.from("dtrs").select("*").eq("crew_profile_id",currentProfile.id).gte("date",sundayISO).lte("date",saturdayISO).order("date",{ascending:true});if(dtrError)throw dtrError;const{data:templates,error:templateError}=await supabaseClient.from("timesheet_templates").select("*").eq("production_id",productionId).eq("is_active",true).limit(1);if(templateError)throw templateError;if(!templates||!templates.length)throw Error("No timesheet template has been configured for this production.");const template=templates[0];const{data:mappings,error:mappingError}=await supabaseClient.from("timesheet_field_mappings").select("*").eq("template_id",template.id);if(mappingError)throw mappingError;const{data:pdfBlob,error:downloadError}=await supabaseClient.storage.from("timesheet-templates").download(template.file_path);if(downloadError)throw downloadError;const pdfDoc=await PDFLib.PDFDocument.load(await pdfBlob.arrayBuffer()),form=pdfDoc.getForm(),values=buildTimesheetValues(sunday,currentWeekEnding,dtrs||[]);let filled=0,errors=0;for(const mapping of mappings){const name=mapping.pdf_field_name,value=values[mapping.field_key];if(value===undefined||value===null||!name)continue;try{const field=form.getField(name);if(typeof field.setText==="function"){field.setText(String(value??""));filled++;continue}if(typeof field.check==="function"&&typeof field.uncheck==="function"){value===true?field.check():field.uncheck();filled++;continue}if(typeof field.select==="function"){field.select(String(value??""));filled++;continue}console.warn("Unhandled PDF field",name)}catch(e){errors++;console.error("PDF field failed",mapping.field_key,name,e)}}try{form.updateFieldAppearances()}catch(e){console.warn("Appearance update failed",e)}const bytes=await pdfDoc.save(),blob=new Blob([bytes],{type:"application/pdf"});if(currentPDFUrl)URL.revokeObjectURL(currentPDFUrl);currentPDFBlob=blob;currentPDFUrl=URL.createObjectURL(blob);$("timesheetPDF").src=currentPDFUrl;$("pdfLoading").classList.add("hidden");await renderTimesheetPreview(blob);$("openPDFButton").disabled=false;$("sendPDFButton").disabled=false;if(!filled)showMessage("timesheetMessage","The PDF loaded, but no mapped fields could be filled.","error");else if(errors)showMessage("timesheetMessage",`${errors} PDF field(s) could not be filled.`,"error")}catch(e){console.error("TIMESHEET ERROR",e);$("pdfLoading").classList.add("hidden");showMessage("timesheetMessage",e.message||"Unable to build timesheet.","error")}}
 function buildTimesheetValues(sunday,saturday,dtrs){const v={};v["crew.name"]=currentProfile.name||"";v["crew.department"]="Sound";v["crew.position"]=currentProfile.position||"";v["week.ending"]=formatPDFDate(saturday);v["crew.day_rate"]=currentProfile.day_rate?"$"+Number(currentProfile.day_rate).toFixed(2):"";v["crew.corporation_name"]=currentProfile.corporation_name||"";v["crew.gst_number"]=currentProfile.gst_number||"";v["crew.gst_amount"]=currentProfile.gst_amount?"$"+Number(currentProfile.gst_amount).toFixed(2):"";v["crew.initials"]=currentProfile.crew_initials||"";v["crew.local"]=currentProfile.local_hotel==="Local";v["crew.hotel"]=currentProfile.local_hotel==="Hotel";v["crew.bc_resident"]=currentProfile.province==="BC";v["crew.on_resident"]=currentProfile.province==="ON";v["crew.kit_fee"]=currentProfile.fee_type==="Kit"&&currentProfile.kit_rental?"$"+Number(currentProfile.kit_rental).toFixed(2):"";v["crew.vehicle_fee"]=currentProfile.fee_type==="Vehicle"&&currentProfile.kit_rental?"$"+Number(currentProfile.kit_rental).toFixed(2):"";const keys=["sun","mon","tue","wed","thu","fri","sat"];for(let i=0;i<7;i++){const date=new Date(sunday.getFullYear(),sunday.getMonth(),sunday.getDate()+i,12),iso=dateToISO(date),key=keys[i],d=dtrs.find(x=>x.date===iso);if(!d)continue;v[`${key}.date`]=formatPDFDate(date);v[`${key}.in`]=minutesToTime(d.start_minutes);v[`${key}.out`]=minutesToTime(d.end_minutes);v[`${key}.lunch_start`]=d.no_lunch?"":minutesToTime(d.lunch_start_minutes);v[`${key}.lunch_end`]=d.no_lunch?"":minutesToTime(d.lunch_end_minutes);let lunch=0;if(!d.no_lunch&&d.lunch_start_minutes!==null&&d.lunch_end_minutes!==null)lunch=d.lunch_end_minutes-d.lunch_start_minutes;v[`${key}.hours`]=minutesToDecimalHours(d.end_minutes-d.start_minutes-lunch);v[`${key}.province`]=currentProfile.province||""}return v}
 function openGeneratedPDF(){if(currentPDFUrl)window.open(currentPDFUrl,"_blank")}
 function safeFilenamePart(value){return String(value||"").trim().replace(/[^a-zA-Z0-9]+/g,"_").replace(/^_+|_+$/g,"")||"Timesheet"}
