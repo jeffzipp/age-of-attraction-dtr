@@ -330,6 +330,59 @@ body.is-manager #dtrScreen .dtr-header-actions button{
   #dtrScreen .dtr-card{margin-top:6px}
 }
 
+
+/* v24 — compact DTR navigation. HOD: My Details | Crew | Timesheet | Log Out.
+   Crew: My Details | Timesheet | Log Out. */
+#dtrScreen .dtr-header{
+  display:block!important;
+  margin-bottom:0!important;
+}
+#dtrScreen .dtr-header-actions{display:none!important}
+.dtr-compact-nav{
+  display:flex;
+  align-items:center;
+  width:100%;
+  gap:0;
+  margin:14px 0 18px;
+  padding:0 0 13px;
+  border-bottom:1px solid #333;
+  overflow:hidden;
+}
+.dtr-compact-nav button{
+  width:auto!important;
+  flex:0 1 auto!important;
+  min-width:0!important;
+  height:auto!important;
+  margin:0!important;
+  padding:5px 10px!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  color:#f1f1f1!important;
+  font-size:14px!important;
+  font-weight:500!important;
+  line-height:1.2!important;
+  white-space:nowrap!important;
+}
+.dtr-compact-nav button:first-child{padding-left:0!important}
+.dtr-compact-nav button:last-child{padding-right:0!important}
+.dtr-compact-nav .nav-separator{
+  display:block;
+  flex:0 0 1px;
+  width:1px;
+  height:20px;
+  margin:0 5px;
+  background:#555;
+}
+.dtr-compact-nav .hod-only{display:none!important}
+body.is-manager .dtr-compact-nav .hod-only{display:block!important}
+@media(max-width:390px){
+  .dtr-compact-nav button{font-size:13px!important;padding-left:7px!important;padding-right:7px!important}
+  .dtr-compact-nav button:first-child{padding-left:0!important}
+  .dtr-compact-nav button:last-child{padding-right:0!important}
+  .dtr-compact-nav .nav-separator{margin:0 3px}
+}
+
 </style>
 </head>
 <body>
@@ -367,11 +420,15 @@ body.is-manager #dtrScreen .dtr-header-actions button{
     <h1>Daily DTR</h1>
     <div class="subtitle" id="crewGreeting"></div>
   </div>
-  <div class="dtr-header-actions">
-    <button class="secondary" onclick="openCrewInfo()">My Details</button>
-    <button id="departmentButton" class="secondary hod-only" onclick="openDepartment()">Crew</button>
-    <button class="secondary" onclick="signOut()">Log Out</button>
-  </div>
+  <nav class="dtr-compact-nav" aria-label="DTR navigation">
+    <button onclick="openCrewInfo()">My Details</button>
+    <span class="nav-separator hod-only" aria-hidden="true"></span>
+    <button id="departmentButton" class="hod-only" onclick="openDepartment()">Crew</button>
+    <span class="nav-separator" aria-hidden="true"></span>
+    <button onclick="openMyTimesheet()">Timesheet</button>
+    <span class="nav-separator" aria-hidden="true"></span>
+    <button onclick="signOut()">Log Out</button>
+  </nav>
 </div>
 
 <div class="dtr-card">
@@ -431,9 +488,7 @@ body.is-manager #dtrScreen .dtr-header-actions button{
 <button id="clearDayButton" class="danger hidden" onclick="clearDay()">Clear Day</button>
 <div id="dtrMessage" class="message"></div>
 
-<div class="dtr-utility-links">
-  <button onclick="openMyTimesheet()">My Timesheet</button>
-</div>
+
 
 </div>
 <div id="timesheetScreen" class="hidden">
