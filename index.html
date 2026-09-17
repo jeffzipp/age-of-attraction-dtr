@@ -314,7 +314,7 @@ body.is-manager .hod-only{display:block}
   <span class="timesheet-launch-arrow">›</span>
 </button>
 
-<button class="crew-info-link secondary" onclick="openCrewInfo()">Crew Info</button>
+<button class="crew-info-link secondary" onclick="openCrewInfo()">My Details</button>
 
 <div class="dtr-card">
   <div class="date-row">
@@ -556,7 +556,7 @@ async function loadMembership(){
 function isManager(){return !!(currentMembership&&currentMembership.status==="active"&&["hod","admin"].includes(currentMembership.role))}
 function populateProfileForm(){if(!currentProfile)return;const p=currentProfile;$("crewName").value=p.name||"";$("position").value=p.position||"";$("employmentType").value=p.employment_type||"";$("dayRate").value=p.day_rate||0;$("kitRental").value=p.kit_rental||0;$("equipmentNotes").value=p.equipment_notes||"";$("feeType").value=p.fee_type||"None";$("localHotel").value=p.local_hotel||"";$("province").value=p.province||"";$("corporationName").value=p.corporation_name||"";$("gstNumber").value=p.gst_number||"";$("gstAmount").value=p.gst_amount||"";$("crewInitials").value=p.crew_initials||"";updateEmploymentFields()}
 function setCompensationLocked(locked){["dayRate","feeType","kitRental"].forEach(id=>{const el=$(id);el.disabled=!!locked;el.classList.toggle("rate-locked",!!locked)});$("lockedRateNote").classList.toggle("hidden",!locked)}
-function openCrewInfo(){if(!currentProfile)return;crewInfoEditMode=true;populateProfileForm();setCompensationLocked(true);$("setupTitle").textContent="Crew Info";$("setupSubtitle").textContent="Update your crew and payroll information.";$("saveProfileButton").textContent="Save Changes";$("crewInfoBack").classList.remove("hidden");clearMessage("setupMessage");showScreen("setupScreen")}
+function openCrewInfo(){if(!currentProfile)return;crewInfoEditMode=true;populateProfileForm();setCompensationLocked(true);$("setupTitle").textContent="My Details";$("setupSubtitle").textContent="Update your personal and payroll information.";$("saveProfileButton").textContent="Save Changes";$("crewInfoBack").classList.remove("hidden");clearMessage("setupMessage");showScreen("setupScreen")}
 function cancelCrewInfoEdit(){crewInfoEditMode=false;setCompensationLocked(false);$("setupTitle").textContent="Crew Setup";$("setupSubtitle").textContent="Enter your production and payroll information.";$("saveProfileButton").textContent="Save Profile";$("crewInfoBack").classList.add("hidden");showDTR()}
 function resetSetupMode(){crewInfoEditMode=false;setCompensationLocked(false);$("setupTitle").textContent="Crew Setup";$("setupSubtitle").textContent="Enter your production and payroll information.";$("saveProfileButton").textContent="Save Profile";$("crewInfoBack").classList.add("hidden")}
 async function findProduction(){const{data,error}=await supabaseClient.from("productions").select("*").eq("name","Age of Attraction").eq("season","Season 2").limit(1);if(error)throw error;if(!data||!data.length)throw Error("Unable to find the production.");productionId=data[0].id}
