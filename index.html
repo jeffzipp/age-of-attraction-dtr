@@ -390,6 +390,24 @@ body.is-manager .dtr-compact-nav .hod-only{display:block!important}
 #setupScreen .app-persistent-nav,
 #timesheetScreen .app-persistent-nav,
 #departmentScreen .app-persistent-nav{margin-top:12px;margin-bottom:18px}
+
+/* v24.2 — DTR tab + subtle active navigation */
+.dtr-compact-nav button[data-nav].active{
+  color:#fff!important;
+  font-weight:700!important;
+  position:relative;
+}
+.dtr-compact-nav button[data-nav].active:after{
+  content:"";
+  position:absolute;
+  left:9px;
+  right:9px;
+  bottom:-9px;
+  height:2px;
+  border-radius:2px;
+  background:#fff;
+}
+.dtr-compact-nav button[data-nav="dtr"].active:after{left:0}
 </style>
 </head>
 <body>
@@ -402,13 +420,15 @@ body.is-manager .dtr-compact-nav .hod-only{display:block!important}
 </div>
 <div id="setupScreen" class="hidden"><div id="inviteSetupBanner" class="invite-banner hidden"></div>
 <div class="setup-header"><h1 id="setupTitle">Crew Setup</h1><div class="setup-header-actions"><button id="crewInfoBack" class="secondary hidden" onclick="cancelCrewInfoEdit()">Back</button><button class="secondary" onclick="signOut()">Log Out</button></div></div><div class="subtitle" id="setupSubtitle">Enter your production and payroll information.</div><nav class="dtr-compact-nav app-persistent-nav" aria-label="App navigation">
-<button onclick="openCrewInfo()">My Details</button>
+<button data-nav="dtr" onclick="showDTR()">DTR</button>
+<span class="nav-separator" aria-hidden="true"></span>
+<button data-nav="details" onclick="openCrewInfo()">My Details</button>
 <span class="nav-separator hod-only" aria-hidden="true"></span>
-<button class="hod-only" onclick="openDepartment()">Crew</button>
+<button data-nav="crew" class="hod-only" onclick="openDepartment()">Crew</button>
 <span class="nav-separator" aria-hidden="true"></span>
-<button onclick="openMyTimesheet()">Timesheet</button>
+<button data-nav="timesheet" onclick="openMyTimesheet()">Timesheet</button>
 <span class="nav-separator" aria-hidden="true"></span>
-<button onclick="signOut()">Log Out</button>
+<button data-nav="logout" onclick="signOut()">Log Out</button>
 </nav>
 <label>Name</label><input id="crewName">
 <label>Department</label><input value="Sound" disabled>
@@ -436,13 +456,15 @@ body.is-manager .dtr-compact-nav .hod-only{display:block!important}
     <div class="subtitle" id="crewGreeting"></div>
   </div>
   <nav class="dtr-compact-nav" aria-label="DTR navigation">
-    <button onclick="openCrewInfo()">My Details</button>
+    <button data-nav="dtr" onclick="showDTR()">DTR</button>
+    <span class="nav-separator" aria-hidden="true"></span>
+    <button data-nav="details" onclick="openCrewInfo()">My Details</button>
     <span class="nav-separator hod-only" aria-hidden="true"></span>
-    <button id="departmentButton" class="hod-only" onclick="openDepartment()">Crew</button>
+    <button id="departmentButton" data-nav="crew" class="hod-only" onclick="openDepartment()">Crew</button>
     <span class="nav-separator" aria-hidden="true"></span>
-    <button onclick="openMyTimesheet()">Timesheet</button>
+    <button data-nav="timesheet" onclick="openMyTimesheet()">Timesheet</button>
     <span class="nav-separator" aria-hidden="true"></span>
-    <button onclick="signOut()">Log Out</button>
+    <button data-nav="logout" onclick="signOut()">Log Out</button>
   </nav>
 </div>
 
@@ -512,13 +534,15 @@ body.is-manager .dtr-compact-nav .hod-only{display:block!important}
   <button class="secondary back-dtr" onclick="showDTR()">← DTR</button>
 </div>
 <nav class="dtr-compact-nav app-persistent-nav" aria-label="App navigation">
-<button onclick="openCrewInfo()">My Details</button>
+<button data-nav="dtr" onclick="showDTR()">DTR</button>
+<span class="nav-separator" aria-hidden="true"></span>
+<button data-nav="details" onclick="openCrewInfo()">My Details</button>
 <span class="nav-separator hod-only" aria-hidden="true"></span>
-<button class="hod-only" onclick="openDepartment()">Crew</button>
+<button data-nav="crew" class="hod-only" onclick="openDepartment()">Crew</button>
 <span class="nav-separator" aria-hidden="true"></span>
-<button onclick="openMyTimesheet()">Timesheet</button>
+<button data-nav="timesheet" onclick="openMyTimesheet()">Timesheet</button>
 <span class="nav-separator" aria-hidden="true"></span>
-<button onclick="signOut()">Log Out</button>
+<button data-nav="logout" onclick="signOut()">Log Out</button>
 </nav>
 <div class="week-nav">
   <button class="secondary" onclick="changeWeek(-7)" aria-label="Previous week">‹</button>
@@ -557,13 +581,15 @@ body.is-manager .dtr-compact-nav .hod-only{display:block!important}
     </div>
   </div>
 <nav class="dtr-compact-nav app-persistent-nav" aria-label="App navigation">
-<button onclick="openCrewInfo()">My Details</button>
+<button data-nav="dtr" onclick="showDTR()">DTR</button>
+<span class="nav-separator" aria-hidden="true"></span>
+<button data-nav="details" onclick="openCrewInfo()">My Details</button>
 <span class="nav-separator hod-only" aria-hidden="true"></span>
-<button class="hod-only" onclick="openDepartment()">Crew</button>
+<button data-nav="crew" class="hod-only" onclick="openDepartment()">Crew</button>
 <span class="nav-separator" aria-hidden="true"></span>
-<button onclick="openMyTimesheet()">Timesheet</button>
+<button data-nav="timesheet" onclick="openMyTimesheet()">Timesheet</button>
 <span class="nav-separator" aria-hidden="true"></span>
-<button onclick="signOut()">Log Out</button>
+<button data-nav="logout" onclick="signOut()">Log Out</button>
 </nav>
   <div class="department-toolbar">
     <button class="secondary" onclick="showDepartmentOverview()">This Week</button>
@@ -629,7 +655,14 @@ const SUPABASE_KEY="sb_publishable_Gl1oRE_S8bRTiI65vCnHRQ_InR0_wX1";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 let currentUser=null,currentProfile=null,productionId=null,currentWeekEnding=null,currentPDFUrl=null,currentPDFBlob=null,currentDTR=null,currentMembership=null,currentDepartmentWeekEnding=null,departmentDTRMap=new Map(),crewInfoEditMode=false;
 const $=id=>document.getElementById(id);
-function showScreen(id){["loginScreen","setupScreen","dtrScreen","timesheetScreen","departmentScreen"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");$("appContainer").classList.toggle("wide",id==="timesheetScreen"||id==="departmentScreen")}
+function setActiveNavForScreen(id){
+  const map={dtrScreen:"dtr",setupScreen:"details",departmentScreen:"crew",timesheetScreen:"timesheet"};
+  const active=map[id]||"";
+  document.querySelectorAll(".dtr-compact-nav button[data-nav]").forEach(btn=>{
+    btn.classList.toggle("active",btn.dataset.nav===active);
+  });
+}
+function showScreen(id){setActiveNavForScreen(id);["loginScreen","setupScreen","dtrScreen","timesheetScreen","departmentScreen"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");$("appContainer").classList.toggle("wide",id==="timesheetScreen"||id==="departmentScreen")}
 function showMessage(id,msg,type){$(id).textContent=msg;$(id).className="message "+type}function clearMessage(id){$(id).textContent="";$(id).className="message"}
 function dateToISO(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}function isoToLocalDate(s){const p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2],12)}function todayString(){return dateToISO(new Date())}
 function getSaturdayForDate(input){const d=new Date(input.getFullYear(),input.getMonth(),input.getDate(),12);d.setDate(d.getDate()+(6-d.getDay()+7)%7);return d}function getSundayForSaturday(s){const d=new Date(s.getFullYear(),s.getMonth(),s.getDate(),12);d.setDate(d.getDate()-6);return d}
