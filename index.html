@@ -276,6 +276,17 @@ body.is-manager .hod-only{display:block}
 #setupScreen .rate-locked{opacity:.55;cursor:not-allowed}
 
 
+
+/* v23.1 — uniform HOD header actions */
+#dtrScreen .dtr-header-actions button{
+  width:auto!important;
+  margin:0!important;
+  padding:9px 11px!important;
+  font-size:13px!important;
+  border-radius:8px!important;
+  line-height:1.2!important;
+}
+
 /* v23 — DTR-first UI, My Details password, sturdier invite links */
 .dtr-utility-links{display:flex;justify-content:center;gap:8px;margin-top:14px;padding-top:10px;border-top:1px solid #242424}
 .dtr-utility-links button{width:auto!important;margin:0!important;padding:8px 10px!important;background:transparent!important;border:0!important;color:#777!important;font-size:12px!important;font-weight:600!important}
@@ -327,8 +338,8 @@ body.is-manager .hod-only{display:block}
     <div class="subtitle" id="crewGreeting"></div>
   </div>
   <div class="dtr-header-actions">
-    <button id="departmentButton" class="secondary department-button hod-only" onclick="openDepartment()">Department</button>
     <button class="secondary" onclick="openCrewInfo()">My Details</button>
+    <button id="departmentButton" class="secondary hod-only" onclick="openDepartment()">Crew</button>
     <button class="secondary" onclick="signOut()">Log Out</button>
   </div>
 </div>
