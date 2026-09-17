@@ -585,6 +585,25 @@ body:not(.is-manager) .dtr-compact-nav button{
 
 </div>
 <div id="timesheetScreen" class="hidden">
+  <div id="timesheetSetupPanel" class="hod-template-panel">
+    <div class="hod-template-head">
+      <div>
+        <div class="hod-template-title">Timesheet Setup</div>
+        <div id="hodTemplateStatus" class="hod-template-status">Checking template…</div>
+      </div>
+    </div>
+    <div class="hod-template-actions">
+      <button class="secondary" onclick="previewHODTimesheet()">Preview Timesheet</button>
+      <label class="hod-upload-button">
+        Replace Timesheet PDF
+        <input id="hodTimesheetFile" type="file" accept="application/pdf,.pdf" onchange="replaceTimesheetTemplate(this.files[0])">
+      </label>
+    </div>
+    <div id="hodTemplateMessage" class="message"></div>
+    <div class="hod-template-note">Age of Attraction Season 2 · Fillable PDF only. A replacement is checked against the current field mapping before it goes live.</div>
+  </div>
+
+
 <div class="timesheet-header">
   <div><h1>My Timesheet</h1><div class="subtitle" id="timesheetCrewName"></div></div>
   <button class="secondary back-dtr" onclick="showDTR()">← DTR</button>
@@ -665,24 +684,6 @@ body:not(.is-manager) .dtr-compact-nav button{
       <div id="inviteResult" class="invite-result"></div>
     </div>
     <div id="crewManageList" class="crew-manage-list"></div>
-  </div>
-
-  <div id="timesheetSetupPanel" class="hod-template-panel">
-    <div class="hod-template-head">
-      <div>
-        <div class="hod-template-title">Timesheet Setup</div>
-        <div id="hodTemplateStatus" class="hod-template-status">Checking template…</div>
-      </div>
-    </div>
-    <div class="hod-template-actions">
-      <button class="secondary" onclick="previewHODTimesheet()">Preview Timesheet</button>
-      <label class="hod-upload-button">
-        Replace Timesheet PDF
-        <input id="hodTimesheetFile" type="file" accept="application/pdf,.pdf" onchange="replaceTimesheetTemplate(this.files[0])">
-      </label>
-    </div>
-    <div id="hodTemplateMessage" class="message"></div>
-    <div class="hod-template-note">Age of Attraction Season 2 · Fillable PDF only. A replacement is checked against the current field mapping before it goes live.</div>
   </div>
 
   <div id="departmentOverviewPanel">
@@ -919,6 +920,8 @@ async function copyInviteLink(){
 let hodActiveTemplate=null;
 
 async function loadHODTimesheetSetup(){
+  const panel=$("timesheetSetupPanel");
+  if(panel)panel.style.display=isManager()?"block":"none";
   if(!isManager())return;
   const status=$("hodTemplateStatus");
   try{
@@ -1004,7 +1007,7 @@ async function openDepartment(){
   if(!currentDepartmentWeekEnding)currentDepartmentWeekEnding=getSaturdayForDate(new Date());
   showScreen("departmentScreen");
   showDepartmentOverview();
-  await Promise.all([loadDepartmentDashboard(),loadHODTimesheetSetup()]);
+  await loadDepartmentDashboard();
 }
 async function changeDepartmentWeek(days){
   if(!currentDepartmentWeekEnding)currentDepartmentWeekEnding=getSaturdayForDate(new Date());
@@ -1112,7 +1115,10 @@ function closeDTRDetail(event){
   $("dtrDetailModal").classList.add("hidden");
 }
 
-async function openMyTimesheet(){const selected=$("dtrDate").value;currentWeekEnding=getSaturdayForDate(selected?isoToLocalDate(selected):new Date());showScreen("timesheetScreen");$("timesheetCrewName").textContent=currentProfile.name+" · "+currentProfile.position;await buildTimesheet()}async function changeWeek(days){if(!currentWeekEnding)return;currentWeekEnding.setDate(currentWeekEnding.getDate()+days);await buildTimesheet()}async function goToCurrentWeek(){currentWeekEnding=getSaturdayForDate(new Date());await buildTimesheet()}
+async function openMyTimesheet(){
+  const setupPanel=$("timesheetSetupPanel");
+  if(setupPanel)setupPanel.style.display=isManager()?"block":"none";
+  if(isManager()) await loadHODTimesheetSetup();const selected=$("dtrDate").value;currentWeekEnding=getSaturdayForDate(selected?isoToLocalDate(selected):new Date());showScreen("timesheetScreen");$("timesheetCrewName").textContent=currentProfile.name+" · "+currentProfile.position;await buildTimesheet()}async function changeWeek(days){if(!currentWeekEnding)return;currentWeekEnding.setDate(currentWeekEnding.getDate()+days);await buildTimesheet()}async function goToCurrentWeek(){currentWeekEnding=getSaturdayForDate(new Date());await buildTimesheet()}
 async function renderTimesheetPreview(blob){
   const wrap=$("pdfPreviewWrap"),canvas=$("timesheetCanvas"),caption=$("pdfPreviewCaption");
   try{
