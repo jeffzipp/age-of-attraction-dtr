@@ -449,6 +449,21 @@ body:not(.is-manager) .dtr-compact-nav button{
   flex:0 1 auto!important;
 }
 
+
+/* v25 — HOD timesheet template setup */
+.hod-template-panel{background:#181818;border:1px solid #333;border-radius:14px;padding:14px;margin:0 0 14px}
+.hod-template-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.hod-template-title{font-size:16px;font-weight:700}
+.hod-template-status{font-size:12px;color:#888;margin-top:4px}
+.hod-template-status.ready{color:#b9dfc1}
+.hod-template-status.error{color:#ffb0b0}
+.hod-template-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.hod-template-actions button{margin:0;padding:11px 8px;font-size:13px}
+.hod-upload-button{display:flex;align-items:center;justify-content:center;margin:0;padding:11px 8px;border-radius:7px;background:#333;color:#fff;border:1px solid #555;font-size:13px;font-weight:bold;cursor:pointer;text-align:center}
+.hod-upload-button input{display:none}
+.hod-template-note{font-size:11px;line-height:1.4;color:#777;margin-top:10px}
+#hodTemplateMessage{margin-top:10px}
+@media(max-width:390px){.hod-template-actions{grid-template-columns:1fr}.hod-template-actions button,.hod-upload-button{min-height:42px}}
 </style>
 </head>
 <body>
@@ -650,6 +665,24 @@ body:not(.is-manager) .dtr-compact-nav button{
       <div id="inviteResult" class="invite-result"></div>
     </div>
     <div id="crewManageList" class="crew-manage-list"></div>
+  </div>
+
+  <div id="timesheetSetupPanel" class="hod-template-panel">
+    <div class="hod-template-head">
+      <div>
+        <div class="hod-template-title">Timesheet Setup</div>
+        <div id="hodTemplateStatus" class="hod-template-status">Checking template…</div>
+      </div>
+    </div>
+    <div class="hod-template-actions">
+      <button class="secondary" onclick="previewHODTimesheet()">Preview Timesheet</button>
+      <label class="hod-upload-button">
+        Replace Timesheet PDF
+        <input id="hodTimesheetFile" type="file" accept="application/pdf,.pdf" onchange="replaceTimesheetTemplate(this.files[0])">
+      </label>
+    </div>
+    <div id="hodTemplateMessage" class="message"></div>
+    <div class="hod-template-note">Age of Attraction Season 2 · Fillable PDF only. A replacement is checked against the current field mapping before it goes live.</div>
   </div>
 
   <div id="departmentOverviewPanel">
@@ -883,12 +916,95 @@ async function copyInviteLink(){
   catch(e){input.select();document.execCommand("copy")}
 }
 
+let hodActiveTemplate=null;
+
+async function loadHODTimesheetSetup(){
+  if(!isManager())return;
+  const status=$("hodTemplateStatus");
+  try{
+    clearMessage("hodTemplateMessage");
+    status.textContent="Checking template…";
+    status.className="hod-template-status";
+    const{data,error}=await supabaseClient.from("timesheet_templates").select("*").eq("production_id",productionId).eq("is_active",true).limit(1);
+    if(error)throw error;
+    if(!data||!data.length)throw Error("No active timesheet template is configured.");
+    hodActiveTemplate=data[0];
+    const{data:mappings,error:mappingError}=await supabaseClient.from("timesheet_field_mappings").select("id,field_key,pdf_field_name").eq("template_id",hodActiveTemplate.id);
+    if(mappingError)throw mappingError;
+    status.textContent=`Template ready · ${(mappings||[]).length} mapped fields`;
+    status.className="hod-template-status ready";
+  }catch(e){
+    hodActiveTemplate=null;
+    status.textContent="Template needs attention";
+    status.className="hod-template-status error";
+    showMessage("hodTemplateMessage",e.message||"Unable to check template.","error");
+  }
+}
+
+async function previewHODTimesheet(){
+  if(!currentProfile)return;
+  await openMyTimesheet();
+}
+
+async function replaceTimesheetTemplate(file){
+  const input=$("hodTimesheetFile");
+  if(!file)return;
+  try{
+    clearMessage("hodTemplateMessage");
+    if(!isManager())throw Error("Only the HOD or production admin can replace the timesheet.");
+    if(file.type!=="application/pdf"&&!file.name.toLowerCase().endsWith(".pdf"))throw Error("Choose a PDF file.");
+    if(!hodActiveTemplate)await loadHODTimesheetSetup();
+    if(!hodActiveTemplate)throw Error("No active template is available to replace.");
+
+    const status=$("hodTemplateStatus");
+    status.textContent="Checking replacement PDF…";
+    status.className="hod-template-status";
+
+    const bytes=await file.arrayBuffer();
+    const pdfDoc=await PDFLib.PDFDocument.load(bytes);
+    const form=pdfDoc.getForm();
+    const pdfNames=new Set(form.getFields().map(f=>f.getName()));
+    if(!pdfNames.size)throw Error("This PDF has no fillable form fields.");
+
+    const{data:mappings,error:mappingError}=await supabaseClient.from("timesheet_field_mappings").select("field_key,pdf_field_name").eq("template_id",hodActiveTemplate.id);
+    if(mappingError)throw mappingError;
+
+    const missing=[];
+    for(const m of (mappings||[])){
+      const expected=m.field_key==="crew.kit_fee"?"Kit Fee if any":m.pdf_field_name;
+      if(expected&&!pdfNames.has(expected))missing.push(expected);
+    }
+    const uniqueMissing=[...new Set(missing)];
+    if(uniqueMissing.length){
+      throw Error(`Replacement not activated. ${uniqueMissing.length} required mapped PDF field${uniqueMissing.length===1?" is":"s are"} missing.`);
+    }
+
+    status.textContent="Uploading replacement…";
+    const{error:uploadError}=await supabaseClient.storage.from("timesheet-templates").upload(
+      hodActiveTemplate.file_path,
+      file,
+      {upsert:true,contentType:"application/pdf",cacheControl:"0"}
+    );
+    if(uploadError)throw uploadError;
+
+    status.textContent=`Template ready · ${(mappings||[]).length} mapped fields`;
+    status.className="hod-template-status ready";
+    showMessage("hodTemplateMessage","Timesheet PDF replaced successfully. The existing field mapping was verified and preserved.","success");
+  }catch(e){
+    $("hodTemplateStatus").textContent=hodActiveTemplate?"Current template unchanged":"Template needs attention";
+    $("hodTemplateStatus").className="hod-template-status "+(hodActiveTemplate?"ready":"error");
+    showMessage("hodTemplateMessage",e.message||"Unable to replace timesheet PDF.","error");
+  }finally{
+    if(input)input.value="";
+  }
+}
+
 async function openDepartment(){
   if(!isManager()){showMessage("dtrMessage","Department access is only available to the HOD or production admin.","error");return}
   if(!currentDepartmentWeekEnding)currentDepartmentWeekEnding=getSaturdayForDate(new Date());
   showScreen("departmentScreen");
   showDepartmentOverview();
-  await loadDepartmentDashboard();
+  await Promise.all([loadDepartmentDashboard(),loadHODTimesheetSetup()]);
 }
 async function changeDepartmentWeek(days){
   if(!currentDepartmentWeekEnding)currentDepartmentWeekEnding=getSaturdayForDate(new Date());
