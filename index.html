@@ -474,6 +474,21 @@ body:not(.is-manager) .dtr-compact-nav button{
     margin-right:auto;
   }
 }
+
+/* v25.7 — actual desktop Crew outer-width fix */
+@media (min-width: 769px){
+  #appContainer.wide:has(#departmentScreen:not(.hidden)){
+    width:min(calc(100% - 40px), 1040px) !important;
+    max-width:1040px !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
+  #departmentScreen{
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+  }
+}
 </style>
 </head>
 <body>
