@@ -408,6 +408,47 @@ body.is-manager .dtr-compact-nav .hod-only{display:block!important}
   background:#fff;
 }
 .dtr-compact-nav button[data-nav="dtr"].active:after{left:0}
+
+/* v24.3 — keep the complete tab bar inside narrow iPhone viewports */
+.dtr-compact-nav{
+  justify-content:space-between!important;
+  overflow:visible!important;
+}
+.dtr-compact-nav button{
+  flex:0 1 auto!important;
+  padding-left:7px!important;
+  padding-right:7px!important;
+}
+.dtr-compact-nav .nav-separator{
+  flex:0 0 1px!important;
+  margin-left:2px!important;
+  margin-right:2px!important;
+}
+@media(max-width:430px){
+  .dtr-compact-nav button{
+    font-size:12.5px!important;
+    letter-spacing:-0.15px!important;
+    padding-left:4px!important;
+    padding-right:4px!important;
+  }
+  .dtr-compact-nav .nav-separator{
+    margin-left:1px!important;
+    margin-right:1px!important;
+    height:18px!important;
+  }
+}
+@media(max-width:370px){
+  .dtr-compact-nav button{
+    font-size:11.5px!important;
+    padding-left:3px!important;
+    padding-right:3px!important;
+  }
+}
+/* Crew has one fewer tab, so allow slightly roomier labels. */
+body:not(.is-manager) .dtr-compact-nav button{
+  flex:0 1 auto!important;
+}
+
 </style>
 </head>
 <body>
