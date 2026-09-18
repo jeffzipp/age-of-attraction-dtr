@@ -595,7 +595,7 @@ body:not(.is-manager) .dtr-compact-nav button{
 <label>Position</label><select id="position"><option value="">Select position</option><option>HOD</option><option>A1</option><option>A2</option><option>Bag Mixer</option></select>
 <label>Employee Type</label><select id="employmentType" onchange="updateEmploymentFields()"><option value="">Select type</option><option>Employee</option><option>Incorporated Contractor</option></select>
 <div id="corporationFields" class="hidden section"><div class="section-title">Corporation Information</div><label>Corporation Name</label><input id="corporationName"><label>GST #</label><input id="gstNumber"></div>
-<div class="section"><div class="section-title">Rate & Kit</div><label>Day Rate</label><input type="number" id="dayRate" min="0" step="0.01" inputmode="decimal"><label>Additional Fee</label><select id="feeType"><option>None</option><option value="Kit">Kit Fee</option><option value="Vehicle">Vehicle Fee</option></select><label>Fee Amount</label><input type="number" id="kitRental" min="0" step="0.01" inputmode="decimal" value="0"><label>Kit / Equipment Notes</label><textarea id="equipmentNotes" placeholder="Optional"></textarea></div>
+<div class="section"><div class="section-title">Rate & Kit</div><label>Day Rate</label><input type="number" id="dayRate" min="0" step="0.01" inputmode="decimal"><label>Additional Fee</label><select id="feeType"><option>None</option><option value="Kit">Kit Fee</option><option value="Vehicle">Vehicle Fee</option></select><label>Fee Amount</label><input type="number" id="kitRental" min="0" step="0.01" inputmode="decimal" value="0"></div>
 <div class="section"><div class="section-title">Production Information</div><label>Local / Hotel</label><select id="localHotel"><option value="">Select</option><option>Local</option><option>Hotel</option></select><label>Province</label><select id="province"><option value="">Select province</option><option>BC</option><option>ON</option></select><label>Crew Initials</label><input id="crewInitials" maxlength="5" placeholder="e.g. JZ"></div>
 <div id="lockedRateNote" class="locked-rate-note hidden">Day rate and additional fee can be updated here.</div>
 <button id="saveProfileButton" onclick="saveProfile()">Save Profile</button>
@@ -896,8 +896,8 @@ async function loadInvite(){const token=inviteTokenFromURL();if(!token)return;tr
 async function acceptActiveInvite(){if(!activeInvite||inviteAcceptedThisSession||!currentUser)return true;try{const token=inviteTokenFromURL();if(!token)return true;const{data,error}=await supabaseClient.rpc("accept_production_invite",{invite_token:token});if(error)throw error;const a=Array.isArray(data)?data[0]:data;inviteAcceptedThisSession=true;if(a?.production_id)productionId=a.production_id;if(a?.name)activeInvite.name=a.name;if(a?.crew_position)activeInvite.crew_position=a.crew_position;prefillInviteSetup();try{const url=new URL(location.href);url.searchParams.delete("invite");url.searchParams.set("v","23");history.replaceState({},"",url.pathname+url.search+url.hash)}catch(_e){}return true}catch(e){showMessage("loginMessage",e.message||"Unable to accept invite.","error");return false}}
 
 
-async function initialize(){try{await loadInvite();const{data:{session}}=await supabaseClient.auth.getSession();if(!session){showScreen("loginScreen");return}currentUser=session.user;await loadProfile()}catch(e){showScreen("loginScreen");showMessage("loginMessage",e.message||"Unable to connect.","error")}}
-async function signUp(){try{const email=$("email").value.trim(),password=$("password").value;if(!email||!password)throw Error("Please enter an email and password.");const{data,error}=await supabaseClient.auth.signUp({email,password});if(error)throw error;currentUser=data.user;if(data.session&&currentUser){await loadProfile();return}showMessage("loginMessage","Account created. Log in to continue.","success")}catch(e){showMessage("loginMessage",e.message||"Unable to create account.","error")}}
+async function initialize(){try{await loadInvite();const{data:{session}}=await supabaseClient.auth.getSession();if(!session){showScreen("loginScreen");return}currentUser=session.user;await loadProfileFast()}catch(e){showScreen("loginScreen");showMessage("loginMessage",e.message||"Unable to connect.","error")}}
+async function signUp(){try{const email=$("email").value.trim(),password=$("password").value;if(!email||!password)throw Error("Please enter an email and password.");const{data,error}=await supabaseClient.auth.signUp({email,password});if(error)throw error;currentUser=data.user;if(data.session&&currentUser){await loadProfileFast();return}showMessage("loginMessage","Account created. Log in to continue.","success")}catch(e){showMessage("loginMessage",e.message||"Unable to create account.","error")}}
 let signInInProgress=false;
 async function signIn(){
   if(signInInProgress)return;
@@ -944,17 +944,12 @@ async function loadProfileFast(){
       if(!ok){showScreen("loginScreen");return}
     }
 
-    // Fetch the user's profile and membership at the same time instead of
-    // waiting for one request to finish before starting the next.
-    const profilePromise=supabaseClient.from("crew_profiles").select("*").eq("user_id",currentUser.id).limit(1);
-    const membershipPromise=supabaseClient.from("production_memberships").select("*").eq("user_id",currentUser.id).eq("status","active");
+    // Only fetch the crew profile before entering the app.
+    // Membership/role data is not required to render the crew DTR screen.
+    const{data,error}=await supabaseClient.from("crew_profiles").select("*").eq("user_id",currentUser.id).limit(1);
+    if(error)throw error;
 
-    const[profileResult,membershipResult]=await Promise.all([profilePromise,membershipPromise]);
-    if(profileResult.error)throw profileResult.error;
-    if(membershipResult.error)throw membershipResult.error;
-
-    const data=profileResult.data||[];
-    if(!data.length){
+    if(!data||!data.length){
       await findProduction();
       resetSetupMode();
       showScreen("setupScreen");
@@ -964,9 +959,6 @@ async function loadProfileFast(){
     currentProfile=data[0];
     productionId=currentProfile.production_id;
 
-    currentMembership=(membershipResult.data||[]).find(m=>m.production_id===productionId)||null;
-    document.body.classList.toggle("is-manager",!!(currentMembership&&["hod","admin"].includes(currentMembership.role)));
-
     if(!currentProfile.employment_type||!currentProfile.local_hotel||!currentProfile.province||!currentProfile.crew_initials){
       populateProfileForm();
       resetSetupMode();
@@ -974,9 +966,20 @@ async function loadProfileFast(){
       return;
     }
 
-    // showDTR reveals the screen before its DTR fetch completes, so the user
-    // gets into the app immediately while today's entry finishes loading.
-    showDTR();
+    // Enter DaySlate immediately. Today's DTR and HOD role finish loading after
+    // the screen is visible instead of blocking the login transition.
+    showScreen("dtrScreen");
+    if(!$("dtrDate").value)$("dtrDate").value=todayString();
+    $("crewGreeting").textContent=currentProfile.name+" · "+currentProfile.position;
+
+    Promise.allSettled([
+      loadMembership().then(()=>setActiveNavForScreen("dtrScreen")),
+      loadDTRForSelectedDate()
+    ]).then(results=>{
+      for(const result of results){
+        if(result.status==="rejected")console.error("POST-LOGIN LOAD ERROR",result.reason);
+      }
+    });
   }catch(e){
     showScreen("loginScreen");
     showMessage("loginMessage",e.message||"Unable to load profile.","error");
@@ -992,7 +995,7 @@ async function loadMembership(){
   if(currentMembership&&currentMembership.status==="active"&&["hod","admin"].includes(currentMembership.role))document.body.classList.add("is-manager");
 }
 function isManager(){return !!(currentMembership&&currentMembership.status==="active"&&["hod","admin"].includes(currentMembership.role))}
-function populateProfileForm(){if(!currentProfile)return;const p=currentProfile;$("crewName").value=p.name||"";$("position").value=p.position||"";$("employmentType").value=p.employment_type||"";$("dayRate").value=p.day_rate||0;$("kitRental").value=p.kit_rental||0;$("equipmentNotes").value=p.equipment_notes||"";$("feeType").value=p.fee_type||"None";$("localHotel").value=p.local_hotel||"";$("province").value=p.province||"";$("corporationName").value=p.corporation_name||"";$("gstNumber").value=p.gst_number||"";$("crewInitials").value=p.crew_initials||"";updateEmploymentFields()}
+function populateProfileForm(){if(!currentProfile)return;const p=currentProfile;$("crewName").value=p.name||"";$("position").value=p.position||"";$("employmentType").value=p.employment_type||"";$("dayRate").value=p.day_rate||0;$("kitRental").value=p.kit_rental||0;$("feeType").value=p.fee_type||"None";$("localHotel").value=p.local_hotel||"";$("province").value=p.province||"";$("corporationName").value=p.corporation_name||"";$("gstNumber").value=p.gst_number||"";$("crewInitials").value=p.crew_initials||"";updateEmploymentFields()}
 function setCompensationLocked(locked){["dayRate","feeType","kitRental"].forEach(id=>{const el=$(id);el.disabled=!!locked;el.classList.toggle("rate-locked",!!locked)});$("lockedRateNote").classList.toggle("hidden",!locked)}
 function openCrewInfo(){if(!currentProfile)return;crewInfoEditMode=true;populateProfileForm();setCompensationLocked(false);$("setupTitle").textContent="My Details";$("setupSubtitle").textContent="Update your personal and payroll information.";$("saveProfileButton").textContent="Save Changes";$("crewInfoBack").classList.remove("hidden");$("passwordSection").classList.remove("hidden");$("newPassword").value="";$("confirmNewPassword").value="";clearMessage("setupMessage");clearMessage("passwordMessage");showScreen("setupScreen")}
 function cancelCrewInfoEdit(){crewInfoEditMode=false;setCompensationLocked(false);$("passwordSection").classList.add("hidden");$("setupTitle").textContent="Crew Setup";$("setupSubtitle").textContent="Enter your production and payroll information.";$("saveProfileButton").textContent="Save Profile";$("crewInfoBack").classList.add("hidden");showDTR()}
@@ -1017,7 +1020,7 @@ async function resetMyPassword(){
   }
 }
 
-async function saveProfile(){try{clearMessage("setupMessage");const employment_type=$("employmentType").value;const profile={user_id:currentUser.id,production_id:productionId,name:$("crewName").value.trim(),position:$("position").value,employment_type,day_rate:(parseFloat($("dayRate").value)||0),kit_rental:(parseFloat($("kitRental").value)||0),fee_type:$("feeType").value,equipment_notes:$("equipmentNotes").value.trim(),local_hotel:$("localHotel").value,province:$("province").value,crew_initials:$("crewInitials").value.trim().toUpperCase(),corporation_name:employment_type==="Incorporated Contractor"?$("corporationName").value.trim():null,gst_number:employment_type==="Incorporated Contractor"?$("gstNumber").value.trim():null};if(!profile.name||!profile.position||!profile.employment_type||!profile.local_hotel||!profile.province||!profile.crew_initials)throw Error("Please complete all required fields.");if(employment_type==="Incorporated Contractor"&&(!profile.corporation_name||!profile.gst_number))throw Error("Please enter your corporation name and GST number.");if(!productionId)await findProduction();profile.production_id=productionId;let r=currentProfile?await supabaseClient.from("crew_profiles").update(profile).eq("id",currentProfile.id).select().single():await supabaseClient.from("crew_profiles").insert(profile).select().single();if(r.error)throw r.error;currentProfile=r.data;productionId=currentProfile.production_id;crewInfoEditMode=false;resetSetupMode();await loadMembership();await showDTR()}catch(e){showMessage("setupMessage",e.message||"Unable to save profile.","error")}}
+async function saveProfile(){try{clearMessage("setupMessage");const employment_type=$("employmentType").value;const profile={user_id:currentUser.id,production_id:productionId,name:$("crewName").value.trim(),position:$("position").value,employment_type,day_rate:(parseFloat($("dayRate").value)||0),kit_rental:(parseFloat($("kitRental").value)||0),fee_type:$("feeType").value,local_hotel:$("localHotel").value,province:$("province").value,crew_initials:$("crewInitials").value.trim().toUpperCase(),corporation_name:employment_type==="Incorporated Contractor"?$("corporationName").value.trim():null,gst_number:employment_type==="Incorporated Contractor"?$("gstNumber").value.trim():null};if(!profile.name||!profile.position||!profile.employment_type||!profile.local_hotel||!profile.province||!profile.crew_initials)throw Error("Please complete all required fields.");if(employment_type==="Incorporated Contractor"&&(!profile.corporation_name||!profile.gst_number))throw Error("Please enter your corporation name and GST number.");if(!productionId)await findProduction();profile.production_id=productionId;let r=currentProfile?await supabaseClient.from("crew_profiles").update(profile).eq("id",currentProfile.id).select().single():await supabaseClient.from("crew_profiles").insert(profile).select().single();if(r.error)throw r.error;currentProfile=r.data;productionId=currentProfile.production_id;crewInfoEditMode=false;resetSetupMode();await loadMembership();await showDTR()}catch(e){showMessage("setupMessage",e.message||"Unable to save profile.","error")}}
 function resetDTRForm(){currentDTR=null;$("startTime").value="";$("lunchStart").value="";$("lunchEnd").value="";$("endTime").value="";$("noLunch").checked=false;$("dtrNotes").value="";$("submitDTRButton").textContent="Submit DTR";$("clearDayButton").classList.add("hidden");$("editingBadge").classList.remove("show");toggleLunch();updateHoursPreview()}
 async function showDTR(){showScreen("dtrScreen");if(!$("dtrDate").value)$("dtrDate").value=todayString();$("crewGreeting").textContent=currentProfile.name+" · "+currentProfile.position;await loadDTRForSelectedDate()}
 async function loadDTRForSelectedDate(){if(!currentProfile)return;clearMessage("dtrMessage");const date=$("dtrDate").value;if(!date)return;const{data,error}=await supabaseClient.from("dtrs").select("*").eq("crew_profile_id",currentProfile.id).eq("date",date).limit(1);if(error){showMessage("dtrMessage",error.message||"Unable to load DTR.","error");return}if(!data||!data.length){resetDTRForm();return}const d=data[0];currentDTR=d;$("startTime").value=minutesToTime(d.start_minutes);$("endTime").value=minutesToTime(d.end_minutes);$("noLunch").checked=!!d.no_lunch;$("lunchStart").value=d.no_lunch?"":minutesToTime(d.lunch_start_minutes);$("lunchEnd").value=d.no_lunch?"":minutesToTime(d.lunch_end_minutes);$("dtrNotes").value=d.notes||"";$("submitDTRButton").textContent="Update DTR";$("clearDayButton").classList.remove("hidden");$("editingBadge").classList.add("show");toggleLunch();updateHoursPreview()}
