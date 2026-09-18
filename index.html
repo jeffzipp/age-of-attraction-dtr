@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#111111">
-<meta name="dayslate-build" content="2026.09.18-icon-tab-bar-v22">
+<meta name="dayslate-build" content="2026.09.18-real-icon-tabs-v23">
 <meta name="application-name" content="SlateMachine">
 <meta name="apple-mobile-web-app-title" content="SlateMachine">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -853,6 +853,77 @@ body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hou
   .dtr-compact-nav button::before{width:19px!important;height:19px!important}
 }
 
+
+/* v23 — real inline-SVG tab UI; no browser mask dependency */
+.dtr-compact-nav{
+  display:flex!important;
+  align-items:stretch!important;
+  justify-content:space-between!important;
+  gap:4px!important;
+  width:100%!important;
+  margin:8px 0 14px!important;
+  padding:5px!important;
+  background:#202020!important;
+  border:1px solid #303030!important;
+  border-bottom:1px solid #303030!important;
+  border-radius:14px!important;
+  overflow:hidden!important;
+}
+.dtr-compact-nav .nav-separator{display:none!important}
+.dtr-compact-nav button[data-nav]{
+  flex:1 1 0!important;
+  width:0!important;
+  min-width:0!important;
+  height:58px!important;
+  margin:0!important;
+  padding:6px 2px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:4px!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:11px!important;
+  color:#e5e5e5!important;
+  font-size:10.5px!important;
+  font-weight:650!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  position:relative!important;
+}
+.dtr-compact-nav button[data-nav]::before,
+.dtr-compact-nav button[data-nav]::after{display:none!important;content:none!important}
+.dtr-compact-nav .tab-icon{
+  display:block!important;
+  width:22px!important;
+  height:22px!important;
+  flex:0 0 22px!important;
+}
+.dtr-compact-nav .tab-icon svg{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  fill:none!important;
+  stroke:currentColor!important;
+  stroke-width:1.9!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+}
+.dtr-compact-nav .tab-label{display:block!important}
+.dtr-compact-nav button[data-nav].active{
+  background:#a8b99a!important;
+  color:#111!important;
+  font-weight:750!important;
+  box-shadow:none!important;
+}
+.dtr-compact-nav button[data-nav="logout"]{color:#aaa!important}
+@media(max-width:390px){
+  .dtr-compact-nav{gap:3px!important;padding:4px!important}
+  .dtr-compact-nav button[data-nav]{height:55px!important;font-size:9.5px!important;padding:5px 1px!important}
+  .dtr-compact-nav .tab-icon{width:20px!important;height:20px!important;flex-basis:20px!important}
+}
+
 </style>
 </head>
 <body>
@@ -871,15 +942,15 @@ body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hou
 <div class="signed-in-brand" aria-label="SlateMachine"><span class="ds-mini-mark" aria-hidden="true"></span><span>SlateMachine</span></div>
 <div id="inviteSetupBanner" class="invite-banner hidden"></div>
 <div class="setup-header"><h1 id="setupTitle">Crew Setup</h1><div class="setup-header-actions"><button id="crewInfoBack" class="secondary hidden" onclick="cancelCrewInfoEdit()">Back</button><button class="secondary" onclick="signOut()">Log Out</button></div></div><div class="subtitle" id="setupSubtitle">Enter your production and payroll information.</div><nav class="dtr-compact-nav app-persistent-nav" aria-label="App navigation">
-<button data-nav="dtr" onclick="showDTR()">DTR</button>
+<button data-nav="dtr" onclick="showDTR()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5l3.2 1.8"/></svg></span><span class="tab-label">DTR</span></button>
 <span class="nav-separator" aria-hidden="true"></span>
-<button data-nav="details" onclick="openCrewInfo()">My Details</button>
+<button data-nav="details" onclick="openCrewInfo()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7.5" r="3.5"/><path d="M5 20c.6-4.4 3-6.6 7-6.6s6.4 2.2 7 6.6"/></svg></span><span class="tab-label">My Details</span></button>
 <span class="nav-separator hod-only" aria-hidden="true"></span>
-<button data-nav="crew" class="hod-only" onclick="openDepartment()">Crew</button>
+<button data-nav="crew" class="hod-only" onclick="openDepartment()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="8" r="3"/><circle cx="16.5" cy="9" r="2.5"/><path d="M2.8 19c.5-4 2.4-6 5.7-6s5.2 2 5.7 6M14 14c3.5-.7 6 1 7 4.5"/></svg></span><span class="tab-label">Crew</span></button>
 <span class="nav-separator" aria-hidden="true"></span>
-<button data-nav="timesheet" onclick="openMyTimesheet()">Timesheet</button>
+<button data-nav="timesheet" onclick="openMyTimesheet()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h8.5L19 8v12.5H6z"/><path d="M14.5 3.5V8H19M9 12h7M9 16h7"/></svg></span><span class="tab-label">Timesheet</span></button>
 <span class="nav-separator" aria-hidden="true"></span>
-<button data-nav="logout" onclick="signOut()">Log Out</button>
+<button data-nav="logout" onclick="signOut()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5.5v16H10M14 8l4 4-4 4M8.5 12H18"/></svg></span><span class="tab-label">Log Out</span></button>
 </nav>
 <label>Name</label><input id="crewName">
 <label>Department</label><input value="Sound" disabled>
@@ -909,15 +980,15 @@ body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hou
     <div class="subtitle" id="crewGreeting"></div>
   </div>
   <nav class="dtr-compact-nav" aria-label="DTR navigation">
-    <button data-nav="dtr" onclick="showDTR()">DTR</button>
+    <button data-nav="dtr" onclick="showDTR()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5l3.2 1.8"/></svg></span><span class="tab-label">DTR</span></button>
     <span class="nav-separator" aria-hidden="true"></span>
-    <button data-nav="details" onclick="openCrewInfo()">My Details</button>
+    <button data-nav="details" onclick="openCrewInfo()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7.5" r="3.5"/><path d="M5 20c.6-4.4 3-6.6 7-6.6s6.4 2.2 7 6.6"/></svg></span><span class="tab-label">My Details</span></button>
     <span class="nav-separator hod-only" aria-hidden="true"></span>
-    <button id="departmentButton" data-nav="crew" class="hod-only" onclick="openDepartment()">Crew</button>
+    <button id="departmentButton" data-nav="crew" class="hod-only" onclick="openDepartment()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="8" r="3"/><circle cx="16.5" cy="9" r="2.5"/><path d="M2.8 19c.5-4 2.4-6 5.7-6s5.2 2 5.7 6M14 14c3.5-.7 6 1 7 4.5"/></svg></span><span class="tab-label">Crew</span></button>
     <span class="nav-separator" aria-hidden="true"></span>
-    <button data-nav="timesheet" onclick="openMyTimesheet()">Timesheet</button>
+    <button data-nav="timesheet" onclick="openMyTimesheet()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h8.5L19 8v12.5H6z"/><path d="M14.5 3.5V8H19M9 12h7M9 16h7"/></svg></span><span class="tab-label">Timesheet</span></button>
     <span class="nav-separator" aria-hidden="true"></span>
-    <button data-nav="logout" onclick="signOut()">Log Out</button>
+    <button data-nav="logout" onclick="signOut()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5.5v16H10M14 8l4 4-4 4M8.5 12H18"/></svg></span><span class="tab-label">Log Out</span></button>
   </nav>
 </div>
 
@@ -994,15 +1065,15 @@ body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hou
   <button class="secondary back-dtr" onclick="showDTR()">← DTR</button>
 </div>
 <nav class="dtr-compact-nav app-persistent-nav" aria-label="App navigation">
-<button data-nav="dtr" onclick="showDTR()">DTR</button>
+<button data-nav="dtr" onclick="showDTR()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5l3.2 1.8"/></svg></span><span class="tab-label">DTR</span></button>
 <span class="nav-separator" aria-hidden="true"></span>
-<button data-nav="details" onclick="openCrewInfo()">My Details</button>
+<button data-nav="details" onclick="openCrewInfo()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7.5" r="3.5"/><path d="M5 20c.6-4.4 3-6.6 7-6.6s6.4 2.2 7 6.6"/></svg></span><span class="tab-label">My Details</span></button>
 <span class="nav-separator hod-only" aria-hidden="true"></span>
-<button data-nav="crew" class="hod-only" onclick="openDepartment()">Crew</button>
+<button data-nav="crew" class="hod-only" onclick="openDepartment()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="8" r="3"/><circle cx="16.5" cy="9" r="2.5"/><path d="M2.8 19c.5-4 2.4-6 5.7-6s5.2 2 5.7 6M14 14c3.5-.7 6 1 7 4.5"/></svg></span><span class="tab-label">Crew</span></button>
 <span class="nav-separator" aria-hidden="true"></span>
-<button data-nav="timesheet" onclick="openMyTimesheet()">Timesheet</button>
+<button data-nav="timesheet" onclick="openMyTimesheet()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h8.5L19 8v12.5H6z"/><path d="M14.5 3.5V8H19M9 12h7M9 16h7"/></svg></span><span class="tab-label">Timesheet</span></button>
 <span class="nav-separator" aria-hidden="true"></span>
-<button data-nav="logout" onclick="signOut()">Log Out</button>
+<button data-nav="logout" onclick="signOut()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5.5v16H10M14 8l4 4-4 4M8.5 12H18"/></svg></span><span class="tab-label">Log Out</span></button>
 </nav>
 <div class="week-nav">
   <button class="secondary" onclick="changeWeek(-7)" aria-label="Previous week">‹</button>
@@ -1061,15 +1132,15 @@ body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hou
     </div>
   </div>
 <nav class="dtr-compact-nav app-persistent-nav" aria-label="App navigation">
-<button data-nav="dtr" onclick="showDTR()">DTR</button>
+<button data-nav="dtr" onclick="showDTR()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5l3.2 1.8"/></svg></span><span class="tab-label">DTR</span></button>
 <span class="nav-separator" aria-hidden="true"></span>
-<button data-nav="details" onclick="openCrewInfo()">My Details</button>
+<button data-nav="details" onclick="openCrewInfo()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7.5" r="3.5"/><path d="M5 20c.6-4.4 3-6.6 7-6.6s6.4 2.2 7 6.6"/></svg></span><span class="tab-label">My Details</span></button>
 <span class="nav-separator hod-only" aria-hidden="true"></span>
-<button data-nav="crew" class="hod-only" onclick="openDepartment()">Crew</button>
+<button data-nav="crew" class="hod-only" onclick="openDepartment()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="8" r="3"/><circle cx="16.5" cy="9" r="2.5"/><path d="M2.8 19c.5-4 2.4-6 5.7-6s5.2 2 5.7 6M14 14c3.5-.7 6 1 7 4.5"/></svg></span><span class="tab-label">Crew</span></button>
 <span class="nav-separator" aria-hidden="true"></span>
-<button data-nav="timesheet" onclick="openMyTimesheet()">Timesheet</button>
+<button data-nav="timesheet" onclick="openMyTimesheet()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h8.5L19 8v12.5H6z"/><path d="M14.5 3.5V8H19M9 12h7M9 16h7"/></svg></span><span class="tab-label">Timesheet</span></button>
 <span class="nav-separator" aria-hidden="true"></span>
-<button data-nav="logout" onclick="signOut()">Log Out</button>
+<button data-nav="logout" onclick="signOut()"><span class="tab-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5.5v16H10M14 8l4 4-4 4M8.5 12H18"/></svg></span><span class="tab-label">Log Out</span></button>
 </nav>
   <div class="department-toolbar">
     <button class="secondary" onclick="goToCurrentDepartmentWeek();showDepartmentOverview()">This Week</button>
@@ -1132,7 +1203,7 @@ body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hou
 <script>
 
 // DaySlate update checker — prevents Safari/Home Screen from staying on stale index.html.
-const DAYSLATE_BUILD="2026.09.18-icon-tab-bar-v22";
+const DAYSLATE_BUILD="2026.09.18-real-icon-tabs-v23";
 async function checkForAppUpdate(){
   try{
     const base=new URL("index.html",location.href);
