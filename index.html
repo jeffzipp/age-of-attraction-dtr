@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#111111">
-<meta name="dayslate-build" content="2026.09.18-dtr-improvements-v9">
+<meta name="dayslate-build" content="2026.09.18-dayoff-v10">
 <meta name="application-name" content="DaySlate">
 <meta name="apple-mobile-web-app-title" content="DaySlate">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -586,19 +586,9 @@ body:not(.is-manager) .dtr-compact-nav button{
 
 /* v9 — iPhone safe area + DTR day-off/calendar status */
 #loginScreen,#setupScreen,#dtrScreen,#timesheetScreen{padding-top:max(8px,env(safe-area-inset-top))}
-.dtr-date-tools{display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:8px;align-items:end}
-.dtr-date-tools input{margin:0}.calendar-status-button{margin:0!important;padding:10px 8px!important;height:44px;font-size:19px!important}
-.dtr-calendar{margin-top:10px;padding:12px;background:#181818;border:1px solid #303030;border-radius:12px}.dtr-calendar.hidden{display:none!important}
-.dtr-cal-head{display:grid;grid-template-columns:40px 1fr 40px;align-items:center;gap:8px;margin-bottom:10px}.dtr-cal-head button{margin:0;padding:8px 4px;width:40px}
-.dtr-cal-month{text-align:center;font-weight:700}.dtr-cal-week,.dtr-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.dtr-cal-week span{text-align:center;color:#777;font-size:10px;text-transform:uppercase;padding:4px 0}
-.dtr-cal-day{position:relative;margin:0!important;padding:9px 2px!important;min-width:0!important;border-radius:8px!important;background:#222!important;color:#bbb!important;border:1px solid #333!important;font-size:13px!important}
-.dtr-cal-day.empty{visibility:hidden}.dtr-cal-day.selected{outline:2px solid #a8b99a}.dtr-cal-day.submitted{background:#17261b!important;border-color:#2f5138!important;color:#b9dfc1!important}
-.dtr-cal-day.day-off{background:#292c26!important;border-color:#59634f!important;color:#d5ddce!important}.dtr-cal-day.future{opacity:.48}
-.dtr-cal-mark{display:block;font-size:8px;line-height:1;margin-top:3px;font-weight:800;letter-spacing:.02em}
 .day-off-row{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding:11px 2px;border-top:1px solid #2d2d2d}.day-off-row span{font-size:15px;color:#ccc}.day-off-row input{width:20px;height:20px;margin:0}
 body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hoursPreview{display:none!important}
-.day-status.day-off{background:#292c26!important;border-color:#59634f!important;color:#d5ddce!important}.day-status.day-off .day-mark{font-size:9px!important;font-weight:800}
+.day-status.day-off{background:#4a1717!important;border-color:#9b3a3a!important;color:#ffb0b0!important}.day-status.day-off .day-mark{font-size:9px!important;font-weight:800}
 </style>
 </head>
 <body>
@@ -670,15 +660,7 @@ body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hou
 <div class="dtr-card">
   <div class="date-row">
     <div class="date-label">Date</div>
-    <div class="dtr-date-tools">
-      <input type="date" id="dtrDate" onchange="loadDTRForSelectedDate();syncDTRCalendarToSelected()">
-      <button type="button" class="secondary calendar-status-button" aria-label="Open DTR calendar" onclick="toggleDTRCalendar()">▦</button>
-    </div>
-    <div id="dtrCalendar" class="dtr-calendar hidden">
-      <div class="dtr-cal-head"><button type="button" class="secondary" onclick="changeDTRCalendarMonth(-1)">‹</button><div id="dtrCalendarMonth" class="dtr-cal-month"></div><button type="button" class="secondary" onclick="changeDTRCalendarMonth(1)">›</button></div>
-      <div class="dtr-cal-week"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
-      <div id="dtrCalendarGrid" class="dtr-cal-grid"></div>
-    </div>
+    <input type="date" id="dtrDate" onchange="loadDTRForSelectedDate()">
   </div>
 
   <div id="editingBadge" class="editing-badge">
@@ -886,7 +868,7 @@ body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hou
 <script>
 
 // DaySlate update checker — prevents Safari/Home Screen from staying on stale index.html.
-const DAYSLATE_BUILD="2026.09.18-dtr-improvements-v9";
+const DAYSLATE_BUILD="2026.09.18-dayoff-v10";
 async function checkForAppUpdate(){
   try{
     const base=new URL("index.html",location.href);
@@ -1114,14 +1096,6 @@ async function clearDay(){
 }
 
 function toggleDayOff(){const off=$("dayOff").checked;document.body.classList.toggle("dtr-day-off",off);if(off){$("startTime").value="";$("endTime").value="";$("lunchStart").value="";$("lunchEnd").value="";$("noLunch").checked=true}toggleLunch();updateHoursPreview()}
-let dtrCalendarMonth=null,dtrCalendarStatus=new Map();
-function syncDTRCalendarToSelected(){const v=$("dtrDate").value;if(v){const d=isoToLocalDate(v);dtrCalendarMonth=new Date(d.getFullYear(),d.getMonth(),1)}}
-async function toggleDTRCalendar(){const cal=$("dtrCalendar"),opening=cal.classList.contains("hidden");cal.classList.toggle("hidden");if(opening){syncDTRCalendarToSelected();await loadDTRCalendarStatus()}}
-async function changeDTRCalendarMonth(delta){if(!dtrCalendarMonth)syncDTRCalendarToSelected();if(!dtrCalendarMonth)dtrCalendarMonth=new Date();dtrCalendarMonth=new Date(dtrCalendarMonth.getFullYear(),dtrCalendarMonth.getMonth()+delta,1);await loadDTRCalendarStatus()}
-async function loadDTRCalendarStatus(){if(!currentProfile)return;if(!dtrCalendarMonth)syncDTRCalendarToSelected();if(!dtrCalendarMonth)dtrCalendarMonth=new Date();const y=dtrCalendarMonth.getFullYear(),m=dtrCalendarMonth.getMonth(),first=new Date(y,m,1,12),last=new Date(y,m+1,0,12);const{data,error}=await supabaseClient.from("dtrs").select("date,day_off,status").eq("crew_profile_id",currentProfile.id).gte("date",dateToISO(first)).lte("date",dateToISO(last));if(error){console.warn("Calendar status load failed",error);return}dtrCalendarStatus=new Map((data||[]).map(d=>[d.date,d]));renderDTRCalendar()}
-function renderDTRCalendar(){const y=dtrCalendarMonth.getFullYear(),m=dtrCalendarMonth.getMonth();$("dtrCalendarMonth").textContent=dtrCalendarMonth.toLocaleDateString(undefined,{month:"long",year:"numeric"});const firstDay=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),selected=$("dtrDate").value,today=todayString();let out="";for(let i=0;i<firstDay;i++)out+='<button type="button" class="dtr-cal-day empty" tabindex="-1"></button>';for(let day=1;day<=days;day++){const d=new Date(y,m,day,12),iso=dateToISO(d),row=dtrCalendarStatus.get(iso);let cls="dtr-cal-day",mark="";if(iso===selected)cls+=" selected";if(iso>today)cls+=" future";if(row?.day_off){cls+=" day-off";mark='<span class="dtr-cal-mark">OFF</span>'}else if(row){cls+=" submitted";mark='<span class="dtr-cal-mark">✓</span>'}out+=`<button type="button" class="${cls}" onclick="selectDTRCalendarDate('${iso}')">${day}${mark}</button>`}$("dtrCalendarGrid").innerHTML=out}
-async function selectDTRCalendarDate(iso){$("dtrDate").value=iso;$("dtrCalendar").classList.add("hidden");await loadDTRForSelectedDate()}
-
 async function submitDTR(){try{
   clearMessage("dtrMessage");
   const date=$("dtrDate").value,dayOff=$("dayOff").checked,notes=$("dtrNotes").value.trim();
