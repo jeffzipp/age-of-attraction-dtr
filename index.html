@@ -765,7 +765,7 @@ function showScreen(id){setActiveNavForScreen(id);["loginScreen","setupScreen","
 function showMessage(id,msg,type){$(id).textContent=msg;$(id).className="message "+type}function clearMessage(id){$(id).textContent="";$(id).className="message"}
 function dateToISO(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}function isoToLocalDate(s){const p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2],12)}function todayString(){return dateToISO(new Date())}
 function getSaturdayForDate(input){const d=new Date(input.getFullYear(),input.getMonth(),input.getDate(),12);d.setDate(d.getDate()+(6-d.getDay()+7)%7);return d}function getSundayForSaturday(s){const d=new Date(s.getFullYear(),s.getMonth(),s.getDate(),12);d.setDate(d.getDate()-6);return d}
-function formatDisplayDate(d){return d.toLocaleDateString("en-CA",{weekday:"long",month:"long",day:"numeric",year:"numeric"})}function formatPDFDate(d){return `${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getDate()).padStart(2,"0")}`}
+function formatDisplayDate(d){return d.toLocaleDateString("en-CA",{weekday:"long",month:"long",day:"numeric",year:"numeric"})}function formatPDFDate(d){return `${d.getMonth()+1}/${d.getDate()}`}
 function normalizeTimeInput(value){
   const raw=(value||"").trim();
   if(!raw)return"";
