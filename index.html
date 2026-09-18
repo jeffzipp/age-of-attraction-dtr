@@ -508,12 +508,60 @@ body:not(.is-manager) .dtr-compact-nav button{
 }
 
 /* DaySlate signed-in brand — compact persistent identity */
-.signed-in-brand{display:flex;align-items:center;gap:7px;margin:0 0 10px;color:#f7f5ef;font-weight:800;font-size:17px;line-height:1;letter-spacing:-.45px}
-.signed-in-brand .ds-mini-mark{position:relative;width:18px;height:22px;flex:0 0 18px}
-.signed-in-brand .ds-mini-mark:before,.signed-in-brand .ds-mini-mark:after{content:"";position:absolute;left:2px;width:14px;height:8px;border-radius:2px;background:#a8b99a;transform:skewY(-12deg)}
-.signed-in-brand .ds-mini-mark:before{top:1px}
-.signed-in-brand .ds-mini-mark:after{top:12px}
-@media(max-width:600px){.signed-in-brand{font-size:15px;margin-bottom:8px}.signed-in-brand .ds-mini-mark{transform:scale(.9);transform-origin:left center}}
+.signed-in-brand{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  width:100%;
+  margin:2px 0 18px;
+  color:#f7f5ef;
+  font-weight:800;
+  font-size:25px;
+  line-height:1;
+  letter-spacing:-.8px;
+  text-align:center;
+}
+.signed-in-brand .ds-mini-mark{
+  position:relative;
+  width:34px;
+  height:42px;
+  flex:0 0 42px;
+}
+.signed-in-brand .ds-mini-mark:before,
+.signed-in-brand .ds-mini-mark:after{
+  content:"";
+  position:absolute;
+  left:3px;
+  width:28px;
+  height:14px;
+  border-radius:3px;
+  background:#a8b99a;
+  transform:skewY(-12deg);
+}
+.signed-in-brand .ds-mini-mark:before{top:2px}
+.signed-in-brand .ds-mini-mark:after{top:24px}
+@media(max-width:600px){
+  .signed-in-brand{
+    font-size:23px;
+    margin:0 0 15px;
+    gap:5px;
+  }
+  .signed-in-brand .ds-mini-mark{
+    width:30px;
+    height:37px;
+    flex-basis:37px;
+  }
+  .signed-in-brand .ds-mini-mark:before,
+  .signed-in-brand .ds-mini-mark:after{
+    left:3px;
+    width:24px;
+    height:12px;
+  }
+  .signed-in-brand .ds-mini-mark:before{top:2px}
+  .signed-in-brand .ds-mini-mark:after{top:21px}
+}
 </style>
 </head>
 <body>
