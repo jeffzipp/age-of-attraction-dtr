@@ -489,17 +489,48 @@ body:not(.is-manager) .dtr-compact-nav button{
     margin:0 !important;
   }
 }
+
+/* DaySlate logo — approved two-slate mark + wordmark */
+.dayslate-login-logo{display:flex;flex-direction:column;align-items:center;justify-content:center;margin:2px 0 24px;text-align:center}
+.dayslate-mark{position:relative;width:44px;height:52px;margin-bottom:8px}
+.dayslate-mark span{position:absolute;left:6px;width:34px;height:18px;background:#a8b99a;border-radius:3px;transform:skewY(-12deg) rotate(-3deg);transform-origin:center}
+.dayslate-mark span:first-child{top:5px}
+.dayslate-mark span:last-child{top:28px}
+.dayslate-wordmark{font-size:39px;line-height:1;font-weight:800;letter-spacing:-2.1px;color:#f7f5ef}
+#loginScreen>h1,#loginScreen>h2{text-align:center}
+@media(max-width:600px){
+  .dayslate-login-logo{margin-top:0;margin-bottom:20px}
+  .dayslate-mark{width:40px;height:47px;margin-bottom:7px}
+  .dayslate-mark span{left:5px;width:31px;height:16px}
+  .dayslate-mark span:first-child{top:4px}
+  .dayslate-mark span:last-child{top:25px}
+  .dayslate-wordmark{font-size:36px}
+}
+
+/* DaySlate signed-in brand — compact persistent identity */
+.signed-in-brand{display:flex;align-items:center;gap:7px;margin:0 0 10px;color:#f7f5ef;font-weight:800;font-size:17px;line-height:1;letter-spacing:-.45px}
+.signed-in-brand .ds-mini-mark{position:relative;width:18px;height:22px;flex:0 0 18px}
+.signed-in-brand .ds-mini-mark:before,.signed-in-brand .ds-mini-mark:after{content:"";position:absolute;left:2px;width:14px;height:8px;border-radius:2px;background:#a8b99a;transform:skewY(-12deg)}
+.signed-in-brand .ds-mini-mark:before{top:1px}
+.signed-in-brand .ds-mini-mark:after{top:12px}
+@media(max-width:600px){.signed-in-brand{font-size:15px;margin-bottom:8px}.signed-in-brand .ds-mini-mark{transform:scale(.9);transform-origin:left center}}
 </style>
 </head>
 <body>
 <div id="appContainer" class="container">
 <div id="loginScreen"><div id="inviteLoginBanner" class="invite-banner hidden"></div>
+<div class="dayslate-login-logo" aria-label="DaySlate">
+  <div class="dayslate-mark" aria-hidden="true"><span></span><span></span></div>
+  <div class="dayslate-wordmark">DaySlate</div>
+</div>
 <h1>Age of Attraction</h1><h2>Season 2 · Sound Department</h2>
 <label>Email</label><input type="email" id="email" autocomplete="email">
 <label>Password</label><input type="password" id="password" autocomplete="current-password">
 <button id="loginButton" onclick="signIn()">Log In</button><button class="secondary" onclick="signUp()">Create Account</button><div id="loginMessage" class="message"></div>
 </div>
-<div id="setupScreen" class="hidden"><div id="inviteSetupBanner" class="invite-banner hidden"></div>
+<div id="setupScreen" class="hidden">
+<div class="signed-in-brand" aria-label="DaySlate"><span class="ds-mini-mark" aria-hidden="true"></span><span>DaySlate</span></div>
+<div id="inviteSetupBanner" class="invite-banner hidden"></div>
 <div class="setup-header"><h1 id="setupTitle">Crew Setup</h1><div class="setup-header-actions"><button id="crewInfoBack" class="secondary hidden" onclick="cancelCrewInfoEdit()">Back</button><button class="secondary" onclick="signOut()">Log Out</button></div></div><div class="subtitle" id="setupSubtitle">Enter your production and payroll information.</div><nav class="dtr-compact-nav app-persistent-nav" aria-label="App navigation">
 <button data-nav="dtr" onclick="showDTR()">DTR</button>
 <span class="nav-separator" aria-hidden="true"></span>
@@ -531,6 +562,8 @@ body:not(.is-manager) .dtr-compact-nav button{
 </div>
 </div>
 <div id="dtrScreen" class="hidden">
+<div class="signed-in-brand" aria-label="DaySlate"><span class="ds-mini-mark" aria-hidden="true"></span><span>DaySlate</span></div>
+
 <div class="dtr-header">
   <div>
     <h1>Daily DTR</h1>
@@ -610,6 +643,8 @@ body:not(.is-manager) .dtr-compact-nav button{
 
 </div>
 <div id="timesheetScreen" class="hidden">
+<div class="signed-in-brand" aria-label="DaySlate"><span class="ds-mini-mark" aria-hidden="true"></span><span>DaySlate</span></div>
+
 <div class="timesheet-header">
   <div><h1>My Timesheet</h1><div class="subtitle" id="timesheetCrewName"></div></div>
   <button class="secondary back-dtr" onclick="showDTR()">← DTR</button>
@@ -669,6 +704,8 @@ body:not(.is-manager) .dtr-compact-nav button{
 </div>
 
 <div id="departmentScreen" class="hidden">
+<div class="signed-in-brand" aria-label="DaySlate"><span class="ds-mini-mark" aria-hidden="true"></span><span>DaySlate</span></div>
+
   <div class="department-header">
     <div>
       <h1>Department</h1>
