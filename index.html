@@ -576,6 +576,141 @@ body:not(.is-manager) .dtr-compact-nav button{
   #loginScreen button.secondary{margin-top:5px}
 }
 
+
+
+/* DaySlate v6 — render-matched mobile login composition; aesthetics only */
+@media (max-width:600px){
+  html:has(#loginScreen:not(.hidden)),
+  body:has(#loginScreen:not(.hidden)){
+    height:100%;
+    min-height:100%;
+    overflow:hidden;
+  }
+  body:has(#loginScreen:not(.hidden)){
+    background-position:50% 50%;
+    background-size:cover;
+    background-attachment:scroll;
+  }
+  body:has(#loginScreen:not(.hidden))::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:linear-gradient(180deg,rgba(5,8,6,.05) 0%,rgba(5,8,6,.10) 25%,rgba(5,8,6,.48) 52%,rgba(5,8,6,.88) 78%,rgba(5,8,6,.98) 100%);
+    z-index:0;
+  }
+  body:has(#loginScreen:not(.hidden)) #appContainer{
+    position:relative;
+    z-index:1;
+    display:block;
+    width:100%;
+    max-width:none;
+    min-height:100svh;
+    height:100svh;
+    padding:calc(env(safe-area-inset-top) + 14px) 20px calc(env(safe-area-inset-bottom) + 10px);
+    overflow:hidden;
+  }
+  #loginScreen{
+    position:absolute;
+    left:20px;
+    right:20px;
+    top:clamp(190px,27svh,250px);
+    bottom:auto;
+    width:auto;
+    margin:0;
+    padding:0;
+    border:0;
+    border-radius:0;
+    background:transparent;
+    box-shadow:none;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+  }
+  #loginScreen .ds-login-brand{
+    align-items:center;
+    text-align:center;
+    margin:0 0 8px;
+  }
+  #loginScreen .ds-login-brand .ds-mark{
+    width:40px;
+    height:40px;
+    margin:0 0 4px;
+  }
+  #loginScreen .ds-login-brand .ds-wordmark{
+    font-size:30px;
+    line-height:1;
+    text-shadow:0 2px 16px rgba(0,0,0,.45);
+  }
+  #loginScreen .ds-login-tag{
+    margin-top:7px;
+    font-size:8.5px;
+    line-height:1.1;
+    letter-spacing:.30em;
+    color:#eef0eb;
+    text-shadow:0 1px 10px rgba(0,0,0,.7);
+  }
+  #loginScreen h1{
+    margin:12px 0 2px;
+    font-size:20px;
+    line-height:1.08;
+    text-align:center;
+    text-shadow:0 2px 14px rgba(0,0,0,.55);
+  }
+  #loginScreen h2{
+    margin:0 0 12px;
+    font-size:13px;
+    line-height:1.15;
+    text-align:center;
+    color:#e0e3de;
+    text-shadow:0 2px 12px rgba(0,0,0,.55);
+  }
+  #loginScreen label{
+    margin:8px 0 4px;
+    font-size:11px;
+    color:#f0f1ed;
+    text-shadow:0 1px 8px rgba(0,0,0,.75);
+  }
+  #loginScreen input{
+    height:43px;
+    padding:9px 12px;
+    border-radius:10px;
+    border:1px solid rgba(158,175,145,.42);
+    background:rgba(19,27,23,.78);
+    box-shadow:0 4px 18px rgba(0,0,0,.16);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+  }
+  #loginScreen button{
+    height:43px;
+    margin-top:10px;
+    padding:9px 12px;
+    border-radius:10px;
+    font-size:15px;
+  }
+  #loginScreen button.secondary{
+    margin-top:7px;
+    background:rgba(18,25,21,.72);
+    border:1px solid rgba(184,199,171,.62);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+  }
+  #loginScreen .message{
+    margin-top:6px;
+    padding:6px 8px;
+    font-size:11px;
+  }
+}
+@media (max-width:600px) and (max-height:760px){
+  #loginScreen{top:clamp(135px,21svh,175px)}
+  #loginScreen .ds-login-brand .ds-mark{width:34px;height:34px}
+  #loginScreen .ds-login-brand .ds-wordmark{font-size:26px}
+  #loginScreen h1{margin-top:8px;font-size:18px}
+  #loginScreen h2{margin-bottom:8px;font-size:12px}
+  #loginScreen label{margin-top:6px}
+  #loginScreen input,#loginScreen button{height:40px}
+  #loginScreen button{margin-top:8px}
+}
+
 </style>
 </head>
 <body>
