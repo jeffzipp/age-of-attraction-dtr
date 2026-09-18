@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#111111">
-<meta name="dayslate-build" content="2026.09.18-branding-v8">
+<meta name="dayslate-build" content="2026.09.18-dtr-improvements-v9">
 <meta name="application-name" content="DaySlate">
 <meta name="apple-mobile-web-app-title" content="DaySlate">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -583,6 +583,22 @@ body:not(.is-manager) .dtr-compact-nav button{
   .signed-in-brand .ds-mini-mark:before{top:2px}
   .signed-in-brand .ds-mini-mark:after{top:21px}
 }
+
+/* v9 — iPhone safe area + DTR day-off/calendar status */
+#loginScreen,#setupScreen,#dtrScreen,#timesheetScreen{padding-top:max(8px,env(safe-area-inset-top))}
+.dtr-date-tools{display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:8px;align-items:end}
+.dtr-date-tools input{margin:0}.calendar-status-button{margin:0!important;padding:10px 8px!important;height:44px;font-size:19px!important}
+.dtr-calendar{margin-top:10px;padding:12px;background:#181818;border:1px solid #303030;border-radius:12px}.dtr-calendar.hidden{display:none!important}
+.dtr-cal-head{display:grid;grid-template-columns:40px 1fr 40px;align-items:center;gap:8px;margin-bottom:10px}.dtr-cal-head button{margin:0;padding:8px 4px;width:40px}
+.dtr-cal-month{text-align:center;font-weight:700}.dtr-cal-week,.dtr-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.dtr-cal-week span{text-align:center;color:#777;font-size:10px;text-transform:uppercase;padding:4px 0}
+.dtr-cal-day{position:relative;margin:0!important;padding:9px 2px!important;min-width:0!important;border-radius:8px!important;background:#222!important;color:#bbb!important;border:1px solid #333!important;font-size:13px!important}
+.dtr-cal-day.empty{visibility:hidden}.dtr-cal-day.selected{outline:2px solid #a8b99a}.dtr-cal-day.submitted{background:#17261b!important;border-color:#2f5138!important;color:#b9dfc1!important}
+.dtr-cal-day.day-off{background:#292c26!important;border-color:#59634f!important;color:#d5ddce!important}.dtr-cal-day.future{opacity:.48}
+.dtr-cal-mark{display:block;font-size:8px;line-height:1;margin-top:3px;font-weight:800;letter-spacing:.02em}
+.day-off-row{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding:11px 2px;border-top:1px solid #2d2d2d}.day-off-row span{font-size:15px;color:#ccc}.day-off-row input{width:20px;height:20px;margin:0}
+body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hoursPreview{display:none!important}
+.day-status.day-off{background:#292c26!important;border-color:#59634f!important;color:#d5ddce!important}.day-status.day-off .day-mark{font-size:9px!important;font-weight:800}
 </style>
 </head>
 <body>
@@ -635,7 +651,7 @@ body:not(.is-manager) .dtr-compact-nav button{
 
 <div class="dtr-header">
   <div>
-    <h1>Daily DTR</h1>
+    <h1>DTR</h1>
     <div class="subtitle" id="crewGreeting"></div>
   </div>
   <nav class="dtr-compact-nav" aria-label="DTR navigation">
@@ -654,7 +670,15 @@ body:not(.is-manager) .dtr-compact-nav button{
 <div class="dtr-card">
   <div class="date-row">
     <div class="date-label">Date</div>
-    <input type="date" id="dtrDate" onchange="loadDTRForSelectedDate()">
+    <div class="dtr-date-tools">
+      <input type="date" id="dtrDate" onchange="loadDTRForSelectedDate();syncDTRCalendarToSelected()">
+      <button type="button" class="secondary calendar-status-button" aria-label="Open DTR calendar" onclick="toggleDTRCalendar()">▦</button>
+    </div>
+    <div id="dtrCalendar" class="dtr-calendar hidden">
+      <div class="dtr-cal-head"><button type="button" class="secondary" onclick="changeDTRCalendarMonth(-1)">‹</button><div id="dtrCalendarMonth" class="dtr-cal-month"></div><button type="button" class="secondary" onclick="changeDTRCalendarMonth(1)">›</button></div>
+      <div class="dtr-cal-week"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
+      <div id="dtrCalendarGrid" class="dtr-cal-grid"></div>
+    </div>
   </div>
 
   <div id="editingBadge" class="editing-badge">
@@ -684,6 +708,11 @@ body:not(.is-manager) .dtr-compact-nav button{
   </div>
 
   <div id="lunchFields"></div>
+
+  <label class="day-off-row">
+    <span>Day Off</span>
+    <input type="checkbox" id="dayOff" onchange="toggleDayOff()">
+  </label>
 
   <label class="no-lunch-row">
     <span>No Lunch</span>
@@ -715,7 +744,7 @@ body:not(.is-manager) .dtr-compact-nav button{
 <div class="signed-in-brand" aria-label="DaySlate"><span class="ds-mini-mark" aria-hidden="true"></span><span>DaySlate</span></div>
 
 <div class="timesheet-header">
-  <div><h1>My Timesheet</h1><div class="subtitle" id="timesheetCrewName"></div></div>
+  <div><h1>Timesheet</h1><div class="subtitle" id="timesheetCrewName"></div></div>
   <button class="secondary back-dtr" onclick="showDTR()">← DTR</button>
 </div>
 <nav class="dtr-compact-nav app-persistent-nav" aria-label="App navigation">
@@ -777,7 +806,7 @@ body:not(.is-manager) .dtr-compact-nav button{
 
   <div class="department-header">
     <div>
-      <h1>Department</h1>
+      <h1>Crew</h1>
       <div class="subtitle">Age of Attraction · Season 2 · Sound</div>
     </div>
     <div class="department-header-actions">
@@ -857,7 +886,7 @@ body:not(.is-manager) .dtr-compact-nav button{
 <script>
 
 // DaySlate update checker — prevents Safari/Home Screen from staying on stale index.html.
-const DAYSLATE_BUILD="2026.09.18-branding-v8";
+const DAYSLATE_BUILD="2026.09.18-dtr-improvements-v9";
 async function checkForAppUpdate(){
   try{
     const base=new URL("index.html",location.href);
@@ -1065,14 +1094,14 @@ async function resetMyPassword(){
 }
 
 async function saveProfile(){try{clearMessage("setupMessage");const employment_type=$("employmentType").value;const profile={user_id:currentUser.id,production_id:productionId,name:$("crewName").value.trim(),position:$("position").value,employment_type,day_rate:(parseFloat($("dayRate").value)||0),kit_rental:(parseFloat($("kitRental").value)||0),fee_type:$("feeType").value,local_hotel:$("localHotel").value,province:$("province").value,province_worked:$("provinceWorked").value,crew_initials:$("crewInitials").value.trim().toUpperCase(),corporation_name:employment_type==="Incorporated Contractor"?$("corporationName").value.trim():null,gst_number:employment_type==="Incorporated Contractor"?$("gstNumber").value.trim():null};if(!profile.name||!profile.position||!profile.employment_type||!profile.local_hotel||!profile.province||!profile.province_worked||!profile.crew_initials)throw Error("Please complete all required fields.");if(employment_type==="Incorporated Contractor"&&(!profile.corporation_name||!profile.gst_number))throw Error("Please enter your corporation name and GST number.");if(!productionId)await findProduction();profile.production_id=productionId;let r=currentProfile?await supabaseClient.from("crew_profiles").update(profile).eq("id",currentProfile.id).select().single():await supabaseClient.from("crew_profiles").insert(profile).select().single();if(r.error)throw r.error;currentProfile=r.data;productionId=currentProfile.production_id;crewInfoEditMode=false;resetSetupMode();await loadMembership();await showDTR()}catch(e){showMessage("setupMessage",e.message||"Unable to save profile.","error")}}
-function resetDTRForm(){currentDTR=null;$("startTime").value="";$("lunchStart").value="";$("lunchEnd").value="";$("endTime").value="";$("noLunch").checked=false;$("dtrNotes").value="";$("submitDTRButton").textContent="Submit DTR";$("clearDayButton").classList.add("hidden");$("editingBadge").classList.remove("show");toggleLunch();updateHoursPreview()}
+function resetDTRForm(){currentDTR=null;$("startTime").value="";$("lunchStart").value="";$("lunchEnd").value="";$("endTime").value="";$("noLunch").checked=false;$("dayOff").checked=false;document.body.classList.remove("dtr-day-off");$("dtrNotes").value="";$("submitDTRButton").textContent="Submit DTR";$("clearDayButton").classList.add("hidden");$("editingBadge").classList.remove("show");toggleLunch();updateHoursPreview()}
 async function showDTR(){showScreen("dtrScreen");if(!$("dtrDate").value)$("dtrDate").value=todayString();$("crewGreeting").textContent=currentProfile.name+" · "+currentProfile.position;await loadDTRForSelectedDate()}
-async function loadDTRForSelectedDate(){if(!currentProfile)return;clearMessage("dtrMessage");const date=$("dtrDate").value;if(!date)return;const{data,error}=await supabaseClient.from("dtrs").select("*").eq("crew_profile_id",currentProfile.id).eq("date",date).limit(1);if(error){showMessage("dtrMessage",error.message||"Unable to load DTR.","error");return}if(!data||!data.length){resetDTRForm();return}const d=data[0];currentDTR=d;$("startTime").value=minutesToTime(d.start_minutes);$("endTime").value=minutesToTime(d.end_minutes);$("noLunch").checked=!!d.no_lunch;$("lunchStart").value=d.no_lunch?"":minutesToTime(d.lunch_start_minutes);$("lunchEnd").value=d.no_lunch?"":minutesToTime(d.lunch_end_minutes);$("dtrNotes").value=d.notes||"";$("submitDTRButton").textContent="Update DTR";$("clearDayButton").classList.remove("hidden");$("editingBadge").classList.add("show");toggleLunch();updateHoursPreview()}
+async function loadDTRForSelectedDate(){if(!currentProfile)return;clearMessage("dtrMessage");const date=$("dtrDate").value;if(!date)return;const{data,error}=await supabaseClient.from("dtrs").select("*").eq("crew_profile_id",currentProfile.id).eq("date",date).limit(1);if(error){showMessage("dtrMessage",error.message||"Unable to load DTR.","error");return}if(!data||!data.length){resetDTRForm();return}const d=data[0];currentDTR=d;$("dayOff").checked=!!d.day_off;document.body.classList.toggle("dtr-day-off",!!d.day_off);$("startTime").value=d.day_off?"":minutesToTime(d.start_minutes);$("endTime").value=d.day_off?"":minutesToTime(d.end_minutes);$("noLunch").checked=!!d.no_lunch;$("lunchStart").value=(d.day_off||d.no_lunch)?"":minutesToTime(d.lunch_start_minutes);$("lunchEnd").value=(d.day_off||d.no_lunch)?"":minutesToTime(d.lunch_end_minutes);$("dtrNotes").value=d.notes||"";$("submitDTRButton").textContent="Update DTR";$("clearDayButton").classList.remove("hidden");$("editingBadge").classList.add("show");toggleLunch();updateHoursPreview()}
 async function clearDay(){
   if(!currentDTR||!currentProfile)return;
   const date=$("dtrDate").value;
   const displayDate=formatDisplayDate(isoToLocalDate(date));
-  if(!confirm(`Clear ${displayDate}?\n\nThis will permanently remove this day's DTR. Use this if the date was entered by mistake or you had the day off.`))return;
+  if(!confirm(`Clear ${displayDate}?\n\nThis will permanently remove this day's DTR. Use this if the date was entered by mistake.`))return;
   try{
     clearMessage("dtrMessage");
     const{error}=await supabaseClient.from("dtrs").delete().eq("id",currentDTR.id).eq("crew_profile_id",currentProfile.id);
@@ -1083,7 +1112,39 @@ async function clearDay(){
     showMessage("dtrMessage",e.message||"Unable to clear this day.","error");
   }
 }
-async function submitDTR(){try{clearMessage("dtrMessage");["startTime","lunchStart","lunchEnd","endTime"].forEach(id=>formatTimeField($(id)));const date=$("dtrDate").value,startValue=$("startTime").value,endValue=$("endTime").value,noLunch=$("noLunch").checked,notes=$("dtrNotes").value.trim();if(!date||!startValue||!endValue)throw Error("Please complete the date, IN and OUT.");const start=parseTimeToMinutes(startValue),end=parseTimeToMinutes(endValue);if(start===null||end===null)throw Error("IN and OUT must use HH:MM format and be between 00:00 and 48:00.");if(end<=start)throw Error("OUT must be later than IN. For after-midnight finishes use 25:00, 26:30, etc.");let ls=null,le=null;if(!noLunch){ls=parseTimeToMinutes($("lunchStart").value);le=parseTimeToMinutes($("lunchEnd").value);if(ls===null||le===null)throw Error("Please enter valid Lunch Start and Lunch End, or select No Lunch.");if(ls<start)throw Error("Lunch Start cannot be before IN.");if(le<=ls)throw Error("Lunch End must be later than Lunch Start.");if(end<=le)throw Error("OUT must be later than Lunch End.")}const wasEditing=!!currentDTR;const{error}=await supabaseClient.from("dtrs").upsert({crew_profile_id:currentProfile.id,date,start_minutes:start,lunch_start_minutes:noLunch?null:ls,lunch_end_minutes:noLunch?null:le,end_minutes:end,no_lunch:noLunch,notes,status:"submitted",updated_at:new Date().toISOString()},{onConflict:"crew_profile_id,date"});if(error)throw error;await loadDTRForSelectedDate();showMessage("dtrMessage",wasEditing?"DTR updated successfully.":"DTR submitted successfully.","success")}catch(e){showMessage("dtrMessage",e.message||"Unable to submit DTR.","error")}}
+
+function toggleDayOff(){const off=$("dayOff").checked;document.body.classList.toggle("dtr-day-off",off);if(off){$("startTime").value="";$("endTime").value="";$("lunchStart").value="";$("lunchEnd").value="";$("noLunch").checked=true}toggleLunch();updateHoursPreview()}
+let dtrCalendarMonth=null,dtrCalendarStatus=new Map();
+function syncDTRCalendarToSelected(){const v=$("dtrDate").value;if(v){const d=isoToLocalDate(v);dtrCalendarMonth=new Date(d.getFullYear(),d.getMonth(),1)}}
+async function toggleDTRCalendar(){const cal=$("dtrCalendar"),opening=cal.classList.contains("hidden");cal.classList.toggle("hidden");if(opening){syncDTRCalendarToSelected();await loadDTRCalendarStatus()}}
+async function changeDTRCalendarMonth(delta){if(!dtrCalendarMonth)syncDTRCalendarToSelected();if(!dtrCalendarMonth)dtrCalendarMonth=new Date();dtrCalendarMonth=new Date(dtrCalendarMonth.getFullYear(),dtrCalendarMonth.getMonth()+delta,1);await loadDTRCalendarStatus()}
+async function loadDTRCalendarStatus(){if(!currentProfile)return;if(!dtrCalendarMonth)syncDTRCalendarToSelected();if(!dtrCalendarMonth)dtrCalendarMonth=new Date();const y=dtrCalendarMonth.getFullYear(),m=dtrCalendarMonth.getMonth(),first=new Date(y,m,1,12),last=new Date(y,m+1,0,12);const{data,error}=await supabaseClient.from("dtrs").select("date,day_off,status").eq("crew_profile_id",currentProfile.id).gte("date",dateToISO(first)).lte("date",dateToISO(last));if(error){console.warn("Calendar status load failed",error);return}dtrCalendarStatus=new Map((data||[]).map(d=>[d.date,d]));renderDTRCalendar()}
+function renderDTRCalendar(){const y=dtrCalendarMonth.getFullYear(),m=dtrCalendarMonth.getMonth();$("dtrCalendarMonth").textContent=dtrCalendarMonth.toLocaleDateString(undefined,{month:"long",year:"numeric"});const firstDay=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate(),selected=$("dtrDate").value,today=todayString();let out="";for(let i=0;i<firstDay;i++)out+='<button type="button" class="dtr-cal-day empty" tabindex="-1"></button>';for(let day=1;day<=days;day++){const d=new Date(y,m,day,12),iso=dateToISO(d),row=dtrCalendarStatus.get(iso);let cls="dtr-cal-day",mark="";if(iso===selected)cls+=" selected";if(iso>today)cls+=" future";if(row?.day_off){cls+=" day-off";mark='<span class="dtr-cal-mark">OFF</span>'}else if(row){cls+=" submitted";mark='<span class="dtr-cal-mark">✓</span>'}out+=`<button type="button" class="${cls}" onclick="selectDTRCalendarDate('${iso}')">${day}${mark}</button>`}$("dtrCalendarGrid").innerHTML=out}
+async function selectDTRCalendarDate(iso){$("dtrDate").value=iso;$("dtrCalendar").classList.add("hidden");await loadDTRForSelectedDate()}
+
+async function submitDTR(){try{
+  clearMessage("dtrMessage");
+  const date=$("dtrDate").value,dayOff=$("dayOff").checked,notes=$("dtrNotes").value.trim();
+  if(!date)throw Error("Please select a date.");
+  const wasEditing=!!currentDTR;
+  let payload={crew_profile_id:currentProfile.id,date,day_off:dayOff,notes,status:"submitted",updated_at:new Date().toISOString()};
+  if(dayOff){
+    Object.assign(payload,{start_minutes:0,end_minutes:0,lunch_start_minutes:null,lunch_end_minutes:null,no_lunch:true});
+  }else{
+    ["startTime","lunchStart","lunchEnd","endTime"].forEach(id=>formatTimeField($(id)));
+    const startValue=$("startTime").value,endValue=$("endTime").value,noLunch=$("noLunch").checked;
+    if(!startValue||!endValue)throw Error("Please complete IN and OUT, or select Day Off.");
+    const start=parseTimeToMinutes(startValue),end=parseTimeToMinutes(endValue);
+    if(start===null||end===null)throw Error("IN and OUT must use HH:MM format and be between 00:00 and 48:00.");
+    if(end<=start)throw Error("OUT must be later than IN. For after-midnight finishes use 25:00, 26:30, etc.");
+    let ls=null,le=null;
+    if(!noLunch){ls=parseTimeToMinutes($("lunchStart").value);le=parseTimeToMinutes($("lunchEnd").value);if(ls===null||le===null)throw Error("Please enter valid Lunch Start and Lunch End, or select No Lunch.");if(ls<start)throw Error("Lunch Start cannot be before IN.");if(le<=ls)throw Error("Lunch End must be later than Lunch Start.");if(end<=le)throw Error("OUT must be later than Lunch End.")}
+    Object.assign(payload,{start_minutes:start,end_minutes:end,lunch_start_minutes:noLunch?null:ls,lunch_end_minutes:noLunch?null:le,no_lunch:noLunch});
+  }
+  const{error}=await supabaseClient.from("dtrs").upsert(payload,{onConflict:"crew_profile_id,date"});if(error)throw error;
+  await loadDTRForSelectedDate();
+  showMessage("dtrMessage",dayOff?"Day off saved.":(wasEditing?"DTR updated successfully.":"DTR submitted successfully."),"success");
+}catch(e){showMessage("dtrMessage",e.message||"Unable to submit DTR.","error")}}
 
 
 function showDepartmentOverview(){
@@ -1297,9 +1358,9 @@ async function loadDepartmentDashboard(){
     $("departmentList").innerHTML=profiles.map(p=>{
       const days=dayDates.map((date,i)=>{
         const dtr=departmentDTRMap.get(`${p.id}|${date}`);
-        const cls=`day-status${dtr?" submitted":""}${date===today?" today":""}`;
+        const cls=`day-status${dtr?" submitted":""}${dtr?.day_off?" day-off":""}${date===today?" today":""}`;
         const disabled=dtr?"":" disabled";
-        return `<button class="${cls}"${disabled} onclick="openDTRDetail('${p.id}','${date}')"><span class="day-name">${dayNames[i]}</span><span class="day-mark">${dtr?"✓":"—"}</span></button>`;
+        return `<button class="${cls}"${disabled} onclick="openDTRDetail('${p.id}','${date}')"><span class="day-name">${dayNames[i]}</span><span class="day-mark">${dtr?(dtr.day_off?"OFF":"✓"):"—"}</span></button>`;
       }).join("");
       return `<div class="crew-week-card"><div class="crew-week-top"><div><div class="crew-week-name">${escapeHTML(p.name)}</div><div class="crew-week-position">${escapeHTML(p.position||"Crew")}</div></div></div><div class="week-status-grid">${days}</div></div>`;
     }).join("");
@@ -1322,8 +1383,8 @@ function openDTRDetail(profileId,date){
     if(error||!data)return;
     $("detailCrewName").textContent=data.name+" · "+(data.position||"Crew");
     $("detailDate").textContent=formatDisplayDate(isoToLocalDate(date));
-    const total=calculateDTRMinutes(dtr);
-    const lunch=dtr.no_lunch?null:(dtr.lunch_end_minutes-dtr.lunch_start_minutes);
+    const total=dtr.day_off?null:calculateDTRMinutes(dtr);
+    const lunch=(dtr.day_off||dtr.no_lunch)?null:(dtr.lunch_end_minutes-dtr.lunch_start_minutes);
     const note=dtr.notes?`<div class="dtr-detail full"><div class="dtr-detail-label">Note</div><div class="dtr-detail-value" style="font-size:14px">${escapeHTML(dtr.notes)}</div></div>`:"";
     $("dtrDetailBody").innerHTML=
       `<div class="dtr-detail"><div class="dtr-detail-label">IN</div><div class="dtr-detail-value">${minutesToTime(dtr.start_minutes)}</div></div>`+
@@ -1371,7 +1432,7 @@ async function renderTimesheetPreview(blob){
 async function buildTimesheet(){try{clearMessage("timesheetMessage");$("pdfLoading").classList.remove("hidden");$("timesheetPDF").classList.add("hidden");$("pdfPreviewWrap").classList.add("hidden");$("pdfPreviewCaption").classList.add("hidden");$("openPDFButton").disabled=true;$("sendPDFButton").disabled=true;$("weekEndingDisplay").textContent=formatDisplayDate(currentWeekEnding);const sunday=getSundayForSaturday(currentWeekEnding),sundayISO=dateToISO(sunday),saturdayISO=dateToISO(currentWeekEnding);const{data:dtrs,error:dtrError}=await supabaseClient.from("dtrs").select("*").eq("crew_profile_id",currentProfile.id).gte("date",sundayISO).lte("date",saturdayISO).order("date",{ascending:true});if(dtrError)throw dtrError;const{data:templates,error:templateError}=await supabaseClient.from("timesheet_templates").select("*").eq("production_id",productionId).eq("is_active",true).limit(1);if(templateError)throw templateError;if(!templates||!templates.length)throw Error("No timesheet template has been configured for this production.");const template=templates[0];const{data:mappings,error:mappingError}=await supabaseClient.from("timesheet_field_mappings").select("*").eq("template_id",template.id);if(mappingError)throw mappingError;const{data:pdfBlob,error:downloadError}=await supabaseClient.storage.from("timesheet-templates").download(template.file_path);if(downloadError)throw downloadError;const pdfDoc=await PDFLib.PDFDocument.load(await pdfBlob.arrayBuffer()),form=pdfDoc.getForm(),values=buildTimesheetValues(sunday,currentWeekEnding,dtrs||[]);let filled=0,errors=0;for(const mapping of mappings){
 const name = mapping.field_key === "crew.kit_fee" ? "Kit Fee if any" : mapping.pdf_field_name;
 const value=values[mapping.field_key];if(value===undefined||value===null||!name)continue;try{const field=form.getField(name);if(typeof field.setText==="function"){field.setText(String(value??""));filled++;continue}if(typeof field.check==="function"&&typeof field.uncheck==="function"){value===true?field.check():field.uncheck();filled++;continue}if(typeof field.select==="function"){field.select(String(value??""));filled++;continue}console.warn("Unhandled PDF field",name)}catch(e){errors++;console.error("PDF field failed",mapping.field_key,name,e)}}try{form.updateFieldAppearances()}catch(e){console.warn("Appearance update failed",e)}const bytes=await pdfDoc.save(),blob=new Blob([bytes],{type:"application/pdf"});if(currentPDFUrl)URL.revokeObjectURL(currentPDFUrl);currentPDFBlob=blob;currentPDFUrl=URL.createObjectURL(blob);$("timesheetPDF").src=currentPDFUrl;$("pdfLoading").classList.add("hidden");await renderTimesheetPreview(blob);$("openPDFButton").disabled=false;$("sendPDFButton").disabled=false;if(!filled)showMessage("timesheetMessage","The PDF loaded, but no mapped fields could be filled.","error");else if(errors)showMessage("timesheetMessage",`${errors} PDF field(s) could not be filled.`,"error")}catch(e){console.error("TIMESHEET ERROR",e);$("pdfLoading").classList.add("hidden");showMessage("timesheetMessage",e.message||"Unable to build timesheet.","error")}}
-function buildTimesheetValues(sunday,saturday,dtrs){const v={};v["crew.name"]=currentProfile.name||"";v["crew.department"]="Sound";v["crew.position"]=currentProfile.position||"";v["week.ending"]=formatPDFDate(saturday);v["crew.day_rate"]=currentProfile.day_rate?"$"+Number(currentProfile.day_rate).toFixed(2):"";v["crew.corporation_name"]=currentProfile.corporation_name||"";v["crew.gst_number"]=currentProfile.gst_number||"";v["crew.gst_amount"]=currentProfile.gst_amount?"$"+Number(currentProfile.gst_amount).toFixed(2):"";v["crew.initials"]=currentProfile.crew_initials||"";v["crew.local"]=currentProfile.local_hotel==="Local";v["crew.hotel"]=currentProfile.local_hotel==="Hotel";v["crew.bc_resident"]=currentProfile.province==="BC";v["crew.on_resident"]=currentProfile.province==="ON";v["crew.kit_fee"]=currentProfile.fee_type==="Kit"&&currentProfile.kit_rental?"$"+Number(currentProfile.kit_rental).toFixed(2):"";v["crew.vehicle_fee"]=currentProfile.fee_type==="Vehicle"&&currentProfile.kit_rental?"$"+Number(currentProfile.kit_rental).toFixed(2):"";const keys=["sun","mon","tue","wed","thu","fri","sat"];for(let i=0;i<7;i++){const date=new Date(sunday.getFullYear(),sunday.getMonth(),sunday.getDate()+i,12),iso=dateToISO(date),key=keys[i],d=dtrs.find(x=>x.date===iso);if(!d)continue;v[`${key}.date`]=formatPDFDate(date);v[`${key}.in`]=minutesToTime(d.start_minutes);v[`${key}.out`]=minutesToTime(d.end_minutes);v[`${key}.lunch_start`]=d.no_lunch?"":minutesToTime(d.lunch_start_minutes);v[`${key}.lunch_end`]=d.no_lunch?"":minutesToTime(d.lunch_end_minutes);let lunch=0;if(!d.no_lunch&&d.lunch_start_minutes!==null&&d.lunch_end_minutes!==null)lunch=d.lunch_end_minutes-d.lunch_start_minutes;v[`${key}.hours`]=minutesToDecimalHours(d.end_minutes-d.start_minutes-lunch);v[`${key}.province`]=currentProfile.province_worked||""}return v}
+function buildTimesheetValues(sunday,saturday,dtrs){const v={};v["crew.name"]=currentProfile.name||"";v["crew.department"]="Sound";v["crew.position"]=currentProfile.position||"";v["week.ending"]=formatPDFDate(saturday);v["crew.day_rate"]=currentProfile.day_rate?"$"+Number(currentProfile.day_rate).toFixed(2):"";v["crew.corporation_name"]=currentProfile.corporation_name||"";v["crew.gst_number"]=currentProfile.gst_number||"";v["crew.gst_amount"]=currentProfile.gst_amount?"$"+Number(currentProfile.gst_amount).toFixed(2):"";v["crew.initials"]=currentProfile.crew_initials||"";v["crew.local"]=currentProfile.local_hotel==="Local";v["crew.hotel"]=currentProfile.local_hotel==="Hotel";v["crew.bc_resident"]=currentProfile.province==="BC";v["crew.on_resident"]=currentProfile.province==="ON";v["crew.kit_fee"]=currentProfile.fee_type==="Kit"&&currentProfile.kit_rental?"$"+Number(currentProfile.kit_rental).toFixed(2):"";v["crew.vehicle_fee"]=currentProfile.fee_type==="Vehicle"&&currentProfile.kit_rental?"$"+Number(currentProfile.kit_rental).toFixed(2):"";const keys=["sun","mon","tue","wed","thu","fri","sat"];for(let i=0;i<7;i++){const date=new Date(sunday.getFullYear(),sunday.getMonth(),sunday.getDate()+i,12),iso=dateToISO(date),key=keys[i],d=dtrs.find(x=>x.date===iso);if(!d||d.day_off)continue;v[`${key}.date`]=formatPDFDate(date);v[`${key}.in`]=minutesToTime(d.start_minutes);v[`${key}.out`]=minutesToTime(d.end_minutes);v[`${key}.lunch_start`]=d.no_lunch?"":minutesToTime(d.lunch_start_minutes);v[`${key}.lunch_end`]=d.no_lunch?"":minutesToTime(d.lunch_end_minutes);let lunch=0;if(!d.no_lunch&&d.lunch_start_minutes!==null&&d.lunch_end_minutes!==null)lunch=d.lunch_end_minutes-d.lunch_start_minutes;v[`${key}.hours`]=minutesToDecimalHours(d.end_minutes-d.start_minutes-lunch);v[`${key}.province`]=currentProfile.province_worked||""}return v}
 function openGeneratedPDF(){if(currentPDFUrl)window.open(currentPDFUrl,"_blank")}
 function safeFilenamePart(value){return String(value||"").trim().replace(/[^a-zA-Z0-9]+/g,"_").replace(/^_+|_+$/g,"")||"Timesheet"}
 async function sendGeneratedPDF(){
