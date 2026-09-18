@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#111111">
-<meta name="dayslate-build" content="2026.09.18-slatemachine-user-reference-v11">
+<meta name="dayslate-build" content="2026.09.18-slatemachine-sage-v13">
 <meta name="application-name" content="SlateMachine">
 <meta name="apple-mobile-web-app-title" content="SlateMachine">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -608,6 +608,26 @@ body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hou
   .signed-in-brand{height:48px!important}
 }
 
+
+/* v12 — force exact SlateMachine artwork; suppress legacy DaySlate text */
+.dayslate-login-logo .dayslate-mark,.dayslate-login-logo .dayslate-wordmark{display:none!important}
+.dayslate-login-logo{
+  width:100%!important;max-width:430px!important;height:auto!important;
+  aspect-ratio:750/460!important;
+  background:url("slatemachine-primary-logo.png") center/contain no-repeat!important;
+  margin:0 auto 18px!important;
+}
+.signed-in-brand .ds-mini-mark,.signed-in-brand>span{display:none!important}
+.signed-in-brand{
+  width:100%!important;height:58px!important;
+  background:url("slatemachine-logo.png") center/contain no-repeat!important;
+  margin:2px 0 18px!important;
+}
+@media(max-width:600px){
+  .dayslate-login-logo{max-width:360px!important}
+  .signed-in-brand{height:46px!important}
+}
+
 </style>
 </head>
 <body>
@@ -615,7 +635,7 @@ body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hou
 <div id="loginScreen"><div id="inviteLoginBanner" class="invite-banner hidden"></div>
 <div class="dayslate-login-logo" aria-label="SlateMachine">
   <div class="dayslate-mark" aria-hidden="true"><span></span><span></span></div>
-  <div class="dayslate-wordmark">DaySlate</div>
+  <div class="dayslate-wordmark">SlateMachine</div>
 </div>
 <h1>Age of Attraction</h1><h2>Season 2 · Sound Department</h2>
 <label>Email</label><input type="email" id="email" autocomplete="email">
@@ -623,7 +643,7 @@ body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hou
 <button id="loginButton" onclick="signIn()">Log In</button><button class="secondary" onclick="signUp()">Create Account</button><div id="loginMessage" class="message"></div>
 </div>
 <div id="setupScreen" class="hidden">
-<div class="signed-in-brand" aria-label="SlateMachine"><span class="ds-mini-mark" aria-hidden="true"></span><span>DaySlate</span></div>
+<div class="signed-in-brand" aria-label="SlateMachine"><span class="ds-mini-mark" aria-hidden="true"></span><span>SlateMachine</span></div>
 <div id="inviteSetupBanner" class="invite-banner hidden"></div>
 <div class="setup-header"><h1 id="setupTitle">Crew Setup</h1><div class="setup-header-actions"><button id="crewInfoBack" class="secondary hidden" onclick="cancelCrewInfoEdit()">Back</button><button class="secondary" onclick="signOut()">Log Out</button></div></div><div class="subtitle" id="setupSubtitle">Enter your production and payroll information.</div><nav class="dtr-compact-nav app-persistent-nav" aria-label="App navigation">
 <button data-nav="dtr" onclick="showDTR()">DTR</button>
@@ -656,7 +676,7 @@ body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hou
 </div>
 </div>
 <div id="dtrScreen" class="hidden">
-<div class="signed-in-brand" aria-label="SlateMachine"><span class="ds-mini-mark" aria-hidden="true"></span><span>DaySlate</span></div>
+<div class="signed-in-brand" aria-label="SlateMachine"><span class="ds-mini-mark" aria-hidden="true"></span><span>SlateMachine</span></div>
 
 <div class="dtr-header">
   <div>
@@ -742,7 +762,7 @@ body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hou
 
 </div>
 <div id="timesheetScreen" class="hidden">
-<div class="signed-in-brand" aria-label="SlateMachine"><span class="ds-mini-mark" aria-hidden="true"></span><span>DaySlate</span></div>
+<div class="signed-in-brand" aria-label="SlateMachine"><span class="ds-mini-mark" aria-hidden="true"></span><span>SlateMachine</span></div>
 
 <div class="timesheet-header">
   <div><h1>Timesheet</h1><div class="subtitle" id="timesheetCrewName"></div></div>
@@ -803,7 +823,7 @@ body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hou
 </div>
 
 <div id="departmentScreen" class="hidden">
-<div class="signed-in-brand" aria-label="SlateMachine"><span class="ds-mini-mark" aria-hidden="true"></span><span>DaySlate</span></div>
+<div class="signed-in-brand" aria-label="SlateMachine"><span class="ds-mini-mark" aria-hidden="true"></span><span>SlateMachine</span></div>
 
   <div class="department-header">
     <div>
@@ -887,7 +907,7 @@ body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hou
 <script>
 
 // DaySlate update checker — prevents Safari/Home Screen from staying on stale index.html.
-const DAYSLATE_BUILD="2026.09.18-slatemachine-user-reference-v11";
+const DAYSLATE_BUILD="2026.09.18-slatemachine-sage-v13";
 async function checkForAppUpdate(){
   try{
     const base=new URL("index.html",location.href);
