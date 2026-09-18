@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#111111">
-<meta name="dayslate-build" content="2026.09.18-compact-my-details-v21">
+<meta name="dayslate-build" content="2026.09.18-icon-tab-bar-v22">
 <meta name="application-name" content="SlateMachine">
 <meta name="apple-mobile-web-app-title" content="SlateMachine">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -771,6 +771,88 @@ body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hou
   margin-top:0!important;
 }
 
+
+/* v22 — compact app-style icon tab bar */
+.dtr-compact-nav{
+  display:flex!important;
+  align-items:stretch!important;
+  gap:4px!important;
+  padding:5px!important;
+  margin:8px 0 14px!important;
+  border:1px solid #303030!important;
+  border-radius:14px!important;
+  background:#202020!important;
+  overflow:hidden!important;
+}
+.dtr-compact-nav .nav-separator{display:none!important}
+.dtr-compact-nav button{
+  flex:1 1 0!important;
+  min-width:0!important;
+  width:auto!important;
+  margin:0!important;
+  padding:7px 3px 6px!important;
+  border:0!important;
+  border-radius:11px!important;
+  background:transparent!important;
+  color:#ddd!important;
+  font-size:11px!important;
+  font-weight:650!important;
+  line-height:1.1!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:4px!important;
+  white-space:nowrap!important;
+}
+.dtr-compact-nav button::before{
+  content:""!important;
+  display:block!important;
+  width:21px!important;
+  height:21px!important;
+  background-color:currentColor!important;
+  -webkit-mask-repeat:no-repeat!important;
+  mask-repeat:no-repeat!important;
+  -webkit-mask-position:center!important;
+  mask-position:center!important;
+  -webkit-mask-size:contain!important;
+  mask-size:contain!important;
+}
+.dtr-compact-nav button[data-nav="dtr"]::before{
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='black' stroke-width='2'/%3E%3Cpath d='M12 7v5l3 2' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")!important;
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='black' stroke-width='2'/%3E%3Cpath d='M12 7v5l3 2' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")!important;
+}
+.dtr-compact-nav button[data-nav="crew"]::before{
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='9' cy='8' r='3' fill='none' stroke='black' stroke-width='2'/%3E%3Ccircle cx='17' cy='9' r='2.5' fill='none' stroke='black' stroke-width='2'/%3E%3Cpath d='M3 19c.5-4 2.5-6 6-6s5.5 2 6 6M14 14c3.5-.8 6 1 7 4' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E")!important;
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='9' cy='8' r='3' fill='none' stroke='black' stroke-width='2'/%3E%3Ccircle cx='17' cy='9' r='2.5' fill='none' stroke='black' stroke-width='2'/%3E%3Cpath d='M3 19c.5-4 2.5-6 6-6s5.5 2 6 6M14 14c3.5-.8 6 1 7 4' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E")!important;
+}
+.dtr-compact-nav button[data-nav="details"]::before{
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='7' r='4' fill='none' stroke='black' stroke-width='2'/%3E%3Cpath d='M4 21c.7-5 3.4-7.5 8-7.5S19.3 16 20 21' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E")!important;
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='7' r='4' fill='none' stroke='black' stroke-width='2'/%3E%3Cpath d='M4 21c.7-5 3.4-7.5 8-7.5S19.3 16 20 21' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E")!important;
+}
+.dtr-compact-nav button[data-nav="timesheet"]::before{
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 3h9l4 4v14H6zM15 3v5h4M9 12h7M9 16h7' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")!important;
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 3h9l4 4v14H6zM15 3v5h4M9 12h7M9 16h7' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")!important;
+}
+.dtr-compact-nav button[data-nav="logout"]::before{
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 4H5v16h5M14 8l4 4-4 4M8 12h10' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")!important;
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 4H5v16h5M14 8l4 4-4 4M8 12h10' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")!important;
+}
+.dtr-compact-nav button.active{
+  background:var(--slatemachine-sage,#a8b99a)!important;
+  color:#111!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+.dtr-compact-nav button[data-nav="logout"]{
+  color:#aaa!important;
+}
+@media(max-width:390px){
+  .dtr-compact-nav{gap:2px!important;padding:4px!important}
+  .dtr-compact-nav button{font-size:10px!important;padding-left:1px!important;padding-right:1px!important}
+  .dtr-compact-nav button::before{width:19px!important;height:19px!important}
+}
+
 </style>
 </head>
 <body>
@@ -1050,7 +1132,7 @@ body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hou
 <script>
 
 // DaySlate update checker — prevents Safari/Home Screen from staying on stale index.html.
-const DAYSLATE_BUILD="2026.09.18-compact-my-details-v21";
+const DAYSLATE_BUILD="2026.09.18-icon-tab-bar-v22";
 async function checkForAppUpdate(){
   try{
     const base=new URL("index.html",location.href);
