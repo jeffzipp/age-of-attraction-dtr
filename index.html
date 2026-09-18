@@ -497,7 +497,7 @@ body:not(.is-manager) .dtr-compact-nav button{
 <h1>Age of Attraction</h1><h2>Season 2 · Sound Department</h2>
 <label>Email</label><input type="email" id="email" autocomplete="email">
 <label>Password</label><input type="password" id="password" autocomplete="current-password">
-<button onclick="signIn()">Log In</button><button class="secondary" onclick="signUp()">Create Account</button><div id="loginMessage" class="message"></div>
+<button id="loginButton" onclick="signIn()">Log In</button><button class="secondary" onclick="signUp()">Create Account</button><div id="loginMessage" class="message"></div>
 </div>
 <div id="setupScreen" class="hidden"><div id="inviteSetupBanner" class="invite-banner hidden"></div>
 <div class="setup-header"><h1 id="setupTitle">Crew Setup</h1><div class="setup-header-actions"><button id="crewInfoBack" class="secondary hidden" onclick="cancelCrewInfoEdit()">Back</button><button class="secondary" onclick="signOut()">Log Out</button></div></div><div class="subtitle" id="setupSubtitle">Enter your production and payroll information.</div><nav class="dtr-compact-nav app-persistent-nav" aria-label="App navigation">
@@ -813,7 +813,33 @@ async function acceptActiveInvite(){if(!activeInvite||inviteAcceptedThisSession|
 
 async function initialize(){try{await loadInvite();const{data:{session}}=await supabaseClient.auth.getSession();if(!session){showScreen("loginScreen");return}currentUser=session.user;await loadProfile()}catch(e){showScreen("loginScreen");showMessage("loginMessage",e.message||"Unable to connect.","error")}}
 async function signUp(){try{const email=$("email").value.trim(),password=$("password").value;if(!email||!password)throw Error("Please enter an email and password.");const{data,error}=await supabaseClient.auth.signUp({email,password});if(error)throw error;currentUser=data.user;if(data.session&&currentUser){await loadProfile();return}showMessage("loginMessage","Account created. Log in to continue.","success")}catch(e){showMessage("loginMessage",e.message||"Unable to create account.","error")}}
-async function signIn(){try{const email=$("email").value.trim(),password=$("password").value;if(!email||!password)throw Error("Please enter an email and password.");const{data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;currentUser=data.user;await loadProfile()}catch(e){showMessage("loginMessage",e.message||"Unable to log in.","error")}}
+let signInInProgress=false;
+async function signIn(){
+  if(signInInProgress)return;
+  const button=$("loginButton");
+  try{
+    signInInProgress=true;
+    clearMessage("loginMessage");
+    if(button){button.disabled=true;button.textContent="Logging In…"}
+    const email=$("email").value.trim(),password=$("password").value;
+    if(!email||!password)throw Error("Please enter an email and password.");
+    const authPromise=supabaseClient.auth.signInWithPassword({email,password});
+    const timeoutPromise=new Promise((_,reject)=>setTimeout(()=>reject(Error("Login is taking longer than expected. Please try again.")),15000));
+    const{data,error}=await Promise.race([authPromise,timeoutPromise]);
+    if(error)throw error;
+    currentUser=data.user;
+    await loadProfile();
+    if(!$("loginScreen").classList.contains("hidden")){
+      const{data:{session}}=await supabaseClient.auth.getSession();
+      if(session){currentUser=session.user;await new Promise(resolve=>setTimeout(resolve,350));await loadProfile()}
+    }
+  }catch(e){
+    showMessage("loginMessage",e.message||"Unable to log in.","error");
+  }finally{
+    signInInProgress=false;
+    if(button){button.disabled=false;button.textContent="Log In"}
+  }
+}
 async function loadProfile(){try{if(activeInvite){const ok=await acceptActiveInvite();if(!ok){showScreen("loginScreen");return}}
   const{data,error}=await supabaseClient.from("crew_profiles").select("*").eq("user_id",currentUser.id).limit(1);
   if(error)throw error;
