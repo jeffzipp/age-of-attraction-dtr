@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#111111">
-<title>Age of Attraction DTR</title>
+<title>DaySlate · Age of Attraction DTR</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#111;color:#fff;font-family:Arial,Helvetica,sans-serif;min-height:100vh}.container{max-width:600px;margin:auto;padding:24px 20px 50px}.container.wide{max-width:1100px}h1{margin:0 0 6px;font-size:28px}h2{margin:0 0 25px;font-size:18px;font-weight:normal;color:#aaa}label{display:block;margin:18px 0 7px;font-size:14px;color:#ccc}input,select,textarea{width:100%;padding:13px;border-radius:7px;border:1px solid #555;background:#333;color:#fff;font-size:16px}select{background:#444}textarea{min-height:90px;resize:vertical}input:disabled{opacity:.4}button{width:100%;padding:14px;margin-top:22px;border:0;border-radius:7px;background:#fff;color:#111;font-size:16px;font-weight:bold;cursor:pointer}button.secondary{background:#333;color:#fff;border:1px solid #555}button.danger{background:#2a1717;color:#ffb0b0;border:1px solid #633;margin-top:10px}button:disabled{opacity:.4;cursor:default}.subtitle{color:#888;margin-bottom:25px}.message{display:none;margin-top:18px;padding:12px;border-radius:7px}.message.success{display:block;background:#18351f;color:#a8e6b4}.message.error{display:block;background:#3a1818;color:#ffb0b0}.hidden{display:none!important}.time-help{margin-top:6px;font-size:13px;color:#888}.hours-preview{margin-top:20px;padding:15px;background:#1d1d1d;border:1px solid #333;border-radius:7px;text-align:center}.hours-number{font-size:22px;font-weight:bold}.hours-detail{margin-top:5px;font-size:13px;color:#999}.top-bar{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:25px}.top-bar button{width:auto;margin:0;padding:8px 12px;font-size:13px}.section{margin-top:30px;padding-top:5px;border-top:1px solid #333}.section-title{margin-top:20px;font-size:16px;font-weight:bold}.checkbox-row{display:flex;align-items:center;gap:12px;margin-top:22px;padding:14px;background:#1d1d1d;border:1px solid #444;border-radius:7px}.checkbox-row input{width:20px;height:20px;margin:0}.timesheet-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}.timesheet-actions button{width:auto;margin:0;flex:1;min-width:120px}.week-ending{text-align:center;padding:15px;margin-bottom:15px;background:#1d1d1d;border:1px solid #333;border-radius:8px}.week-ending-label{color:#888;font-size:12px;text-transform:uppercase;letter-spacing:1px}.week-ending-date{margin-top:5px;font-size:20px;font-weight:bold}.pdf-container{background:#222;border:1px solid #333;border-radius:8px;overflow:hidden}#timesheetPDF{display:block;width:100%;height:75vh;min-height:600px;border:0;background:#fff}.loading{padding:50px 20px;text-align:center;color:#aaa}.timesheet-note{margin-top:12px;color:#777;font-size:13px;text-align:center}.editing-badge{display:none;margin:0 0 12px;padding:10px 12px;border-radius:7px;background:#332b16;color:#ffe39b}.editing-badge.show{display:block}@media(max-width:600px){#timesheetPDF{height:68vh;min-height:500px}.timesheet-actions{display:grid;grid-template-columns:1fr 1fr}.timesheet-actions button{width:100%}}
 
@@ -490,225 +490,40 @@ body:not(.is-manager) .dtr-compact-nav button{
   }
 }
 
-/* DaySlate v4 — login starts at top and fits mobile viewport */
-@media (max-width:600px){
-  body:has(#loginScreen:not(.hidden)) #appContainer{
-    min-height:100svh!important;
-    height:100svh!important;
-    padding:calc(env(safe-area-inset-top) + 8px) 14px calc(env(safe-area-inset-bottom) + 8px)!important;
-    display:flex!important;
-    align-items:flex-start!important;
-    justify-content:center!important;
-    overflow:hidden!important;
-  }
-  #loginScreen{
-    width:100%!important;
-    margin:0!important;
-    padding:12px 16px!important;
-    max-height:calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 16px)!important;
-  }
-  #loginScreen .ds-login-brand{margin-bottom:6px!important}
-  #loginScreen .ds-login-brand .ds-mark{width:30px!important;height:30px!important;margin-bottom:3px!important}
-  #loginScreen .ds-login-brand .ds-wordmark{font-size:25px!important}
-  #loginScreen .ds-login-tag{margin-top:4px!important;font-size:8px!important}
-  #loginScreen h1{font-size:19px!important;margin:7px 0 2px!important}
-  #loginScreen h2{font-size:12px!important;margin:0 0 8px!important}
-  #loginScreen label{margin:7px 0 4px!important;font-size:11px!important}
-  #loginScreen input{height:40px!important;padding:8px 11px!important}
-  #loginScreen button{height:40px!important;margin-top:8px!important;padding:8px 11px!important;font-size:14px!important}
-  #loginScreen button.secondary{margin-top:6px!important}
-  #loginScreen .message{margin-top:6px!important;padding:6px 8px!important}
-}
-
-
-/* DaySlate v5 — login starts high in the usable mobile viewport; aesthetics only */
-@media (max-width:600px){
-  html, body:has(#loginScreen:not(.hidden)){
-    height:100%;
-    min-height:100%;
-  }
-  body:has(#loginScreen:not(.hidden)){
-    min-height:100svh;
-    overflow:hidden;
-    background-position:50% center;
-  }
-  body:has(#loginScreen:not(.hidden)) #appContainer{
-    box-sizing:border-box;
-    width:100%;
-    max-width:none;
-    min-height:100svh;
-    height:100svh;
-    padding:calc(env(safe-area-inset-top) + 10px) 14px calc(env(safe-area-inset-bottom) + 8px);
-    display:flex;
-    align-items:flex-start;
-    justify-content:center;
-  }
-  #loginScreen{
-    box-sizing:border-box;
-    width:100%;
-    margin:clamp(12px,2.5svh,24px) 0 0 !important;
-    padding:clamp(12px,1.8svh,17px) 18px;
-    max-height:calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 34px);
-    overflow:hidden;
-  }
-  #loginScreen .ds-login-brand{margin-bottom:7px}
-  #loginScreen .ds-login-brand .ds-mark{width:32px;height:32px;margin-bottom:3px}
-  #loginScreen .ds-login-brand .ds-wordmark{font-size:26px}
-  #loginScreen .ds-login-tag{margin-top:5px;font-size:8px;letter-spacing:.25em}
-  #loginScreen h1{font-size:19px;margin:8px 0 2px}
-  #loginScreen h2{font-size:12px;margin:0 0 9px}
-  #loginScreen label{margin:7px 0 4px;font-size:11px}
-  #loginScreen input{height:42px;padding:8px 11px;font-size:16px}
-  #loginScreen button{height:42px;margin-top:9px;padding:8px 11px;font-size:15px}
-  #loginScreen button.secondary{margin-top:7px}
-  #loginScreen .message{margin-top:6px;padding:6px 9px;font-size:11px}
+/* DaySlate login — approved composition */
+body:has(#loginScreen:not(.hidden)){background:#0d100e;overflow:hidden}
+body:has(#loginScreen:not(.hidden)) #appContainer{max-width:none;width:100%;height:100svh;min-height:100svh;margin:0;padding:0;position:relative;overflow:hidden}
+#loginScreen{position:relative;width:100%;height:100%;min-height:0;padding:0;overflow:hidden;background:#0c100d;color:#f4f2ea}
+#loginScreen:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,12,9,.05) 0%,rgba(8,12,9,.12) 32%,rgba(8,12,9,.55) 57%,rgba(8,12,9,.96) 78%,#0b0f0c 100%),url("DaySlate-login.png") 50% 12%/cover no-repeat;z-index:0}
+#loginScreen:after{content:"";position:absolute;left:0;right:0;bottom:0;height:48%;background:linear-gradient(180deg,transparent,#0b0f0c 42%);z-index:0;pointer-events:none}
+#loginScreen>*{position:relative;z-index:1}
+#loginScreen #inviteLoginBanner{position:absolute;top:calc(env(safe-area-inset-top) + 12px);left:18px;right:18px;z-index:3}
+.ds-login-copy{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);width:100%;text-align:center;text-shadow:0 2px 18px rgba(0,0,0,.8)}
+.ds-login-mark{width:52px;height:42px;margin:0 auto 7px;position:relative}
+.ds-login-mark span{position:absolute;left:8px;width:36px;height:14px;border-radius:4px;background:#93a886;transform:skewX(-34deg)}
+.ds-login-mark span:first-child{top:3px}.ds-login-mark span:last-child{bottom:3px;left:5px}
+.ds-login-wordmark{font:800 32px/1 -apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;letter-spacing:-1.5px}
+.ds-login-tagline{margin-top:8px;font-size:9px;font-weight:700;letter-spacing:.28em;color:#c9cec7}
+.ds-login-form{position:absolute;left:20px;right:20px;bottom:calc(env(safe-area-inset-bottom) + 18px);max-width:460px;margin:0 auto}
+#loginScreen .ds-login-form h1{margin:0 0 2px;text-align:left;font-size:24px;line-height:1.05;font-weight:800;letter-spacing:-.035em;color:#f4f2ea}
+#loginScreen .ds-login-form h2{margin:0 0 14px;text-align:left;font-size:12px;line-height:1.2;font-weight:500;color:#c4c9c2}
+#loginScreen .ds-login-form label{margin:8px 0 5px;font-size:11px;color:#d4d8d2}
+#loginScreen .ds-login-form input{height:43px;padding:9px 12px;border-radius:8px;border:1px solid rgba(151,169,143,.36);background:rgba(26,34,28,.88);color:#fff;font-size:16px;box-shadow:none}
+#loginScreen .ds-login-form input:focus{outline:none;border-color:#92a487;box-shadow:0 0 0 2px rgba(146,164,135,.12)}
+#loginScreen .ds-login-form button{height:43px;margin-top:10px;padding:8px 12px;border-radius:8px;border:0;background:#98a98c;color:#10140f;font-size:15px;font-weight:800;box-shadow:none}
+#loginScreen .ds-login-form button.secondary{margin-top:7px;background:rgba(24,31,26,.9);color:#eef0eb;border:1px solid rgba(151,169,143,.34)}
+#loginScreen .ds-login-form .message{margin-top:7px;padding:7px 9px;font-size:11px}
+@media (min-width:601px){
+ body:has(#loginScreen:not(.hidden)) #appContainer{max-width:520px;margin:auto}
+ #loginScreen{border-left:1px solid #252c27;border-right:1px solid #252c27}
+ .ds-login-copy{top:39%}.ds-login-form{bottom:34px}
 }
 @media (max-width:600px) and (max-height:760px){
-  body:has(#loginScreen:not(.hidden)) #appContainer{padding-top:calc(env(safe-area-inset-top) + 6px)}
-  #loginScreen{margin-top:6px !important;padding:10px 15px}
-  #loginScreen .ds-login-brand .ds-mark{width:27px;height:27px}
-  #loginScreen .ds-login-brand .ds-wordmark{font-size:23px}
-  #loginScreen h1{font-size:17px;margin-top:5px}
-  #loginScreen h2{font-size:11px;margin-bottom:6px}
-  #loginScreen label{margin:5px 0 3px}
-  #loginScreen input,#loginScreen button{height:39px}
-  #loginScreen button{margin-top:7px}
-  #loginScreen button.secondary{margin-top:5px}
-}
-
-
-
-/* DaySlate v6 — render-matched mobile login composition; aesthetics only */
-@media (max-width:600px){
-  html:has(#loginScreen:not(.hidden)),
-  body:has(#loginScreen:not(.hidden)){
-    height:100%;
-    min-height:100%;
-    overflow:hidden;
-  }
-  body:has(#loginScreen:not(.hidden)){
-    background-position:50% 50%;
-    background-size:cover;
-    background-attachment:scroll;
-  }
-  body:has(#loginScreen:not(.hidden))::after{
-    content:"";
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    background:linear-gradient(180deg,rgba(5,8,6,.05) 0%,rgba(5,8,6,.10) 25%,rgba(5,8,6,.48) 52%,rgba(5,8,6,.88) 78%,rgba(5,8,6,.98) 100%);
-    z-index:0;
-  }
-  body:has(#loginScreen:not(.hidden)) #appContainer{
-    position:relative;
-    z-index:1;
-    display:block;
-    width:100%;
-    max-width:none;
-    min-height:100svh;
-    height:100svh;
-    padding:calc(env(safe-area-inset-top) + 14px) 20px calc(env(safe-area-inset-bottom) + 10px);
-    overflow:hidden;
-  }
-  #loginScreen{
-    position:absolute;
-    left:20px;
-    right:20px;
-    top:clamp(190px,27svh,250px);
-    bottom:auto;
-    width:auto;
-    margin:0;
-    padding:0;
-    border:0;
-    border-radius:0;
-    background:transparent;
-    box-shadow:none;
-    backdrop-filter:none;
-    -webkit-backdrop-filter:none;
-  }
-  #loginScreen .ds-login-brand{
-    align-items:center;
-    text-align:center;
-    margin:0 0 8px;
-  }
-  #loginScreen .ds-login-brand .ds-mark{
-    width:40px;
-    height:40px;
-    margin:0 0 4px;
-  }
-  #loginScreen .ds-login-brand .ds-wordmark{
-    font-size:30px;
-    line-height:1;
-    text-shadow:0 2px 16px rgba(0,0,0,.45);
-  }
-  #loginScreen .ds-login-tag{
-    margin-top:7px;
-    font-size:8.5px;
-    line-height:1.1;
-    letter-spacing:.30em;
-    color:#eef0eb;
-    text-shadow:0 1px 10px rgba(0,0,0,.7);
-  }
-  #loginScreen h1{
-    margin:12px 0 2px;
-    font-size:20px;
-    line-height:1.08;
-    text-align:center;
-    text-shadow:0 2px 14px rgba(0,0,0,.55);
-  }
-  #loginScreen h2{
-    margin:0 0 12px;
-    font-size:13px;
-    line-height:1.15;
-    text-align:center;
-    color:#e0e3de;
-    text-shadow:0 2px 12px rgba(0,0,0,.55);
-  }
-  #loginScreen label{
-    margin:8px 0 4px;
-    font-size:11px;
-    color:#f0f1ed;
-    text-shadow:0 1px 8px rgba(0,0,0,.75);
-  }
-  #loginScreen input{
-    height:43px;
-    padding:9px 12px;
-    border-radius:10px;
-    border:1px solid rgba(158,175,145,.42);
-    background:rgba(19,27,23,.78);
-    box-shadow:0 4px 18px rgba(0,0,0,.16);
-    backdrop-filter:blur(8px);
-    -webkit-backdrop-filter:blur(8px);
-  }
-  #loginScreen button{
-    height:43px;
-    margin-top:10px;
-    padding:9px 12px;
-    border-radius:10px;
-    font-size:15px;
-  }
-  #loginScreen button.secondary{
-    margin-top:7px;
-    background:rgba(18,25,21,.72);
-    border:1px solid rgba(184,199,171,.62);
-    backdrop-filter:blur(8px);
-    -webkit-backdrop-filter:blur(8px);
-  }
-  #loginScreen .message{
-    margin-top:6px;
-    padding:6px 8px;
-    font-size:11px;
-  }
-}
-@media (max-width:600px) and (max-height:760px){
-  #loginScreen{top:clamp(135px,21svh,175px)}
-  #loginScreen .ds-login-brand .ds-mark{width:34px;height:34px}
-  #loginScreen .ds-login-brand .ds-wordmark{font-size:26px}
-  #loginScreen h1{margin-top:8px;font-size:18px}
-  #loginScreen h2{margin-bottom:8px;font-size:12px}
-  #loginScreen label{margin-top:6px}
-  #loginScreen input,#loginScreen button{height:40px}
-  #loginScreen button{margin-top:8px}
+ .ds-login-copy{top:34%}.ds-login-mark{width:44px;height:35px}.ds-login-wordmark{font-size:28px}.ds-login-tagline{margin-top:5px;font-size:8px}
+ .ds-login-form{bottom:calc(env(safe-area-inset-bottom) + 8px)}
+ #loginScreen .ds-login-form h1{font-size:21px}#loginScreen .ds-login-form h2{margin-bottom:8px}
+ #loginScreen .ds-login-form label{margin-top:6px}#loginScreen .ds-login-form input,#loginScreen .ds-login-form button{height:39px}
+ #loginScreen .ds-login-form button{margin-top:7px}#loginScreen .ds-login-form button.secondary{margin-top:5px}
 }
 
 </style>
@@ -716,11 +531,13 @@ body:not(.is-manager) .dtr-compact-nav button{
 <body>
 <div id="appContainer" class="container">
 <div id="loginScreen"><div id="inviteLoginBanner" class="invite-banner hidden"></div>
+<div class="ds-login-copy"><div class="ds-login-mark" aria-hidden="true"><span></span><span></span></div><div class="ds-login-wordmark">DaySlate</div><div class="ds-login-tagline">CREW IN. DAY DONE.</div></div>
+<div class="ds-login-form">
 <h1>Age of Attraction</h1><h2>Season 2 · Sound Department</h2>
 <label>Email</label><input type="email" id="email" autocomplete="email">
 <label>Password</label><input type="password" id="password" autocomplete="current-password">
 <button onclick="signIn()">Log In</button><button class="secondary" onclick="signUp()">Create Account</button><div id="loginMessage" class="message"></div>
-</div>
+</div></div>
 <div id="setupScreen" class="hidden"><div id="inviteSetupBanner" class="invite-banner hidden"></div>
 <div class="setup-header"><h1 id="setupTitle">Crew Setup</h1><div class="setup-header-actions"><button id="crewInfoBack" class="secondary hidden" onclick="cancelCrewInfoEdit()">Back</button><button class="secondary" onclick="signOut()">Log Out</button></div></div><div class="subtitle" id="setupSubtitle">Enter your production and payroll information.</div><nav class="dtr-compact-nav app-persistent-nav" aria-label="App navigation">
 <button data-nav="dtr" onclick="showDTR()">DTR</button>
