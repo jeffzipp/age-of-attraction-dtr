@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#111111">
-<meta name="dayslate-build" content="2026.09.18-swipe-remove-v27">
+<meta name="dayslate-build" content="2026.09.19-desktop-crew-width-v28">
 <meta name="application-name" content="SlateMachine">
 <meta name="apple-mobile-web-app-title" content="SlateMachine">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -496,18 +496,13 @@ body:not(.is-manager) .dtr-compact-nav button{
   }
 }
 
-/* v25.7 — actual desktop Crew outer-width fix */
+/* v28 — desktop Crew page fixed-width layout */
 @media (min-width: 769px){
-  #appContainer.wide:has(#departmentScreen:not(.hidden)){
-    width:min(calc(100% - 40px), 1040px) !important;
+  #departmentScreen{
+    width:min(calc(100vw - 40px), 1040px) !important;
     max-width:1040px !important;
     margin-left:auto !important;
     margin-right:auto !important;
-  }
-  #departmentScreen{
-    width:100% !important;
-    max-width:none !important;
-    margin:0 !important;
   }
 }
 
