@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#111111">
-<meta name="dayslate-build" content="2026.09.18-crew-tabs-fix-v24">
+<meta name="dayslate-build" content="2026.09.18-wild-frontier-pilot-v25">
 <meta name="application-name" content="SlateMachine">
 <meta name="apple-mobile-web-app-title" content="SlateMachine">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -945,6 +945,29 @@ body.is-manager .dtr-compact-nav button[data-nav]{flex:1 1 20%!important}
 }
 .dtr-compact-nav button[data-nav].active{margin:0!important}
 
+
+/* v25 — Wild Frontier pilot: lifecycle, crew removal, weekly DTR log */
+.weekly-log-panel{margin-top:12px}
+.weekly-log-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.weekly-log-head h3{margin:0;font-size:17px}
+.weekly-log-head button{width:auto;margin:0;padding:9px 11px;font-size:12px}
+.weekly-day{margin:0 0 10px;border:1px solid #333;border-radius:11px;overflow:hidden;background:#181818}
+.weekly-day-title{padding:8px 10px;background:#a9b59f;color:#111;font-size:12px;font-weight:800;letter-spacing:.04em}
+.weekly-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.weekly-table{width:100%;min-width:820px;border-collapse:collapse;font-size:11px}
+.weekly-table th{background:#202020;color:#f2ebdd;text-align:left;padding:7px 6px;border-bottom:1px solid #3a3a3a;white-space:nowrap}
+.weekly-table td{padding:7px 6px;border-bottom:1px solid #292929;color:#ddd;vertical-align:top}
+.weekly-table tr:last-child td{border-bottom:0}
+.weekly-status-off{color:#ffb0b0!important;font-weight:700}.weekly-status-missing{color:#e7c56d!important;font-weight:700}
+.crew-manage-actions{display:flex;align-items:center;gap:8px}.crew-remove{width:auto!important;margin:0!important;padding:7px 9px!important;font-size:11px!important}
+.production-controls{margin-top:18px;padding:14px;background:#181818;border:1px solid #3a2b2b;border-radius:12px}
+.production-controls h3{margin:0 0 5px;font-size:16px}.production-controls p{margin:0;color:#888;font-size:12px;line-height:1.45}
+.production-controls button{margin-top:12px}
+.no-production-card{max-width:500px;margin:12vh auto 0;text-align:center;background:#181818;border:1px solid #333;border-radius:18px;padding:28px 20px}
+.no-production-card img{width:72px;height:72px;object-fit:contain;margin-bottom:18px}
+.no-production-card h1{font-size:24px;margin-bottom:10px}.no-production-card p{color:#999;line-height:1.5;margin:0 0 18px}
+.no-production-card button{max-width:220px}
+@media(max-width:600px){.department-toolbar{display:grid!important;grid-template-columns:repeat(3,1fr)!important}.department-toolbar button{font-size:12px;padding:10px 5px!important}}
 </style>
 </head>
 <body>
@@ -1165,6 +1188,7 @@ body.is-manager .dtr-compact-nav button[data-nav]{flex:1 1 20%!important}
 </nav>
   <div class="department-toolbar">
     <button class="secondary" onclick="goToCurrentDepartmentWeek();showDepartmentOverview()">This Week</button>
+    <button class="secondary" onclick="showWeeklyDTRLog()">Weekly Log</button>
     <button class="secondary" onclick="showCrewManagement()">Invite Crew</button>
   </div>
 
@@ -1181,6 +1205,21 @@ body.is-manager .dtr-compact-nav button[data-nav]{flex:1 1 20%!important}
       <div id="inviteResult" class="invite-result"></div>
     </div>
     <div id="crewManageList" class="crew-manage-list"></div>
+    <div class="production-controls">
+      <h3>Production Controls</h3>
+      <p>Wrapping the production locks DTR entry and editing for everyone, preserves all records, and revokes outstanding invites.</p>
+      <button class="danger" onclick="wrapCurrentProduction()">Wrap Production</button>
+    </div>
+  </div>
+
+  <div id="weeklyDTRPanel" class="weekly-log-panel hidden">
+    <div class="weekly-log-head">
+      <h3>Weekly DTR Log</h3>
+      <button class="secondary" onclick="exportWeeklyDTRPDF()">Export PDF</button>
+    </div>
+    <div id="weeklyDTRMeta" class="subtitle"></div>
+    <div id="weeklyDTRPreview"></div>
+    <div id="weeklyDTRMessage" class="message"></div>
   </div>
 
   <div id="departmentOverviewPanel">
@@ -1204,6 +1243,15 @@ body.is-manager .dtr-compact-nav button[data-nav]{flex:1 1 20%!important}
   </div>
 </div>
 
+<div id="noActiveProductionScreen" class="hidden">
+  <div class="no-production-card">
+    <img src="slatemachine-app-icon-master.png" alt="">
+    <h1>No Active Production</h1>
+    <p id="noActiveProductionText">Your production access is not currently active. When you are onboarded to another production, SlateMachine will become available again.</p>
+    <button class="secondary" onclick="signOut()">Log Out</button>
+  </div>
+</div>
+
 <div id="dtrDetailModal" class="dtr-modal hidden" onclick="closeDTRDetail(event)">
   <div class="dtr-modal-card" onclick="event.stopPropagation()">
     <div class="dtr-modal-head">
@@ -1224,7 +1272,7 @@ body.is-manager .dtr-compact-nav button[data-nav]{flex:1 1 20%!important}
 <script>
 
 // DaySlate update checker — prevents Safari/Home Screen from staying on stale index.html.
-const DAYSLATE_BUILD="2026.09.18-crew-tabs-fix-v24";
+const DAYSLATE_BUILD="2026.09.18-wild-frontier-pilot-v25";
 async function checkForAppUpdate(){
   try{
     const base=new URL("index.html",location.href);
@@ -1248,7 +1296,7 @@ document.addEventListener("visibilitychange",()=>{if(document.visibilityState===
 const SUPABASE_URL="https://hyhzcikkoqvvfyiffmla.supabase.co";
 const SUPABASE_KEY="sb_publishable_Gl1oRE_S8bRTiI65vCnHRQ_InR0_wX1";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let currentUser=null,currentProfile=null,productionId=null,currentWeekEnding=null,currentPDFUrl=null,currentPDFBlob=null,currentDTR=null,currentMembership=null,currentDepartmentWeekEnding=null,departmentDTRMap=new Map(),crewInfoEditMode=false;
+let currentUser=null,currentProfile=null,productionId=null,currentWeekEnding=null,currentPDFUrl=null,currentPDFBlob=null,currentDTR=null,currentMembership=null,currentProduction=null,currentDepartmentWeekEnding=null,departmentDTRMap=new Map(),crewInfoEditMode=false,weeklyLogData=null;
 const $=id=>document.getElementById(id);
 function setActiveNavForScreen(id){
   const map={dtrScreen:"dtr",setupScreen:"details",departmentScreen:"crew",timesheetScreen:"timesheet"};
@@ -1257,7 +1305,7 @@ function setActiveNavForScreen(id){
     btn.classList.toggle("active",btn.dataset.nav===active);
   });
 }
-function showScreen(id){setActiveNavForScreen(id);["loginScreen","setupScreen","dtrScreen","timesheetScreen","departmentScreen"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");$("appContainer").classList.toggle("wide",id==="timesheetScreen"||id==="departmentScreen")}
+function showScreen(id){setActiveNavForScreen(id);["loginScreen","setupScreen","dtrScreen","timesheetScreen","departmentScreen","noActiveProductionScreen"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");$("appContainer").classList.toggle("wide",id==="timesheetScreen"||id==="departmentScreen")}
 function showMessage(id,msg,type){$(id).textContent=msg;$(id).className="message "+type}function clearMessage(id){$(id).textContent="";$(id).className="message"}
 function dateToISO(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}function isoToLocalDate(s){const p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2],12)}function todayString(){return dateToISO(new Date())}
 function getSaturdayForDate(input){const d=new Date(input.getFullYear(),input.getMonth(),input.getDate(),12);d.setDate(d.getDate()+(6-d.getDay()+7)%7);return d}function getSundayForSaturday(s){const d=new Date(s.getFullYear(),s.getMonth(),s.getDate(),12);d.setDate(d.getDate()-6);return d}
@@ -1370,6 +1418,13 @@ async function loadProfileFast(){
     currentProfile=data[0];
     productionId=currentProfile.production_id;
 
+    // Access control is checked before entering the working app.
+    await Promise.all([loadMembership(),loadProductionState()]);
+    if(!currentMembership||currentMembership.status!=="active"||currentProduction?.status!=="active"){
+      showNoActiveProduction();
+      return;
+    }
+
     if(!currentProfile.employment_type||!currentProfile.local_hotel||!currentProfile.province||!currentProfile.crew_initials){
       populateProfileForm();
       resetSetupMode();
@@ -1377,20 +1432,11 @@ async function loadProfileFast(){
       return;
     }
 
-    // Enter DaySlate immediately. Today's DTR and HOD role finish loading after
-    // the screen is visible instead of blocking the login transition.
     showScreen("dtrScreen");
     if(!$("dtrDate").value)$("dtrDate").value=todayString();
     $("crewGreeting").textContent=currentProfile.name+" · "+currentProfile.position;
-
-    Promise.allSettled([
-      loadMembership().then(()=>setActiveNavForScreen("dtrScreen")),
-      loadDTRForSelectedDate()
-    ]).then(results=>{
-      for(const result of results){
-        if(result.status==="rejected")console.error("POST-LOGIN LOAD ERROR",result.reason);
-      }
-    });
+    setActiveNavForScreen("dtrScreen");
+    loadDTRForSelectedDate().catch(e=>console.error("POST-LOGIN DTR LOAD ERROR",e));
   }catch(e){
     showScreen("loginScreen");
     showMessage("loginMessage",e.message||"Unable to load profile.","error");
@@ -1411,7 +1457,9 @@ function setCompensationLocked(locked){["dayRate","feeType","kitRental"].forEach
 function openCrewInfo(){if(!currentProfile)return;crewInfoEditMode=true;populateProfileForm();setCompensationLocked(false);$("setupTitle").textContent="My Details";$("setupSubtitle").textContent="Update your personal and payroll information.";$("saveProfileButton").textContent="Save Changes";$("crewInfoBack").classList.remove("hidden");$("passwordSection").classList.remove("hidden");$("newPassword").value="";$("confirmNewPassword").value="";clearMessage("setupMessage");clearMessage("passwordMessage");showScreen("setupScreen")}
 function cancelCrewInfoEdit(){crewInfoEditMode=false;setCompensationLocked(false);$("passwordSection").classList.add("hidden");$("setupTitle").textContent="Crew Setup";$("setupSubtitle").textContent="Enter your production and payroll information.";$("saveProfileButton").textContent="Save Profile";$("crewInfoBack").classList.add("hidden");showDTR()}
 function resetSetupMode(){crewInfoEditMode=false;setCompensationLocked(false);$("passwordSection").classList.add("hidden");$("setupTitle").textContent="Crew Setup";$("setupSubtitle").textContent="Enter your production and payroll information.";$("saveProfileButton").textContent="Save Profile";$("crewInfoBack").classList.add("hidden")}
-async function findProduction(){const{data,error}=await supabaseClient.from("productions").select("*").eq("name","Age of Attraction").eq("season","Season 2").limit(1);if(error)throw error;if(!data||!data.length)throw Error("Unable to find the production.");productionId=data[0].id}
+async function findProduction(){const{data,error}=await supabaseClient.from("productions").select("*").eq("status","active").order("created_at",{ascending:false}).limit(1);if(error)throw error;if(!data||!data.length)throw Error("No active production is available.");productionId=data[0].id;currentProduction=data[0]}
+async function loadProductionState(){if(!productionId)return null;const{data,error}=await supabaseClient.from("productions").select("*").eq("id",productionId).single();if(error)throw error;currentProduction=data;return data}
+function showNoActiveProduction(){const name=currentProduction?.name||"This production";$("noActiveProductionText").textContent=currentProduction?.status==="wrapped"?name+" has wrapped. Your records are preserved, but DTR entry and editing are now closed. SlateMachine will become available again when you are onboarded to another active production.":"You do not currently have access to an active production. SlateMachine will become available when you are onboarded to a production.";showScreen("noActiveProductionScreen")}
 
 async function resetMyPassword(){
   try{
@@ -1477,15 +1525,10 @@ async function submitDTR(){try{
 }catch(e){showMessage("dtrMessage",e.message||"Unable to submit DTR.","error")}}
 
 
-function showDepartmentOverview(){
-  $("crewManagementPanel").classList.add("hidden");
-  $("departmentOverviewPanel").classList.remove("hidden");
-}
-async function showCrewManagement(){
-  $("departmentOverviewPanel").classList.add("hidden");
-  $("crewManagementPanel").classList.remove("hidden");
-  await loadCrewManagement();
-}
+function hideDepartmentPanels(){["crewManagementPanel","departmentOverviewPanel","weeklyDTRPanel"].forEach(id=>$(id).classList.add("hidden"))}
+function showDepartmentOverview(){hideDepartmentPanels();$("departmentOverviewPanel").classList.remove("hidden")}
+async function showCrewManagement(){hideDepartmentPanels();$("crewManagementPanel").classList.remove("hidden");await loadCrewManagement()}
+async function showWeeklyDTRLog(){hideDepartmentPanels();$("weeklyDTRPanel").classList.remove("hidden");await loadWeeklyDTRLog()}
 async function loadCrewManagement(){
   try{
     $("crewManageList").innerHTML='<div class="department-empty">Loading crew…</div>';
@@ -1494,15 +1537,150 @@ async function loadCrewManagement(){
     const{data:memberships,error:membershipError}=await supabaseClient.from("production_memberships").select("user_id,role,status").eq("production_id",productionId);
     if(membershipError)throw membershipError;
     const byUser=new Map((memberships||[]).map(m=>[m.user_id,m]));
-    $("crewManageList").innerHTML=(profiles||[]).map(p=>{
-      const m=byUser.get(p.user_id);
-      const role=m?.role||"crew";
-      return `<div class="crew-manage-card"><div><div class="crew-manage-name">${escapeHTML(p.name)}</div><div class="crew-manage-meta">${escapeHTML(p.position||"Crew")} · ${escapeHTML(m?.status||"active")}</div></div><span class="role-pill ${role==="hod"?"hod":""}">${escapeHTML(role)}</span></div>`;
-    }).join("")||'<div class="department-empty">No crew yet.</div>';
+    const active=(profiles||[]).filter(p=>byUser.get(p.user_id)?.status==="active");
+    $("crewManageList").innerHTML=active.map(p=>{
+      const m=byUser.get(p.user_id),role=m?.role||"crew";
+      const canRemove=p.user_id!==currentUser.id&&!["hod","admin"].includes(role);
+      const remove=canRemove?`<button class="danger crew-remove" onclick="removeCrewMember('${p.user_id}','${escapeHTML(p.name).replace(/'/g,"&#39;")}')">Remove</button>`:"";
+      return `<div class="crew-manage-card"><div><div class="crew-manage-name">${escapeHTML(p.name)}</div><div class="crew-manage-meta">${escapeHTML(p.position||"Crew")} · active</div></div><div class="crew-manage-actions"><span class="role-pill ${["hod","admin"].includes(role)?"hod":""}">${escapeHTML(role)}</span>${remove}</div></div>`;
+    }).join("")||'<div class="department-empty">No active crew.</div>';
   }catch(e){
     $("crewManageList").innerHTML=`<div class="department-empty">${escapeHTML(e.message||"Unable to load crew.")}</div>`;
   }
 }
+
+async function removeCrewMember(userId,name){
+  if(!isManager())return;
+  if(!confirm(`Remove ${name} from this production?\n\nThey will lose access to this production. Their existing DTRs and timesheet history will be preserved.`))return;
+  try{
+    const{error}=await supabaseClient.rpc("remove_production_crew",{target_production_id:productionId,target_user_id:userId});
+    if(error)throw error;
+    showMessage("departmentMessage",name+" removed from the active crew. Historical records were preserved.","success");
+    await loadCrewManagement();
+  }catch(e){showMessage("departmentMessage",e.message||"Unable to remove crew member.","error")}
+}
+
+async function wrapCurrentProduction(){
+  if(!isManager())return;
+  const label=[currentProduction?.name,currentProduction?.season].filter(Boolean).join(" · ")||"this production";
+  if(!confirm(`Wrap ${label}?\n\nThis locks DTR entry and editing for everyone and revokes outstanding invites. Existing records are preserved. This should only be done when the production is finished.`))return;
+  if(!confirm("Final confirmation: mark this production WRAPPED?"))return;
+  try{
+    const{error}=await supabaseClient.rpc("wrap_production",{target_production_id:productionId});
+    if(error)throw error;
+    await loadProductionState();
+    showNoActiveProduction();
+  }catch(e){showMessage("departmentMessage",e.message||"Unable to wrap production.","error")}
+}
+
+async function getWeeklyLogData(){
+  if(!currentDepartmentWeekEnding)currentDepartmentWeekEnding=getSaturdayForDate(new Date());
+  const sunday=getSundayForSaturday(currentDepartmentWeekEnding);
+  const sundayISO=dateToISO(sunday),saturdayISO=dateToISO(currentDepartmentWeekEnding);
+  const{data:memberships,error:me}=await supabaseClient.from("production_memberships").select("user_id,role,status").eq("production_id",productionId).eq("status","active");
+  if(me)throw me;
+  const activeUsers=new Set((memberships||[]).map(m=>m.user_id));
+  const{data:profiles,error:pe}=await supabaseClient.from("crew_profiles").select("*").eq("production_id",productionId).order("name",{ascending:true});
+  if(pe)throw pe;
+  const crew=(profiles||[]).filter(p=>activeUsers.has(p.user_id));
+  const ids=crew.map(p=>p.id);
+  let dtrs=[];
+  if(ids.length){
+    const{data,error}=await supabaseClient.from("dtrs").select("*").in("crew_profile_id",ids).gte("date",sundayISO).lte("date",saturdayISO).order("date",{ascending:true});
+    if(error)throw error; dtrs=data||[];
+  }
+  const map=new Map(dtrs.map(d=>[`${d.crew_profile_id}|${d.date}`,d]));
+  return {sunday,saturday:new Date(currentDepartmentWeekEnding),crew,map};
+}
+function weeklyStatus(d){
+  if(!d)return "MISSING";
+  if(d.day_off)return "DAY OFF";
+  if(d.no_lunch)return "NO LUNCH";
+  return "";
+}
+async function loadWeeklyDTRLog(){
+  try{
+    clearMessage("weeklyDTRMessage");
+    $("weeklyDTRPreview").innerHTML='<div class="department-empty">Loading weekly DTR log…</div>';
+    weeklyLogData=await getWeeklyLogData();
+    const {sunday,saturday,crew,map}=weeklyLogData;
+    $("weeklyDTRMeta").textContent=`${currentProduction?.name||"Production"} · ${currentProduction?.department||"Sound"} · ${formatDisplayDate(sunday)} – ${formatDisplayDate(saturday)}`;
+    const days=["SUN","MON","TUE","WED","THU","FRI","SAT"];
+    let html="";
+    for(let i=0;i<7;i++){
+      const date=new Date(sunday);date.setDate(sunday.getDate()+i);const iso=dateToISO(date);
+      const rows=crew.map(p=>{
+        const d=map.get(`${p.id}|${iso}`),status=weeklyStatus(d);
+        const total=d&&!d.day_off?calculateDTRMinutes(d):null;
+        const cls=status==="DAY OFF"?"weekly-status-off":status==="MISSING"?"weekly-status-missing":"";
+        return `<tr><td>${escapeHTML(p.name)}</td><td>${escapeHTML(p.position||"")}</td><td>${d&&!d.day_off?minutesToTime(d.start_minutes):"—"}</td><td>${d&&!d.day_off&&!d.no_lunch?minutesToTime(d.lunch_start_minutes):"—"}</td><td>${d&&!d.day_off&&!d.no_lunch?minutesToTime(d.lunch_end_minutes):"—"}</td><td>${d&&!d.day_off?minutesToTime(d.end_minutes):"—"}</td><td>${total===null?"—":minutesToDisplay(total)}</td><td class="${cls}">${escapeHTML(status||d?.notes||"")}</td><td>${escapeHTML(p.crew_initials||"")}</td></tr>`;
+      }).join("");
+      html+=`<div class="weekly-day"><div class="weekly-day-title">${days[i]} · ${formatDisplayDate(date)}</div><div class="weekly-table-wrap"><table class="weekly-table"><thead><tr><th>Crew</th><th>Pos.</th><th>Start</th><th>Lunch Start</th><th>Lunch End</th><th>End</th><th>Total</th><th>Status / Note</th><th>Init.</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+    }
+    $("weeklyDTRPreview").innerHTML=html||'<div class="department-empty">No active crew.</div>';
+  }catch(e){$("weeklyDTRPreview").innerHTML="";showMessage("weeklyDTRMessage",e.message||"Unable to load weekly DTR log.","error")}
+}
+function pdfSafeText(v,max=45){const s=String(v??"").replace(/[^\x20-\x7E]/g," ");return s.length>max?s.slice(0,max-1)+"…":s}
+async function exportWeeklyDTRPDF(){
+  try{
+    clearMessage("weeklyDTRMessage");
+    if(!weeklyLogData)weeklyLogData=await getWeeklyLogData();
+    const {PDFDocument,StandardFonts,rgb}=PDFLib;
+    const pdf=await PDFDocument.create();
+    const font=await pdf.embedFont(StandardFonts.Helvetica),bold=await pdf.embedFont(StandardFonts.HelveticaBold);
+    let logo=null;
+    try{const img=await fetch("slatemachine-app-icon-master.png",{cache:"no-store"});if(img.ok)logo=await pdf.embedPng(await img.arrayBuffer())}catch(_e){}
+    const sage=rgb(0.663,0.710,0.624),cream=rgb(0.949,0.922,0.867),charcoal=rgb(0.067,0.067,0.067),grid=rgb(0.78,0.77,0.74),white=rgb(1,1,1),text=rgb(0.13,0.13,0.13),red=rgb(0.48,0.18,0.18);
+    const W=792,H=612,margin=28,rowH=17;
+    let page,y;
+    function newPage(){
+      page=pdf.addPage([W,H]);y=H-28;
+      if(logo){page.drawImage(logo,{x:margin,y:y-34,width:34,height:34})}
+      page.drawText("WEEKLY DTR LOG",{x:W-margin-190,y:y-23,size:18,font:bold,color:charcoal});
+      y-=48;
+      const prod=pdfSafeText(currentProduction?.name||"Production",28),season=pdfSafeText(currentProduction?.season||"",20),dept=pdfSafeText(currentProduction?.department||"Sound",18);
+      page.drawRectangle({x:margin,y:y-35,width:W-margin*2,height:35,color:rgb(.97,.96,.94),borderColor:grid,borderWidth:.5});
+      page.drawText("PRODUCTION",{x:margin+7,y:y-11,size:6,font:bold,color:text});page.drawText(prod,{x:margin+7,y:y-25,size:9,font:bold,color:text});
+      page.drawText("SEASON",{x:210,y:y-11,size:6,font:bold,color:text});page.drawText(season||"—",{x:210,y:y-25,size:9,font,color:text});
+      page.drawText("DEPARTMENT",{x:330,y:y-11,size:6,font:bold,color:text});page.drawText(dept,{x:330,y:y-25,size:9,font,color:text});
+      page.drawText("WEEK",{x:445,y:y-11,size:6,font:bold,color:text});page.drawText(`${formatPDFDate(weeklyLogData.sunday)} - ${formatPDFDate(weeklyLogData.saturday)}`,{x:445,y:y-25,size:9,font,color:text});
+      page.drawText("WEEK ENDING",{x:610,y:y-11,size:6,font:bold,color:text});page.drawText(formatPDFDate(weeklyLogData.saturday),{x:610,y:y-25,size:9,font,color:text});
+      y-=47;
+    }
+    const cols=[28,145,188,225,285,345,390,430,475,710],heads=["Crew","Pos.","Start","Lunch Start","Lunch End","End","Total","Status / Note","Init."];
+    function drawHeader(day,date){
+      if(y<95)newPage();
+      page.drawRectangle({x:margin,y:y-18,width:W-margin*2,height:18,color:sage});
+      page.drawText(`${day} · ${formatDisplayDate(date)}`,{x:margin+6,y:y-12,size:8,font:bold,color:charcoal});y-=18;
+      page.drawRectangle({x:margin,y:y-17,width:W-margin*2,height:17,color:charcoal});
+      for(let i=0;i<heads.length;i++)page.drawText(heads[i],{x:cols[i]+4,y:y-11,size:6.4,font:bold,color:cream});
+      y-=17;
+    }
+    newPage();
+    const days=["SUN","MON","TUE","WED","THU","FRI","SAT"];
+    for(let di=0;di<7;di++){
+      const date=new Date(weeklyLogData.sunday);date.setDate(date.getDate()+di);const iso=dateToISO(date);
+      drawHeader(days[di],date);
+      for(const p of weeklyLogData.crew){
+        if(y<48){newPage();drawHeader(days[di],date)}
+        const d=weeklyLogData.map.get(`${p.id}|${iso}`),status=weeklyStatus(d),total=d&&!d.day_off?calculateDTRMinutes(d):null;
+        const vals=[pdfSafeText(p.name,20),pdfSafeText(p.position,7),d&&!d.day_off?minutesToTime(d.start_minutes):"—",d&&!d.day_off&&!d.no_lunch?minutesToTime(d.lunch_start_minutes):"—",d&&!d.day_off&&!d.no_lunch?minutesToTime(d.lunch_end_minutes):"—",d&&!d.day_off?minutesToTime(d.end_minutes):"—",total===null?"—":minutesToDisplay(total),pdfSafeText(status||d?.notes||"",34),pdfSafeText(p.crew_initials||"",5)];
+        page.drawRectangle({x:margin,y:y-rowH,width:W-margin*2,height:rowH,color:white,borderColor:grid,borderWidth:.35});
+        vals.forEach((v,i)=>page.drawText(String(v),{x:cols[i]+4,y:y-11,size:6.5,font:(status==="MISSING"||status==="DAY OFF")&&i===7?bold:font,color:status==="DAY OFF"&&i===7?red:text}));
+        y-=rowH;
+      }
+      y-=8;
+    }
+    for(const p of pdf.getPages()){p.drawText("Generated by SlateMachine",{x:margin,y:12,size:6,font,color:rgb(.4,.4,.4)});p.drawText(`Page ${pdf.getPages().indexOf(p)+1} of ${pdf.getPageCount()}`,{x:W-85,y:12,size:6,font,color:rgb(.4,.4,.4)})}
+    const bytes=await pdf.save(),blob=new Blob([bytes],{type:"application/pdf"}),url=URL.createObjectURL(blob);
+    const filename=`${safeFilenamePart(currentProduction?.name||"Production")}_Sound_Weekly_DTR_WE_${dateToISO(weeklyLogData.saturday)}.pdf`;
+    const file=new File([blob],filename,{type:"application/pdf"});
+    if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){await navigator.share({files:[file],title:"Weekly DTR Log",text:`Weekly DTR Log - Week Ending ${formatDisplayDate(weeklyLogData.saturday)}`})}
+    else{const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();showMessage("weeklyDTRMessage","Weekly DTR Log PDF exported.","success")}
+    setTimeout(()=>URL.revokeObjectURL(url),30000);
+  }catch(e){if(e?.name==="AbortError")return;showMessage("weeklyDTRMessage",e.message||"Unable to export weekly DTR PDF.","error")}
+}
+
 async function createCrewInvite(){
   const name=$("inviteName").value.trim(),email=$("inviteEmail").value.trim().toLowerCase(),position=$("invitePosition").value;
   const result=$("inviteResult");
@@ -1651,7 +1829,10 @@ async function loadDepartmentDashboard(){
 
     const{data:crew,error:crewError}=await supabaseClient.from("crew_profiles").select("*").eq("production_id",productionId).order("name",{ascending:true});
     if(crewError)throw crewError;
-    const profiles=crew||[];
+    const{data:activeMemberships,error:activeMembershipError}=await supabaseClient.from("production_memberships").select("user_id").eq("production_id",productionId).eq("status","active");
+    if(activeMembershipError)throw activeMembershipError;
+    const activeUsers=new Set((activeMemberships||[]).map(m=>m.user_id));
+    const profiles=(crew||[]).filter(p=>activeUsers.has(p.user_id));
     const profileIds=profiles.map(p=>p.id);
 
     let dtrs=[];
@@ -1789,7 +1970,7 @@ async function sendGeneratedPDF(){
     showMessage("timesheetMessage",e.message||"Unable to share PDF.","error");
   }
 }
-async function signOut(){if(currentPDFUrl){URL.revokeObjectURL(currentPDFUrl);currentPDFUrl=null}currentPDFBlob=null;await supabaseClient.auth.signOut();currentUser=currentProfile=productionId=currentWeekEnding=currentDTR=currentMembership=currentDepartmentWeekEnding=null;departmentDTRMap=new Map();document.body.classList.remove("is-manager");showScreen("loginScreen")}
+async function signOut(){if(currentPDFUrl){URL.revokeObjectURL(currentPDFUrl);currentPDFUrl=null}currentPDFBlob=null;await supabaseClient.auth.signOut();currentUser=currentProfile=productionId=currentWeekEnding=currentDTR=currentMembership=currentProduction=currentDepartmentWeekEnding=null;departmentDTRMap=new Map();weeklyLogData=null;document.body.classList.remove("is-manager");showScreen("loginScreen")}
 $("password").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();signIn()}});
 $("email").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();$("password").focus()}});
 initialize();
