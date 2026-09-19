@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#111111">
-<meta name="dayslate-build" content="2026.09.19-rollout-stable-v29">
+<meta name="dayslate-build" content="2026.09.19-auth-session-v30">
 <meta name="application-name" content="SlateMachine">
 <meta name="apple-mobile-web-app-title" content="SlateMachine">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1345,6 +1345,12 @@ async function acceptActiveInvite(){if(!activeInvite||inviteAcceptedThisSession|
 
 
 async function initialize(){try{await loadInvite();const{data:{session}}=await supabaseClient.auth.getSession();if(!session){showScreen("loginScreen");return}currentUser=session.user;await loadProfileFast()}catch(e){showScreen("loginScreen");showMessage("loginMessage",e.message||"Unable to connect.","error")}}
+supabaseClient.auth.onAuthStateChange((event,session)=>{
+  if(event==="SIGNED_IN"&&session?.user&&!currentUser){
+    currentUser=session.user;
+    setTimeout(()=>loadProfileFast(),0);
+  }
+});
 async function signUp(){try{const email=$("email").value.trim(),password=$("password").value;if(!email||!password)throw Error("Please enter an email and password.");const{data,error}=await supabaseClient.auth.signUp({email,password});if(error)throw error;currentUser=data.user;if(data.session&&currentUser){await loadProfileFast();return}showMessage("loginMessage","Account created. Log in to continue.","success")}catch(e){showMessage("loginMessage",e.message||"Unable to create account.","error")}}
 let signInInProgress=false;
 async function signIn(){
