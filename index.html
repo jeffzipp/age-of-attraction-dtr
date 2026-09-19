@@ -977,7 +977,7 @@ body.is-manager .dtr-compact-nav button[data-nav]{flex:1 1 20%!important}
   <div class="dayslate-mark" aria-hidden="true"><span></span><span></span></div>
   <div class="dayslate-wordmark">SlateMachine</div>
 </div>
-<h1>Age of Attraction</h1><h2>Season 2 · Sound Department</h2>
+<h1>Wild Frontier</h1><h2>Sound Department</h2>
 <label>Email</label><input type="email" id="email" autocomplete="email">
 <label>Password</label><input type="password" id="password" autocomplete="current-password">
 <button id="loginButton" onclick="signIn()">Log In</button><button class="secondary" onclick="signUp()">Create Account</button><div id="loginMessage" class="message"></div>
@@ -1157,7 +1157,7 @@ body.is-manager .dtr-compact-nav button[data-nav]{flex:1 1 20%!important}
       </label>
     </div>
     <div id="hodTemplateMessage" class="message"></div>
-    <div class="hod-template-note">Age of Attraction Season 2 · Fillable PDF only. A replacement is checked against the current field mapping before it goes live.</div>
+    <div class="hod-template-note">Wild Frontier · Fillable PDF only. A replacement is checked against the current field mapping before it goes live.</div>
   </div>
 </div>
 </div>
@@ -1168,7 +1168,7 @@ body.is-manager .dtr-compact-nav button[data-nav]{flex:1 1 20%!important}
   <div class="department-header">
     <div>
       <h1>Crew</h1>
-      <div class="subtitle">Age of Attraction · Season 2 · Sound</div>
+      <div class="subtitle">Wild Frontier · Sound</div>
     </div>
     <div class="department-header-actions">
       <button class="secondary" onclick="showDTR()">My DTR</button>
@@ -1950,7 +1950,7 @@ async function sendGeneratedPDF(){
   try{
     if(!currentPDFBlob||!currentWeekEnding)throw Error("Your timesheet PDF is not ready yet.");
     const crew=safeFilenamePart(currentProfile?.name||"Crew");
-    const production="Age_of_Attraction_S2";
+    const production=safeFilenamePart(currentProduction?.name||"Production");
     const weekEnding=dateToISO(currentWeekEnding);
     const filename=`${crew}_${production}_WE_${weekEnding}.pdf`;
     const file=new File([currentPDFBlob],filename,{type:"application/pdf"});
