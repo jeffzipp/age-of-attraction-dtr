@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#111111">
-<meta name="dayslate-build" content="2026.09.18-crew-remove-visible-v26">
+<meta name="dayslate-build" content="2026.09.18-swipe-remove-v27">
 <meta name="application-name" content="SlateMachine">
 <meta name="apple-mobile-web-app-title" content="SlateMachine">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -969,12 +969,17 @@ body.is-manager .dtr-compact-nav button[data-nav]{flex:1 1 20%!important}
 .no-production-card button{max-width:220px}
 @media(max-width:600px){.department-toolbar{display:grid!important;grid-template-columns:repeat(3,1fr)!important}.department-toolbar button{font-size:12px;padding:10px 5px!important}}
 
-/* v26 — make crew removal visible on the main HOD/Admin roster */
-#departmentScreen .crew-week-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
-#departmentScreen .crew-dashboard-remove{width:auto!important;margin:0!important;padding:5px 8px!important;font-size:10px!important;line-height:1!important;min-height:0!important;flex:0 0 auto}
+/* v27 — swipe-left crew removal on HOD/Admin roster */
+#departmentScreen .crew-swipe-shell{position:relative;overflow:hidden;border-radius:10px}
+#departmentScreen .crew-swipe-actions{position:absolute;inset:0 0 0 auto;width:82px;display:flex;align-items:stretch;justify-content:flex-end;background:#4a1717}
+#departmentScreen .crew-swipe-remove{width:82px!important;height:100%!important;margin:0!important;border:0!important;border-radius:0!important;background:#7b2424!important;color:#fff!important;font-size:11px!important;font-weight:800!important;padding:0 8px!important}
+#departmentScreen .crew-swipe-content{position:relative;z-index:1;margin:0!important;transform:translateX(0);transition:transform .18s ease;touch-action:pan-y;background:#181818}
+#departmentScreen .crew-swipe-shell.swipe-open .crew-swipe-content{transform:translateX(-82px)}
+#departmentScreen .crew-swipe-shell:not(.crew-swipe-enabled) .crew-swipe-actions{display:none}
+#departmentScreen .crew-week-top{display:block}
 @media(max-width:600px){
-  #departmentScreen .crew-week-top{min-width:0}
-  #departmentScreen .crew-dashboard-remove{padding:5px 6px!important;font-size:9px!important}
+  #departmentScreen .crew-swipe-shell{border-radius:10px}
+  #departmentScreen .crew-swipe-content{width:100%;box-sizing:border-box}
 }
 </style>
 </head>
@@ -1280,7 +1285,7 @@ body.is-manager .dtr-compact-nav button[data-nav]{flex:1 1 20%!important}
 <script>
 
 // DaySlate update checker — prevents Safari/Home Screen from staying on stale index.html.
-const DAYSLATE_BUILD="2026.09.18-crew-remove-visible-v26";
+const DAYSLATE_BUILD="2026.09.18-swipe-remove-v27";
 async function checkForAppUpdate(){
   try{
     const base=new URL("index.html",location.href);
@@ -1884,15 +1889,54 @@ async function loadDepartmentDashboard(){
       }).join("");
       const membership=activeMembershipByUser.get(p.user_id),role=membership?.role||"crew";
       const canRemove=p.user_id!==currentUser.id&&!["hod","admin"].includes(role);
-      const removeButton=canRemove?`<button class="danger crew-dashboard-remove" onclick="removeCrewMember('${p.user_id}','${escapeHTML(p.name).replace(/'/g,"&#39;")}')">Remove</button>`:"";
-      return `<div class="crew-week-card"><div class="crew-week-top"><div><div class="crew-week-name">${escapeHTML(p.name)}</div><div class="crew-week-position">${escapeHTML(p.position||"Crew")}</div></div>${removeButton}</div><div class="week-status-grid">${days}</div></div>`;
+      const removeAction=canRemove?`<button class="crew-swipe-remove" onclick="event.stopPropagation();removeCrewMember('${p.user_id}','${escapeHTML(p.name).replace(/'/g,"&#39;")}')">Remove</button>`:"";
+      const swipeClass=canRemove?" crew-swipe-enabled":"";
+      return `<div class="crew-swipe-shell${swipeClass}" data-swipe-row><div class="crew-swipe-actions">${removeAction}</div><div class="crew-week-card crew-swipe-content"><div class="crew-week-top"><div><div class="crew-week-name">${escapeHTML(p.name)}</div><div class="crew-week-position">${escapeHTML(p.position||"Crew")}</div></div></div><div class="week-status-grid">${days}</div></div></div>`;
     }).join("");
+    bindCrewSwipeRows();
   }catch(e){
     console.error("DEPARTMENT ERROR",e);
     $("departmentList").innerHTML="";
     showMessage("departmentMessage",e.message||"Unable to load department.","error");
   }
 }
+function closeCrewSwipeRows(except=null){
+  document.querySelectorAll("[data-swipe-row].swipe-open").forEach(row=>{if(row!==except)row.classList.remove("swipe-open")});
+}
+function bindCrewSwipeRows(){
+  document.querySelectorAll("[data-swipe-row].crew-swipe-enabled").forEach(row=>{
+    if(row.dataset.swipeBound==="1")return;
+    row.dataset.swipeBound="1";
+    const content=row.querySelector(".crew-swipe-content");
+    let startX=0,startY=0,dx=0,tracking=false;
+    content.addEventListener("touchstart",e=>{
+      if(!e.touches?.length)return;
+      startX=e.touches[0].clientX;startY=e.touches[0].clientY;dx=0;tracking=true;
+      closeCrewSwipeRows(row);
+    },{passive:true});
+    content.addEventListener("touchmove",e=>{
+      if(!tracking||!e.touches?.length)return;
+      dx=e.touches[0].clientX-startX;
+      const dy=e.touches[0].clientY-startY;
+      if(Math.abs(dy)>Math.abs(dx)+8){tracking=false;return}
+      if(Math.abs(dx)>8){
+        const base=row.classList.contains("swipe-open")?-82:0;
+        const x=Math.max(-82,Math.min(0,base+dx));
+        content.style.transition="none";content.style.transform=`translateX(${x}px)`;
+      }
+    },{passive:true});
+    content.addEventListener("touchend",()=>{
+      if(!tracking)return;
+      content.style.transition="";content.style.transform="";
+      if(dx<-28)row.classList.add("swipe-open");
+      else if(dx>28)row.classList.remove("swipe-open");
+      tracking=false;
+    },{passive:true});
+  });
+}
+document.addEventListener("click",e=>{
+  if(!e.target.closest("[data-swipe-row]"))closeCrewSwipeRows();
+});
 function openDTRDetail(profileId,date){
   const dtr=departmentDTRMap.get(`${profileId}|${date}`);
   if(!dtr)return;
