@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#111111">
-<meta name="dayslate-build" content="2026.09.19-desktop-crew-width-v28">
+<meta name="dayslate-build" content="2026.09.19-rollout-stable-v29">
 <meta name="application-name" content="SlateMachine">
 <meta name="apple-mobile-web-app-title" content="SlateMachine">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1279,27 +1279,8 @@ body.is-manager .dtr-compact-nav button[data-nav]{flex:1 1 20%!important}
 <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 <script>
 
-// DaySlate update checker — prevents Safari/Home Screen from staying on stale index.html.
-const DAYSLATE_BUILD="2026.09.19-desktop-crew-width-v28";
-async function checkForAppUpdate(){
-  try{
-    const base=new URL("index.html",location.href);
-    base.searchParams.set("_dayslate_check",Date.now().toString());
-    const response=await fetch(base.toString(),{cache:"no-store",headers:{"Cache-Control":"no-cache"}});
-    if(!response.ok)return;
-    const fresh=await response.text();
-    const match=fresh.match(/<meta\s+name=["']dayslate-build["']\s+content=["']([^"']+)["']/i);
-    if(!match||match[1]===DAYSLATE_BUILD)return;
-    const reloadURL=new URL(location.href);
-    reloadURL.searchParams.set("v",match[1]);
-    location.replace(reloadURL.toString());
-  }catch(e){
-    console.warn("SlateMachine update check failed",e);
-  }
-}
-checkForAppUpdate();
-window.addEventListener("pageshow",event=>{if(event.persisted)checkForAppUpdate()});
-document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")checkForAppUpdate()});
+// SlateMachine v29 — automatic reload checker disabled for rollout stability.
+// Fresh versions are loaded through normal navigation/cache-busted links.
 
 const SUPABASE_URL="https://hyhzcikkoqvvfyiffmla.supabase.co";
 const SUPABASE_KEY="sb_publishable_Gl1oRE_S8bRTiI65vCnHRQ_InR0_wX1";
