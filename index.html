@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#111111">
-<meta name="dayslate-build" content="2026.09.18-real-icon-tabs-v23">
+<meta name="dayslate-build" content="2026.09.18-crew-tabs-fix-v24">
 <meta name="application-name" content="SlateMachine">
 <meta name="apple-mobile-web-app-title" content="SlateMachine">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -924,6 +924,27 @@ body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hou
   .dtr-compact-nav .tab-icon{width:20px!important;height:20px!important;flex-basis:20px!important}
 }
 
+
+/* v24 — crew tab-bar fix */
+body:not(.is-manager) .dtr-compact-nav button.hod-only{display:none!important}
+body.is-manager .dtr-compact-nav button.hod-only{display:flex!important}
+
+/* Equal-width tabs with clean left/right edges */
+.dtr-compact-nav button[data-nav]{
+  flex:1 1 0!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:none!important;
+}
+body:not(.is-manager) .dtr-compact-nav button[data-nav]:not(.hod-only){flex:1 1 25%!important}
+body.is-manager .dtr-compact-nav button[data-nav]{flex:1 1 20%!important}
+.dtr-compact-nav{
+  box-sizing:border-box!important;
+  padding:5px!important;
+  overflow:hidden!important;
+}
+.dtr-compact-nav button[data-nav].active{margin:0!important}
+
 </style>
 </head>
 <body>
@@ -1203,7 +1224,7 @@ body.dtr-day-off .time-grid,body.dtr-day-off .no-lunch-row,body.dtr-day-off #hou
 <script>
 
 // DaySlate update checker — prevents Safari/Home Screen from staying on stale index.html.
-const DAYSLATE_BUILD="2026.09.18-real-icon-tabs-v23";
+const DAYSLATE_BUILD="2026.09.18-crew-tabs-fix-v24";
 async function checkForAppUpdate(){
   try{
     const base=new URL("index.html",location.href);
